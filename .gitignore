@@ -1,0 +1,45 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+.env
+.env.testing
+.env.backup
+.phpunit.result.cache
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Laravel specific
+project/backend/vendor/
+project/backend/storage/*.key
+project/backend/public/hot
+project/backend/public/storage
+project/backend/storage/framework/cache/data/*
+project/backend/storage/framework/sessions/*
+project/backend/storage/framework/testing/*
+project/backend/storage/framework/views/*
+project/backend/storage/logs/*
+
+# React/Vite specific
+project/frontend/node_modules/
+project/frontend/dist/
+project/frontend/.env
+project/frontend/.env.*

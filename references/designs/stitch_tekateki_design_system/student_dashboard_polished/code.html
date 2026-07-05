@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TekaTeki - Student Dashboard</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                            "danger": "#EA4335",
+                            "inverse-primary": "#adc6ff",
+                            "surface": "#FFFFFF",
+                            "on-tertiary-fixed-variant": "#6f3800",
+                            "secondary": "#712ae2",
+                            "primary-container": "#2771df",
+                            "on-tertiary": "#ffffff",
+                            "surface-bright": "#f9f9ff",
+                            "success": "#34A853",
+                            "warning": "#FBBC05",
+                            "primary-hover": "#1A73E8",
+                            "tertiary-fixed": "#ffdcc4",
+                            "on-secondary-fixed": "#25005a",
+                            "on-error": "#ffffff",
+                            "on-surface": "#191b22",
+                            "surface-container-lowest": "#ffffff",
+                            "surface-tint": "#005ac1",
+                            "on-secondary-fixed-variant": "#5a00c6",
+                            "primary-fixed-dim": "#adc6ff",
+                            "tertiary-fixed-dim": "#ffb780",
+                            "on-tertiary-container": "#fffbff",
+                            "background": "#f9f9ff",
+                            "on-primary": "#ffffff",
+                            "on-secondary-container": "#fffbff",
+                            "outline-variant": "#c2c6d5",
+                            "border-subtle": "#E2E8F0",
+                            "primary-fixed": "#d8e2ff",
+                            "surface-container-highest": "#e1e2eb",
+                            "inverse-on-surface": "#eff0fa",
+                            "tertiary": "#8f4a00",
+                            "secondary-container": "#8a4cfc",
+                            "tertiary-container": "#b35e00",
+                            "secondary-fixed-dim": "#d2bbff",
+                            "hover-state": "#F1F5F9",
+                            "background-main": "#F8FAFC",
+                            "surface-container-high": "#e7e7f1",
+                            "on-tertiary-fixed": "#2f1400",
+                            "surface-container": "#ecedf7",
+                            "on-primary-fixed": "#001a41",
+                            "text-secondary": "#64748B",
+                            "inverse-surface": "#2e3038",
+                            "error-container": "#ffdad6",
+                            "surface-container-low": "#f2f3fd",
+                            "secondary-fixed": "#eaddff",
+                            "error": "#ba1a1a",
+                            "primary": "#0058bd",
+                            "on-background": "#191b22",
+                            "text-primary": "#0F172A",
+                            "on-error-container": "#93000a",
+                            "surface-variant": "#e1e2eb",
+                            "on-primary-container": "#fefcff",
+                            "surface-dim": "#d8d9e3",
+                            "outline": "#727785",
+                            "on-primary-fixed-variant": "#004494",
+                            "on-secondary": "#ffffff",
+                            "on-surface-variant": "#424753"
+                    },
+                    "borderRadius": {
+                            "DEFAULT": "0.25rem",
+                            "lg": "0.5rem",
+                            "xl": "0.75rem",
+                            "full": "9999px"
+                    },
+                    "spacing": {
+                            "container-max": "1440px",
+                            "margin-page": "2rem",
+                            "sidebar-width": "280px",
+                            "gutter-grid": "1.5rem"
+                    },
+                    "fontFamily": {
+                            "body": [
+                                    "Inter"
+                            ],
+                            "button": [
+                                    "Inter"
+                            ],
+                            "section": [
+                                    "Inter"
+                            ],
+                            "card-title": [
+                                    "Inter"
+                            ],
+                            "caption": [
+                                    "Inter"
+                            ],
+                            "headline": [
+                                    "Inter"
+                            ],
+                            "display": [
+                                    "Inter"
+                            ],
+                            "headline-mobile": [
+                                    "Inter"
+                            ]
+                    },
+                    "fontSize": {
+                            "body": [
+                                    "16px",
+                                    {
+                                            "lineHeight": "1.6",
+                                            "fontWeight": "400"
+                                    }
+                            ],
+                            "button": [
+                                    "15px",
+                                    {
+                                            "lineHeight": "1",
+                                            "fontWeight": "500"
+                                    }
+                            ],
+                            "section": [
+                                    "28px",
+                                    {
+                                            "lineHeight": "1.3",
+                                            "fontWeight": "600"
+                                    }
+                            ],
+                            "card-title": [
+                                    "20px",
+                                    {
+                                            "lineHeight": "1.4",
+                                            "fontWeight": "600"
+                                    }
+                            ],
+                            "caption": [
+                                    "14px",
+                                    {
+                                            "lineHeight": "1.4",
+                                            "fontWeight": "400"
+                                    }
+                            ],
+                            "headline": [
+                                    "36px",
+                                    {
+                                            "lineHeight": "1.25",
+                                            "letterSpacing": "-0.01em",
+                                            "fontWeight": "600"
+                                    }
+                            ],
+                            "display": [
+                                    "48px",
+                                    {
+                                            "lineHeight": "1.2",
+                                            "letterSpacing": "-0.02em",
+                                            "fontWeight": "700"
+                                    }
+                            ],
+                            "headline-mobile": [
+                                    "30px",
+                                    {
+                                            "lineHeight": "1.2",
+                                            "fontWeight": "600"
+                                    }
+                            ]
+                    }
+            },
+                },
+            }
+    </script>
+<style>
+        .bg-grid-pattern {
+            background-image: linear-gradient(to right, #808080 1px, transparent 1px), linear-gradient(to bottom, #808080 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+<body class="bg-background-main font-body text-text-primary min-h-screen flex text-body relative">
+<!-- Background Pattern -->
+<div class="fixed inset-0 bg-grid-pattern opacity-5 pointer-events-none z-[-1]"></div>
+<!-- SideNavBar -->
+<aside class="hidden md:flex bg-surface dark:bg-on-surface font-body text-body fixed left-4 top-4 bottom-4 w-sidebar-width rounded-xl shadow-sm border-r border-border-subtle dark:border-outline-variant flex-col p-6 gap-4 z-50">
+<div class="flex items-center gap-3 mb-8">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold">
+                T
+            </div>
+<div>
+<h1 class="font-headline text-headline text-primary dark:text-primary-fixed font-bold tracking-tight">TekaTeki</h1>
+<p class="font-caption text-caption text-slate-600">Premium EdTech</p>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-2">
+<a class="bg-secondary-container text-on-secondary-container rounded-xl font-button flex items-center gap-3 px-4 py-3 hover:scale-[1.02] active:scale-[0.98] transition-transform duration-300 ease-out" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+                Dashboard
+            </a>
+<a class="text-slate-600 hover:bg-hover-state rounded-xl flex items-center gap-3 px-4 py-3 hover:scale-[1.02] active:scale-[0.98] transition-transform duration-300 ease-out" href="#">
+<span class="material-symbols-outlined">auto_stories</span>
+                Learning Path
+            </a>
+<a class="text-slate-600 hover:bg-hover-state rounded-xl flex items-center gap-3 px-4 py-3 hover:scale-[1.02] active:scale-[0.98] transition-transform duration-300 ease-out" href="#">
+<span class="material-symbols-outlined">assignment</span>
+                Assignments
+            </a>
+<a class="text-slate-600 hover:bg-hover-state rounded-xl flex items-center gap-3 px-4 py-3 hover:scale-[1.02] active:scale-[0.98] transition-transform duration-300 ease-out" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+                Crosswords
+            </a>
+<a class="text-slate-600 hover:bg-hover-state rounded-xl flex items-center gap-3 px-4 py-3 hover:scale-[1.02] active:scale-[0.98] transition-transform duration-300 ease-out" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+</nav>
+<div class="mt-auto flex flex-col gap-4">
+<button class="w-full bg-primary text-on-primary font-button rounded-xl py-3 hover:scale-[1.02] active:scale-[0.98] transition-transform duration-300 ease-out shadow-sm hover:shadow-lg">
+                Start Daily Challenge
+            </button>
+<div class="flex flex-col gap-2 border-t border-border-subtle pt-4">
+<a class="text-slate-600 hover:bg-hover-state rounded-xl flex items-center gap-3 px-4 py-2 hover:scale-[1.02] active:scale-[0.98] transition-transform duration-300 ease-out" href="#">
+<span class="material-symbols-outlined">help</span>
+                    Help Center
+                </a>
+<a class="text-slate-600 hover:bg-hover-state rounded-xl flex items-center gap-3 px-4 py-2 hover:scale-[1.02] active:scale-[0.98] transition-transform duration-300 ease-out" href="#">
+<span class="material-symbols-outlined">logout</span>
+                    Logout
+                </a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-[312px] min-h-screen flex flex-col relative">
+<!-- TopNavBar (Mobile mainly, but structured as requested) -->
+<header class="md:hidden sticky top-0 w-full z-40 bg-surface/80 dark:bg-on-surface/80 backdrop-blur-md border-b border-border-subtle dark:border-outline-variant shadow-sm flex justify-between items-center px-margin-page py-4 max-w-container-max mx-auto font-body text-body">
+<div class="font-headline text-headline-mobile text-primary dark:text-primary-fixed font-bold tracking-tight">TekaTeki</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-slate-600 hover:text-primary hover:bg-hover-state transition-colors duration-300 p-2 rounded-full cursor-pointer active:scale-95 transition-transform">notifications</span>
+<span class="material-symbols-outlined text-slate-600 hover:text-primary hover:bg-hover-state transition-colors duration-300 p-2 rounded-full cursor-pointer active:scale-95 transition-transform">dark_mode</span>
+<img alt="User avatar" class="w-8 h-8 rounded-full border border-border-subtle object-cover" data-alt="A small circular avatar placeholder image for a generic user profile in a premium edtech application. Minimalist, light mode UI context. 50 words description minimum." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeZDZ0hCiw_o5gU-DiuSYhFOpoQHjhqo-nbx-z5oqEP6TsDf4wbtK8ytkH_HVNWmFEWEJzu05_MJZPTc08inoE9skK5eSkP_pa0ldRLk4eSl8IE6jve075qzW5AD_py1UFYWM1syTKwCNDpXpFtZ107ZVbH7uknAJMP1kgOw41mmwCLANkob--3VYvZSqb5Io_XraurofRKoBxbPYOAFFSWWGAUAmCkH_fmzanL3v2d9oxf2UyoZclCB7vXuyVR9RdVaX6Wq-w8Y_n"/>
+</div>
+</header>
+<div class="p-margin-page max-w-container-max mx-auto w-full flex-1 flex flex-col gap-margin-page">
+<!-- Hero Section -->
+<section class="relative bg-surface rounded-2xl p-8 shadow-sm border border-border-subtle flex flex-col md:flex-row items-center justify-between gap-6 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+<!-- Soft Gradient Blobs -->
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary-fixed-dim/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+<div class="absolute bottom-0 left-0 w-64 h-64 bg-secondary-fixed-dim/30 rounded-full blur-3xl translate-y-1/2 -translate-x-1/3"></div>
+<div class="flex-1 relative z-10">
+<h2 class="font-display text-display text-text-primary mb-2 font-bold tracking-tight">Welcome back, Alex!</h2>
+<p class="font-body text-body text-slate-600 mb-6">You're on a 5-day learning streak. Keep up the great work!</p>
+<div class="flex gap-4">
+<div class="flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-lg">
+<span class="material-symbols-outlined text-warning" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="font-button text-button">5 Day Streak</span>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-lg">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">stars</span>
+<span class="font-button text-button">1,250 Points</span>
+</div>
+</div>
+</div>
+<div class="w-full md:w-1/3 relative z-10">
+<img class="w-full h-48 object-contain rounded-xl" data-alt="An abstract 3D illustration of educational items floating gracefully. Books, lightbulbs, and geometric shapes in a bright, modern light-mode setting with soft shadows. Soft blue and purple accents matching a premium EdTech SaaS brand identity. Highly polished, minimalist corporate modern aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAh4QZev4hWhYaNBmlH4sGSTAXVk330NQ047XgIQTqjAMtcKgj05grwQpBc6wTkBdmY6FOmpVsAG0GyOsc_q-YUjalW1LQEgRXvByFZOs7kED_R-vOTsL5249934oZFC9M-Zs5z_qC0zXF_jNg4BkgYecvzNnKM86RcsTF7o35BU9XR4uie4Y2udMVGNKmfU-OljhOHE1HKqRP1pvPGXz_oKWjCoakIpqwhoRnMlPJ_7Sd7HIr9MkgYg06wLg-TsUdkDsb69XHeQYge"/>
+</div>
+</section>
+<!-- Bento Grid Main -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter-grid">
+<!-- Continue Learning (Large) -->
+<div class="lg:col-span-2 bg-surface rounded-2xl p-6 shadow-sm border border-border-subtle hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-card-title text-card-title font-bold tracking-tight">Continue Learning</h3>
+<button class="text-primary hover:bg-primary/10 p-2 rounded-full transition-colors hover:scale-[1.02] active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<div class="flex gap-6 items-center">
+<div class="w-32 h-32 rounded-xl bg-surface-container-low flex-shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A clean, abstract thumbnail graphic for an advanced mathematics course. Features geometric wireframes and elegant typography on a soft white background. The style is premium corporate modern, blending Google Material 3 spacing with refined SaaS aesthetics." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAo8MBU-rMBA0u4DACUO_q42VVbDVXoX56wq8nWyKBbsjHamEsftDAoCJ8EvnkKz9cqCyhLqF1u4Luq_Vdl7_XgClGwYHlx7qOKv80GbOXj7D2Gdj-55KvYeh8_-voc82WvP08qhUXaKYfs8olMCUYKvSmTdHwG1JcA6XRySaHA4M6FlibSWgllPJKpmlLYIU5COGmRMHO43vVIkBMutNQJbKoPZtRrOo5eiMoE42KC-ndRrlq4raA15H3IKqtDio3Bt2iFZsXWg6jO"/>
+</div>
+<div class="flex-1">
+<span class="text-xs font-bold tracking-wider text-secondary uppercase mb-1 block">Module 4</span>
+<h4 class="font-section text-section text-text-primary mb-2 font-bold tracking-tight">Advanced Calculus Applications</h4>
+<p class="font-caption text-caption text-slate-600 mb-4">You left off at 'Integration by Parts'. Estimated time: 15 mins.</p>
+<div class="w-full bg-surface-container-highest rounded-full h-2 mb-2">
+<div class="bg-primary h-2 rounded-full w-[65%]"></div>
+</div>
+<div class="flex justify-between text-caption font-caption text-slate-600">
+<span>65% Complete</span>
+<span>4/6 Lessons</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Today's Goal -->
+<div class="bg-surface rounded-2xl p-6 shadow-sm border border-border-subtle hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col items-center justify-center text-center">
+<h3 class="font-card-title text-card-title w-full text-left mb-6 font-bold tracking-tight">Daily Goal</h3>
+<div class="relative w-32 h-32 flex items-center justify-center mb-4">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 100 100">
+<circle class="text-surface-container-highest" cx="50" cy="50" fill="transparent" r="45" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-secondary-container" cx="50" cy="50" fill="transparent" r="45" stroke="currentColor" stroke-dasharray="283" stroke-dashoffset="70" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-section text-section font-bold tracking-tight">45</span>
+<span class="font-caption text-caption text-slate-600">/60 min</span>
+</div>
+</div>
+<p class="font-body text-body text-slate-600">Almost there! Keep focusing.</p>
+</div>
+</div>
+<!-- Two Column Layout: Recommended & Quick Actions -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter-grid">
+<!-- Recommended Materials -->
+<div class="lg:col-span-2">
+<h3 class="font-section text-section mb-4 font-bold tracking-tight">Recommended for you</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Card 1 -->
+<div class="bg-surface rounded-2xl p-4 shadow-sm border border-border-subtle hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex gap-4 items-start cursor-pointer">
+<div class="w-16 h-16 rounded-lg bg-tertiary-fixed-dim flex items-center justify-center text-tertiary flex-shrink-0">
+<span class="material-symbols-outlined text-3xl">psychology</span>
+</div>
+<div>
+<h4 class="font-card-title text-card-title text-base mb-1 font-bold tracking-tight">Cognitive Psychology Basics</h4>
+<p class="font-caption text-caption text-slate-600 mb-2">Based on your recent interest in human behavior.</p>
+<span class="text-xs font-medium text-tertiary bg-tertiary-fixed px-2 py-1 rounded-md">New Course</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface rounded-2xl p-4 shadow-sm border border-border-subtle hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex gap-4 items-start cursor-pointer">
+<div class="w-16 h-16 rounded-lg bg-primary-fixed-dim flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined text-3xl">data_object</span>
+</div>
+<div>
+<h4 class="font-card-title text-card-title text-base mb-1 font-bold tracking-tight">Data Structures Overview</h4>
+<p class="font-caption text-caption text-slate-600 mb-2">Essential for completing module 5.</p>
+<span class="text-xs font-medium text-primary bg-primary-fixed px-2 py-1 rounded-md">Suggested</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Actions & Timeline -->
+<div class="flex flex-col gap-6">
+<div class="bg-surface rounded-2xl p-6 shadow-sm border border-border-subtle hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+<h3 class="font-card-title text-card-title mb-4 font-bold tracking-tight">Quick Actions</h3>
+<div class="flex flex-col gap-3">
+<button class="w-full flex items-center gap-3 p-3 rounded-xl bg-surface-container hover:bg-hover-state transition-colors text-left group">
+<div class="w-8 h-8 rounded-lg bg-secondary-container text-on-secondary-container flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">extension</span>
+</div>
+<span class="font-button text-button flex-1 font-bold tracking-tight">Open Daily Crossword</span>
+<span class="material-symbols-outlined text-slate-600 group-hover:text-primary transition-colors">chevron_right</span>
+</button>
+<button class="w-full flex items-center gap-3 p-3 rounded-xl bg-surface-container hover:bg-hover-state transition-colors text-left group">
+<div class="w-8 h-8 rounded-lg bg-primary-container text-on-primary-container flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">groups</span>
+</div>
+<span class="font-button text-button flex-1 font-bold tracking-tight">Join Study Group</span>
+<span class="material-symbols-outlined text-slate-600 group-hover:text-primary transition-colors">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
