@@ -25,11 +25,8 @@ class AuthController extends Controller
             'role' => $request->role,
         ]);
 
-        $token = $user->createToken('auth_token')->plainTextToken;
-
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
+            'message' => 'Registrasi berhasil. Akun Anda sedang menunggu persetujuan admin.',
             'user' => $user
         ], 201);
     }

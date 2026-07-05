@@ -14,7 +14,7 @@ export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  
+  const [success, setSuccess] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -26,6 +26,7 @@ export default function Register() {
     }
     
     setError('');
+    setSuccess('');
     setIsLoading(true);
 
     try {
@@ -38,8 +39,12 @@ export default function Register() {
       if (!response.ok) {
         throw new Error(data.message || 'Registration failed');
       }
-      login(data.access_token, data.user);
-      navigate('/');
+      setSuccess(data.message || 'Registration successful. Please wait for admin approval.');
+      // Clear form
+      setName('');
+      setEmail('');
+      setPassword('');
+      setPasswordConfirmation('');
     } catch (err: any) {
       setError(err.message || 'Registration failed. Please check your details.');
     } finally {
@@ -113,6 +118,12 @@ export default function Register() {
           {error && (
             <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl text-sm font-medium border border-red-100 dark:border-red-900/30 flex items-center justify-center">
               {error}
+            </div>
+          )}
+          
+          {success && (
+            <div className="mb-6 p-4 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-xl text-sm font-medium border border-emerald-100 dark:border-emerald-900/30 flex items-center justify-center text-center">
+              {success}
             </div>
           )}
 

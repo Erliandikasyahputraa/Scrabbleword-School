@@ -43,3 +43,17 @@ project/frontend/node_modules/
 project/frontend/dist/
 project/frontend/.env
 project/frontend/.env.*
+
+# Ignore root documentation and configuration (private)
+/*.md
+/.prettierrc
+/references/
+/AI_RULES.md
+/CLAUDE_RULES.md
+/CHANGELOG.md
+/NEXT_ACTION.md
+/PROJECT_CONTEXT.md
+/PROJECT_MEMORY.md
+/PROJECT_SCOPE.md
+/TASK_QUEUE.md
+/TECH_STACK.md
