@@ -11,6 +11,7 @@ import LearnPortal from "./routes/LearnPortal"
 import Approvals from "./routes/Approvals"
 import Courses from "./routes/Courses"
 import Users from "./routes/Users"
+import ErrorPage from "./routes/ErrorPage"
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="/approvals" element={<Approvals />} />
           <Route path="/courses/:id" element={<CourseDetail />} />
           <Route path="/courses/:courseId/materials/:id" element={<LearnPortal />} />
+          <Route path="*" element={<ErrorPage code={404} />} />
         </Route>
       </Routes>
     </AppProviders>

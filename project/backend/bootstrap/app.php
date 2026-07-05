@@ -18,8 +18,16 @@ return Application::configure(basePath: dirname(__DIR__))
             'teacher' => \App\Http\Middleware\CheckRole::class.':teacher',
             'student' => \App\Http\Middleware\CheckRole::class.':student',
         ]);
+        $middleware->api(prepend: [
+            \App\Http\Middleware\ForceJsonResponse::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
+        $exceptions->render(function (\Illuminate\Auth\AuthenticationException $e, Request $request) {
+            if ($request->is('api/*')) {
+                return response()->json(['message' => 'Unauthenticated.'], 401);
+            }
+        });
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*'),
         );

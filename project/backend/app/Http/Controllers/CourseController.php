@@ -18,6 +18,19 @@ class CourseController extends Controller
         } else {
             // Students see only enrolled courses
             $courses = $user->enrolledCourses()->withCount('materials')->get();
+            
+            // Calculate progress for each course
+            foreach ($courses as $course) {
+                if ($course->materials_count == 0) {
+                    $course->progress = 0;
+                } else {
+                    $completedMaterials = \App\Models\Submission::where('student_id', $user->id)
+                        ->whereIn('material_id', $course->materials()->pluck('id'))
+                        ->where('is_completed', true)
+                        ->count();
+                    $course->progress = round(($completedMaterials / $course->materials_count) * 100);
+                }
+            }
         }
         return response()->json($courses);
     }
@@ -55,13 +68,45 @@ class CourseController extends Controller
         $course = Course::with(['materials', 'teacher:id,name'])->findOrFail($id);
         
         $user = $request->user();
-        // Teacher can only view their own courses
+        
         if ($user->role === 'teacher' && $course->teacher_id !== $user->id) {
-            return response()->json(['message' => 'Unauthorized'], 403);
+            return response()->json(['message' => 'Unauthorized: You do not own this course.'], 403);
         }
 
         $courseData = $course->toArray();
         $courseData['teacher_name'] = $course->teacher?->name;
+
+        if ($user->role === 'student') {
+            if (!$user->enrolledCourses()->where('course_id', $id)->exists()) {
+                return response()->json(['message' => 'Unauthorized: You are not enrolled in this course.'], 403);
+            }
+            
+            // Calculate progress
+            $materialsCount = $course->materials()->count();
+            if ($materialsCount == 0) {
+                $courseData['progress'] = 0;
+            } else {
+                $completedMaterials = \App\Models\Submission::where('student_id', $user->id)
+                    ->whereIn('material_id', $course->materials()->pluck('id'))
+                    ->where('is_completed', true)
+                    ->count();
+                $courseData['progress'] = round(($completedMaterials / $materialsCount) * 100);
+            }
+            
+            // Append Material status
+            $mySubmissions = \App\Models\Submission::where('student_id', $user->id)
+                ->whereIn('material_id', $course->materials()->pluck('id'))
+                ->get()
+                ->keyBy('material_id');
+                
+            foreach ($courseData['materials'] as &$mat) {
+                if ($mySubmissions->has($mat['id'])) {
+                    $mat['status'] = $mySubmissions[$mat['id']]->is_completed ? 'COMPLETED' : 'IN_PROGRESS';
+                } else {
+                    $mat['status'] = 'NOT_STARTED';
+                }
+            }
+        }
 
         return response()->json($courseData);
     }
@@ -75,7 +120,7 @@ class CourseController extends Controller
             return response()->json(['message' => 'Unauthorized'], 403);
         }
         if ($user->role === 'teacher' && $course->teacher_id !== $user->id) {
-            return response()->json(['message' => 'Unauthorized'], 403);
+            return response()->json(['message' => 'Unauthorized: You do not own this course.'], 403);
         }
 
         $request->validate([
@@ -96,7 +141,7 @@ class CourseController extends Controller
             return response()->json(['message' => 'Unauthorized'], 403);
         }
         if ($user->role === 'teacher' && $course->teacher_id !== $user->id) {
-            return response()->json(['message' => 'Unauthorized'], 403);
+            return response()->json(['message' => 'Unauthorized: You do not own this course.'], 403);
         }
         
         $course->delete();

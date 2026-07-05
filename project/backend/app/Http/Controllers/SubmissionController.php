@@ -18,6 +18,19 @@ class SubmissionController extends Controller
         ]);
 
         $material = Material::findOrFail($materialId);
+        
+        // Enrollment validation: Ensure student is actually enrolled in this course
+        $user = $request->user();
+        if (!$user->enrolledCourses()->where('course_id', $material->course_id)->exists()) {
+            return response()->json(['message' => 'Unauthorized: You are not enrolled in this course.'], 403);
+        }
+
+        // Duplicate submit prevention: check if they already submitted
+        $submission = Submission::where('student_id', $user->id)->where('material_id', $materialId)->first();
+        if ($submission && $submission->is_completed) {
+            return response()->json(['message' => 'You have already submitted this material.'], 400);
+        }
+
         $studentAnswers = $request->answers;
         $crosswordData = $material->crossword_data;
         
@@ -41,10 +54,19 @@ class SubmissionController extends Controller
         $score = ($totalWords > 0) ? round(($correctWordsCount / $totalWords) * 100) : 0;
         $incorrectWordsCount = $totalWords - $correctWordsCount;
         
-        $submission = Submission::updateOrCreate(
-            ['student_id' => $request->user()->id, 'material_id' => $materialId],
-            ['score' => $score, 'is_completed' => true]
-        );
+        if ($submission) {
+            $submission->update([
+                'score' => $score,
+                'is_completed' => true
+            ]);
+        } else {
+            $submission = Submission::create([
+                'student_id' => $user->id,
+                'material_id' => $materialId,
+                'score' => $score,
+                'is_completed' => true
+            ]);
+        }
 
         return response()->json([
             'message' => 'Crossword submitted successfully',
@@ -64,8 +86,8 @@ class SubmissionController extends Controller
     public function history(Request $request)
     {
         $submissions = Submission::where('student_id', $request->user()->id)
-            ->with('material:id,title,course_id')
-            ->orderBy('updated_at', 'desc')
+            ->with(['material:id,title,course_id', 'material.course:id,name'])
+            ->orderBy('created_at', 'desc')
             ->get();
         return response()->json($submissions);
     }
@@ -101,6 +123,42 @@ class SubmissionController extends Controller
             'pending' => max(0, $totalEnrolled - $completed),
             'average_score' => round($averageScore, 1),
         ]);
+    }
+
+    /**
+     * Get the authenticated student's submission for a specific material.
+     */
+    public function mySubmission(Request $request, $materialId)
+    {
+        $submission = Submission::where('student_id', $request->user()->id)
+            ->where('material_id', $materialId)
+            ->first();
+            
+        if (!$submission) {
+            return response()->json(null, 200);
+        }
+        
+        return response()->json($submission);
+    }
+
+    /**
+     * Mark the PDF as read (IN_PROGRESS material status).
+     */
+    public function markRead(Request $request, $materialId)
+    {
+        $user = $request->user();
+        $material = Material::findOrFail($materialId);
+
+        if (!$user->enrolledCourses()->where('course_id', $material->course_id)->exists()) {
+            return response()->json(['message' => 'Unauthorized: You are not enrolled in this course.'], 403);
+        }
+
+        $submission = Submission::firstOrCreate(
+            ['student_id' => $user->id, 'material_id' => $materialId],
+            ['score' => 0, 'is_completed' => false]
+        );
+
+        return response()->json(['message' => 'PDF marked as read', 'submission' => $submission]);
     }
 }
 

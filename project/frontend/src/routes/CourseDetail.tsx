@@ -1,15 +1,21 @@
-import { Link, useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchApi } from '../lib/api';
 import { useAuth } from '../providers/AuthProvider';
 import { FileText, ArrowLeft, PlayCircle, Clock, BarChart, Award } from 'lucide-react';
 import { Button } from '../components/ui/Button';
+import ErrorPage from './ErrorPage';
+import { MaterialFormModal } from '../components/ui/MaterialFormModal';
+import { CourseFormModal } from '../components/ui/CourseFormModal';
+import { StudentAssignmentModal } from '../components/ui/StudentAssignmentModal';
 
 type Material = {
   id: number;
   title: string;
   pdf_path: string | null;
   crossword_data: any;
+  status?: 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED';
 };
 
 type CourseDetail = {
@@ -18,17 +24,57 @@ type CourseDetail = {
   description: string;
   teacher_id: number;
   teacher_name?: string;
+  progress?: number;
   materials: Material[];
 };
 
 export default function CourseDetail() {
   const { id } = useParams();
   const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
+  const [isMaterialModalOpen, setIsMaterialModalOpen] = useState(false);
+  const [isCourseModalOpen, setIsCourseModalOpen] = useState(false);
+  const [isAssignmentModalOpen, setIsAssignmentModalOpen] = useState(false);
+  const [editingMaterial, setEditingMaterial] = useState<Material | null>(null);
 
   const { data: course, isLoading, error } = useQuery<CourseDetail>({
     queryKey: ['course', id],
     queryFn: () => fetchApi(`/courses/${id}`)
   });
+
+  const deleteMaterialMutation = useMutation({
+    mutationFn: (materialId: number) => fetchApi(`/courses/${id}/materials/${materialId}`, { method: 'DELETE' }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['course', id] })
+  });
+
+  const deleteCourseMutation = useMutation({
+    mutationFn: () => fetchApi(`/courses/${id}`, { method: 'DELETE' }),
+    onSuccess: () => {
+      alert('Course deleted successfully');
+      navigate('/courses');
+    }
+  });
+
+  const handleEditMaterial = (material: Material) => {
+    setEditingMaterial(material);
+    setIsMaterialModalOpen(true);
+  };
+
+  const handleDeleteMaterial = (materialId: number) => {
+    if (confirm('Are you sure you want to delete this material?')) {
+      deleteMaterialMutation.mutate(materialId);
+    }
+  };
+
+  const handleDeleteCourse = () => {
+    if (confirm('Are you sure you want to delete this ENTIRE course?')) {
+      deleteCourseMutation.mutate();
+    }
+  };
+
+  const isOwnerOrAdmin = user?.role === 'admin' || (user?.role === 'teacher' && course?.teacher_id === user?.id);
 
   if (isLoading) {
     return (
@@ -39,24 +85,29 @@ export default function CourseDetail() {
   }
 
   if (error || !course) {
-    return (
-      <div className="text-center p-12 bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 max-w-2xl mx-auto">
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Course not found</h2>
-        <p className="text-slate-500 dark:text-slate-400 mb-6">The course you are looking for does not exist or you don't have access to it.</p>
-        <Link to="/"><Button>Return to Dashboard</Button></Link>
-      </div>
-    );
+    const errObj = error as any;
+    const code = errObj?.status || 404;
+    return <ErrorPage code={code} message={errObj?.message} />;
   }
 
   return (
     <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500">
-      <Link 
-        to="/" 
-        className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 font-medium transition-colors"
-      >
-        <ArrowLeft size={18} />
-        Back to Dashboard
-      </Link>
+      <div className="flex justify-between items-center">
+        <Link 
+          to="/courses" 
+          className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 font-medium transition-colors"
+        >
+          <ArrowLeft size={18} />
+          Back to Courses
+        </Link>
+        {isOwnerOrAdmin && (
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={() => setIsAssignmentModalOpen(true)}>Assign Students</Button>
+            <Button variant="outline" size="sm" onClick={() => setIsCourseModalOpen(true)}>Edit Course</Button>
+            <Button variant="outline" size="sm" className="text-red-600 border-red-200 hover:bg-red-50" onClick={handleDeleteCourse}>Delete Course</Button>
+          </div>
+        )}
+      </div>
 
       {/* Hero Banner */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 lg:p-12 shadow-sm flex flex-col md:flex-row gap-8 items-start relative overflow-hidden">
@@ -97,9 +148,19 @@ export default function CourseDetail() {
             <div className="relative">
               <svg className="w-20 h-20 transform -rotate-90">
                 <circle cx="40" cy="40" r="36" stroke="currentColor" strokeWidth="8" fill="transparent" className="text-slate-100 dark:text-slate-800" />
-                <circle cx="40" cy="40" r="36" stroke="currentColor" strokeWidth="8" fill="transparent" strokeDasharray="226" strokeDashoffset="226" className="text-primary" />
+                <circle 
+                   cx="40" 
+                   cy="40" 
+                   r="36" 
+                   stroke="currentColor" 
+                   strokeWidth="8" 
+                   fill="transparent" 
+                   strokeDasharray="226" 
+                   strokeDashoffset={226 - (226 * (course.progress || 0)) / 100} 
+                   className="text-primary transition-all duration-1000" 
+                />
               </svg>
-              <span className="absolute inset-0 flex items-center justify-center text-lg font-bold text-slate-700 dark:text-slate-300">0%</span>
+              <span className="absolute inset-0 flex items-center justify-center text-lg font-bold text-slate-700 dark:text-slate-300">{course.progress || 0}%</span>
             </div>
           </div>
           <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Course Progress</p>
@@ -111,8 +172,8 @@ export default function CourseDetail() {
         <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
           Course Syllabus
         </h2>
-        {user?.role === 'teacher' && course.teacher_id === user?.id && (
-          <Button variant="secondary" size="sm">Add Material</Button>
+        {isOwnerOrAdmin && (
+          <Button variant="secondary" size="sm" onClick={() => { setEditingMaterial(null); setIsMaterialModalOpen(true); }}>Add Material</Button>
         )}
       </div>
       
@@ -126,8 +187,14 @@ export default function CourseDetail() {
           course.materials.map((material, index) => (
             <div key={material.id} className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors group">
               <div className="flex items-start gap-4">
-                <div className="p-3 bg-blue-50 dark:bg-blue-900/20 text-primary rounded-xl group-hover:bg-primary group-hover:text-white transition-colors mt-1 sm:mt-0">
-                  <FileText size={24} />
+                <div className={`p-3 rounded-xl transition-colors mt-1 sm:mt-0 ${
+                   material.status === 'COMPLETED' ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-400 group-hover:bg-green-500 group-hover:text-white' :
+                   material.status === 'IN_PROGRESS' ? 'bg-orange-50 text-orange-600 dark:bg-orange-900/20 dark:text-orange-400 group-hover:bg-orange-500 group-hover:text-white' :
+                   'bg-blue-50 text-primary dark:bg-blue-900/20 group-hover:bg-primary group-hover:text-white'
+                }`}>
+                  {material.status === 'COMPLETED' ? <Award size={24} /> :
+                   material.status === 'IN_PROGRESS' ? <Clock size={24} /> :
+                   <FileText size={24} />}
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-slate-900 dark:text-white group-hover:text-primary transition-colors">
@@ -140,17 +207,46 @@ export default function CourseDetail() {
                 </div>
               </div>
               
-              <Link to={`/courses/${id}/materials/${material.id}`}>
-                <Button variant="outline" className="w-full sm:w-auto gap-2 group-hover:bg-primary group-hover:text-white group-hover:border-primary">
-                  <PlayCircle size={18} />
-                  Start Module
-                </Button>
-              </Link>
+              <div className="flex gap-2">
+                {isOwnerOrAdmin && (
+                  <>
+                    <Button variant="outline" size="sm" onClick={() => handleEditMaterial(material)}>Edit</Button>
+                    <Button variant="outline" size="sm" className="text-red-600 border-red-200" onClick={() => handleDeleteMaterial(material.id)}>Delete</Button>
+                  </>
+                )}
+                <Link to={`/courses/${id}/materials/${material.id}`}>
+                  <Button variant="outline" className="w-full sm:w-auto gap-2 group-hover:bg-primary group-hover:text-white group-hover:border-primary">
+                    <PlayCircle size={18} />
+                    Start Module
+                  </Button>
+                </Link>
+              </div>
             </div>
           ))
         )}
 
       </div>
+      
+      {isOwnerOrAdmin && (
+          <>
+            <MaterialFormModal 
+                isOpen={isMaterialModalOpen} 
+                onClose={() => setIsMaterialModalOpen(false)} 
+                courseId={id!} 
+                initialData={editingMaterial} 
+            />
+            <CourseFormModal
+                isOpen={isCourseModalOpen}
+                onClose={() => setIsCourseModalOpen(false)}
+                initialData={{ id: course.id, name: course.name, description: course.description }}
+            />
+            <StudentAssignmentModal
+                isOpen={isAssignmentModalOpen}
+                onClose={() => setIsAssignmentModalOpen(false)}
+                courseId={Number(id)}
+            />
+          </>
+      )}
     </div>
   );
 }

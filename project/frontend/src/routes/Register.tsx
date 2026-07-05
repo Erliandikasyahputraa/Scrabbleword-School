@@ -15,8 +15,8 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [success, setSuccess] = useState('');
-  const { login } = useAuth();
-  const navigate = useNavigate();
+  // Removing unused login
+  // Removing unused navigate
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

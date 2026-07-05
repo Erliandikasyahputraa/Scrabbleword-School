@@ -13,6 +13,7 @@ type Course = {
   description: string;
   materials_count?: number;
   students_count?: number;
+  progress?: number;
 };
 
 export default function Courses() {
@@ -91,6 +92,7 @@ export default function Courses() {
               title={course.name}
               description={course.description || "No description provided."}
               materialCount={course.materials_count || 0}
+              progress={course.progress}
             />
           ))}
         </div>
