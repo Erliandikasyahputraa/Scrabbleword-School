@@ -2,7 +2,7 @@ import { Outlet, Link, Navigate, useNavigate, useLocation } from "react-router-d
 import { useState, useEffect } from "react"
 import { useAuth } from "../../providers/AuthProvider"
 import { ThemeToggle } from "../ui/ThemeToggle"
-import { BrandBackground } from "../ui/BrandBackground"
+import { AppThemeBackgroundLayer } from "../crossword/AppThemeBackgroundLayer"
 import { Logo } from "../ui/Logo"
 import { Menu, X, Home, BookOpen, Users, ShieldCheck } from "lucide-react"
 
@@ -81,7 +81,7 @@ export function AuthenticatedLayout() {
 
   return (
     <div className="flex min-h-screen bg-background font-sans text-foreground transition-colors">
-      <BrandBackground pattern="crossword" opacity={0.015} />
+      <AppThemeBackgroundLayer />
       
       {/* Desktop Sidebar (lg and up) */}
       <aside className={`hidden lg:flex flex-col bg-card border-r border-border transition-all duration-300 shadow-sm shrink-0 sticky top-0 h-screen ${isCollapsed ? 'w-20' : 'w-64'}`}>

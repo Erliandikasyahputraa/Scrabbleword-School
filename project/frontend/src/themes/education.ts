@@ -12,4 +12,18 @@ export const educationTheme: CrosswordTheme = {
   clueNumber: 'text-slate-400 font-bold',
   hover: 'hover:bg-slate-50 transition-colors duration-150',
   typography: 'text-slate-900 font-bold font-sans',
+  tokens: {
+    primary: '221 83% 53%',         // blue-600
+    ring: '221 83% 53%',
+    border: '214 32% 88%',
+    accentStripe: '#1d4ed8',
+    scrollbar: '#93c5fd',
+    badge: '#dbeafe',
+    badgeText: '#1e3a8a',
+    buttonPrimary: '#1d4ed8',
+    buttonPrimaryText: '#ffffff',
+    cardShadow: 'rgba(29, 78, 216, 0.08)',
+    pageBackground: '#f0f6ff',
+    illustrationColor: '#1e3a8a',
+  },
 };

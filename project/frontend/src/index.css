@@ -116,3 +116,59 @@
     @apply antialiased transition-colors duration-300;
   }
 }
+
+/* ─── Global Crossword Theme Design Token Overrides ─────────────────────────── */
+/* These classes consume CSS variables injected by CrosswordThemeProvider.       */
+
+/* Scrollbar accents */
+:root {
+  --theme-scrollbar: #94a3b8;
+  --theme-accent-stripe: hsl(var(--primary));
+  --theme-badge-bg: hsl(var(--secondary));
+  --theme-badge-text: hsl(var(--secondary-foreground));
+  --theme-button-primary: hsl(var(--primary));
+  --theme-button-primary-text: hsl(var(--primary-foreground));
+  --theme-card-shadow: rgba(0,0,0,0.05);
+  --theme-illustration-color: hsl(var(--primary));
+}
+
+/* Themed scrollbars */
+.themed-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+.themed-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.themed-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--theme-scrollbar);
+  border-radius: 99px;
+  opacity: 0.6;
+}
+.themed-scrollbar::-webkit-scrollbar-thumb:hover { opacity: 1; }
+
+/* Themed focus ring — applies to any input/button with ring-theme class */
+.ring-theme:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--theme-accent-stripe), 0 0 0 5px color-mix(in srgb, var(--theme-accent-stripe) 20%, transparent);
+}
+
+/* Theme-aware card accent border-top */
+.card-themed {
+  border-top: 3px solid var(--theme-accent-stripe);
+  box-shadow: 0 2px 20px var(--theme-card-shadow);
+}
+
+/* Theme badge */
+.badge-themed {
+  background-color: var(--theme-badge-bg);
+  color: var(--theme-badge-text);
+}
+
+/* Theme button */
+.btn-theme-primary {
+  background-color: var(--theme-button-primary);
+  color: var(--theme-button-primary-text);
+}
+.btn-theme-primary:hover {
+  filter: brightness(1.08);
+}
+
+/* Global scrollbar default */
+html { scrollbar-color: var(--theme-scrollbar) transparent; scrollbar-width: thin; }
+

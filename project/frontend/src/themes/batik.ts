@@ -12,4 +12,18 @@ export const batikTheme: CrosswordTheme = {
   clueNumber: 'text-slate-400 font-bold',
   hover: 'hover:bg-slate-50 transition-colors duration-150',
   typography: 'text-slate-900 font-bold font-sans',
+  tokens: {
+    primary: '25 78% 42%',          // deep amber/batik brown
+    ring: '25 78% 42%',
+    border: '35 50% 82%',
+    accentStripe: '#b45309',
+    scrollbar: '#fcd34d',
+    badge: '#fef3c7',
+    badgeText: '#92400e',
+    buttonPrimary: '#b45309',
+    buttonPrimaryText: '#fffbeb',
+    cardShadow: 'rgba(180, 83, 9, 0.09)',
+    pageBackground: '#fffbeb',
+    illustrationColor: '#78350f',
+  },
 };
