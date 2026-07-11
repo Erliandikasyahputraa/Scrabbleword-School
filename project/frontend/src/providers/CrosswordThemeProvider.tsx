@@ -15,25 +15,33 @@ export function CrosswordThemeProvider({ children }: { children: React.ReactNode
 
   // Load from local storage
   useEffect(() => {
-    const savedThemeId = localStorage.getItem('crosswordLabs_theme');
-    if (savedThemeId) {
-      const found = themes.find(t => t.id === savedThemeId);
-      if (found) {
-        setActiveTheme(found);
+    try {
+      const savedThemeId = localStorage.getItem('crosswordLabs_theme');
+      if (savedThemeId) {
+        const found = themes.find(t => t.id === savedThemeId);
+        if (found) {
+          setActiveTheme(found);
+        }
       }
+    } catch (e) {
+      console.warn("Failed to load theme from localStorage", e);
     }
   }, []);
 
-  const setTheme = (themeId: string) => {
+  const handleSetTheme = (themeId: string) => {
     const found = themes.find(t => t.id === themeId);
     if (found) {
       setActiveTheme(found);
-      localStorage.setItem('crosswordLabs_theme', themeId);
+      try {
+        localStorage.setItem('crosswordLabs_theme', themeId);
+      } catch (e) {
+        console.warn("Failed to save theme to localStorage", e);
+      }
     }
   };
 
   return (
-    <CrosswordThemeContext.Provider value={{ activeTheme, setTheme, availableThemes: themes }}>
+    <CrosswordThemeContext.Provider value={{ activeTheme, setTheme: handleSetTheme, availableThemes: themes }}>
       {children}
     </CrosswordThemeContext.Provider>
   );

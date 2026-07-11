@@ -12,9 +12,10 @@ import type { CrosswordData } from '../../../types/crossword';
 interface CrosswordBuilderProps {
   initialData?: CrosswordData | null;
   onChange: (data: CrosswordData | null) => void;
+  sidebarFooter?: React.ReactNode;
 }
 
-export function CrosswordBuilder({ initialData, onChange }: CrosswordBuilderProps) {
+export function CrosswordBuilder({ initialData, onChange, sidebarFooter }: CrosswordBuilderProps) {
   const [words, setWords] = useState<CrosswordInputWord[]>([]);
   const [generatedData, setGeneratedData] = useState<CrosswordData | null>(null);
   const [error, setError] = useState<string>('');
@@ -134,7 +135,7 @@ export function CrosswordBuilder({ initialData, onChange }: CrosswordBuilderProp
             )}
           </div>
           
-          <div className="p-4 bg-card border-t border-border shrink-0 z-10 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+          <div className="p-4 bg-card border-t border-border shrink-0 z-10 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] space-y-3">
             <Button 
               type="button" 
               onClick={handleGenerate} 
@@ -145,9 +146,10 @@ export function CrosswordBuilder({ initialData, onChange }: CrosswordBuilderProp
               {isGenerating ? (
                 <span className="flex items-center gap-2"><RefreshCw size={16} className="animate-spin" /> Generating...</span>
               ) : (
-                <span className="flex items-center gap-2"><RefreshCw size={16} /> {generatedData ? 'Regenerate' : 'Generate'}</span>
+                <span className="flex items-center gap-2"><RefreshCw size={16} /> {generatedData ? 'Regenerate' : 'Generate Layout'}</span>
               )}
             </Button>
+            {sidebarFooter}
           </div>
         </div>
       </div>

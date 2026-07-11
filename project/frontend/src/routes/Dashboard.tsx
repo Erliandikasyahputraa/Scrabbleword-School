@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../providers/AuthProvider';
 import { fetchApi } from '../lib/api';
-import { Users, BookOpen, FileText, Puzzle, Trophy, Target, GraduationCap, CheckCircle, ArrowRight, PlayCircle, PlusCircle, ShieldCheck, Clock } from 'lucide-react';
+import { Users, BookOpen, FileText, Puzzle, Trophy, Target, GraduationCap, CheckCircle, ArrowRight, PlayCircle, PlusCircle, ShieldCheck, Clock, TrendingUp } from 'lucide-react';
 import { Card, CardContent } from '../components/ui/Card';
 import { Link, useNavigate } from 'react-router-dom';
 import { Spinner } from '../components/ui/LoadingSystem';
@@ -163,8 +163,8 @@ export default function Dashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
               <Card className="border-border overflow-hidden relative shadow-sm hover:shadow-md transition-shadow">
                 <CardContent className="p-5 sm:p-6 relative z-10 flex flex-col justify-center h-full">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 rounded-xl text-primary flex items-center justify-center mb-4">
-                    <Trophy size={20} className="sm:w-6 sm:h-6" />
+                  <div className="w-10 h-10 bg-primary/10 rounded-lg text-primary flex items-center justify-center mb-4 shrink-0">
+                    <Trophy size={20} className="w-5 h-5" />
                   </div>
                   <div>
                     <p className="text-sm font-medium text-muted-foreground mb-1">Average Student Score</p>
@@ -179,8 +179,8 @@ export default function Dashboard() {
 
               <Card className="border-border overflow-hidden relative shadow-sm hover:shadow-md transition-shadow">
                 <CardContent className="p-5 sm:p-6 relative z-10 flex flex-col justify-center h-full">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-success/10 rounded-xl text-success flex items-center justify-center mb-4">
-                    <CheckCircle size={20} className="sm:w-6 sm:h-6" />
+                  <div className="w-10 h-10 bg-success/10 rounded-lg text-success flex items-center justify-center mb-4 shrink-0">
+                    <TrendingUp size={20} className="w-5 h-5" />
                   </div>
                   <div>
                     <p className="text-sm font-medium text-muted-foreground mb-1">Completion Rate</p>
@@ -294,9 +294,9 @@ export default function Dashboard() {
 function StatCard({ icon, label, value, context }: { icon: React.ReactNode, label: string, value: string, context?: string }) {
   return (
     <Card hoverable className="border-border shadow-sm hover:-translate-y-1 transition-all duration-200 group">
-      <CardContent className="p-5 flex flex-col justify-between h-full">
-        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-muted rounded-xl flex items-center justify-center shrink-0 group-hover:bg-primary/10 transition-colors mb-4">
-          <div className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full">
+      <CardContent className="p-4 sm:p-5 flex flex-col justify-between h-full">
+        <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center shrink-0 group-hover:bg-primary/10 transition-colors mb-3">
+          <div className="w-5 h-5 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full">
             {icon}
           </div>
         </div>

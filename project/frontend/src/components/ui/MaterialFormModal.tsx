@@ -4,6 +4,7 @@ import { Button } from './Button';
 import { useQueryClient } from '@tanstack/react-query';
 import { API_URL } from '../../lib/api';
 import { CrosswordBuilder } from '../crossword/builder/CrosswordBuilder';
+import { CustomUploadField } from './CustomUploadField';
 import { toast } from 'react-hot-toast';
 
 type MaterialFormModalProps = {
@@ -136,7 +137,7 @@ export function MaterialFormModal({ isOpen, onClose, courseId, initialData }: Ma
         <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0 space-y-4 overflow-y-auto lg:overflow-hidden p-1">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 shrink-0">
             <div>
-              <label className="block text-sm font-medium text-foreground mb-1">Title</label>
+              <label className="block text-sm font-medium text-foreground mb-1">Material Title <span className="text-red-500">*</span></label>
               <input
                 type="text"
                 required
@@ -144,29 +145,24 @@ export function MaterialFormModal({ isOpen, onClose, courseId, initialData }: Ma
                 value={title}
                 onChange={e => setTitle(e.target.value)}
                 className="w-full h-12 px-4 rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-foreground disabled:opacity-50"
-                placeholder="e.g. Chapter 1: Introduction"
+                placeholder="e.g. Chapter 1: Basic Vocabulary"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-foreground mb-1">
-                PDF Document {initialData && '(Leave empty to keep current)'}
-              </label>
-              <input
-                type="file"
-                accept="application/pdf"
+              <CustomUploadField
+                file={pdfFile}
+                onChange={setPdfFile}
                 disabled={isUploading}
                 required={!initialData}
-                onChange={e => setPdfFile(e.target.files?.[0] || null)}
-                className="w-full h-12 px-4 py-2 rounded-xl border border-border bg-background text-foreground disabled:opacity-50"
+                label={initialData ? "PDF Document (Leave empty to keep current)" : "PDF Document"}
               />
             </div>
           </div>
           <div className="flex items-center justify-between mb-2 mt-4 shrink-0">
-            <label className="block text-sm font-medium text-foreground">Interactive Puzzle Workspace (Optional)</label>
+            <label className="block text-sm font-medium text-foreground">Interactive Puzzle Workspace</label>
           </div>
           
-          <div className="flex-1 min-h-[600px] lg:min-h-0 rounded-2xl flex flex-col">
-            
+          <div className="flex-1 min-h-[700px] lg:min-h-0 rounded-2xl flex flex-col">
             <CrosswordBuilder 
                initialData={crosswordJson ? JSON.parse(crosswordJson) : null}
                onChange={(data) => {
@@ -175,31 +171,30 @@ export function MaterialFormModal({ isOpen, onClose, courseId, initialData }: Ma
                  } else {
                     setCrosswordJson('');
                  }
-               }} 
+               }}
+               sidebarFooter={
+                 <div className="space-y-3">
+                   {isUploading && (
+                     <div className="p-3 bg-muted rounded-xl border border-border">
+                       <div className="flex justify-between items-center mb-2">
+                         <span className="text-xs font-medium text-foreground flex items-center gap-2">
+                            <div className="animate-spin h-3 w-3 border-2 border-primary border-t-transparent rounded-full" />
+                            Uploading...
+                         </span>
+                         <span className="text-xs font-bold text-primary">{uploadProgress}%</span>
+                       </div>
+                       <div className="w-full bg-slate-200 dark:bg-slate-700 h-1.5 rounded-full overflow-hidden">
+                         <div className="bg-primary h-full transition-all duration-300" style={{ width: `${uploadProgress}%` }} />
+                       </div>
+                     </div>
+                   )}
+                   <Button type="submit" fullWidth disabled={isUploading} className="h-11 shadow-sm font-semibold">
+                     {isUploading ? 'Saving...' : 'Save Material'}
+                   </Button>
+                 </div>
+               }
             />
           </div>
-          
-          {isUploading && (
-            <div className="mt-4 p-4 bg-muted rounded-xl border border-border">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-medium text-foreground flex items-center gap-2">
-                   <div className="animate-spin h-4 w-4 border-2 border-primary border-t-transparent rounded-full" />
-                   Uploading PDF...
-                </span>
-                <span className="text-sm font-bold text-primary">{uploadProgress}%</span>
-              </div>
-              <div className="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
-                <div 
-                  className="bg-primary h-full transition-all duration-300" 
-                  style={{ width: `${uploadProgress}%` }}
-                />
-              </div>
-            </div>
-          )}
-
-          <Button type="submit" fullWidth disabled={isUploading} className="h-12 shrink-0">
-            {isUploading ? 'Uploading...' : 'Save Material & Crossword'}
-          </Button>
         </form>
       </div>
     </div>
