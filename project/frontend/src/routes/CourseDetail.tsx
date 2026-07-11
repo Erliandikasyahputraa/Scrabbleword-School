@@ -17,7 +17,7 @@ type Material = {
   title: string;
   pdf_path: string | null;
   crossword_data: any;
-  status?: 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED';
+  status?: 'NOT_STARTED' | 'READING' | 'READY_FOR_CROSSWORD' | 'COMPLETED';
 };
 
 type CourseDetail = {
@@ -257,16 +257,20 @@ export default function CourseDetail() {
             )}
           </div>
         ) : (
-          course.materials.map((material, index) => (
+          course.materials.map((material, index) => {
+            const isCompleted = material.status === 'COMPLETED';
+            const isInProgress = material.status === 'READING' || material.status === 'READY_FOR_CROSSWORD';
+            
+            return (
             <div key={material.id} className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors group">
               <div className="flex items-start gap-4">
                 <div className={`p-3 rounded-xl transition-colors mt-1 sm:mt-0 ${
-                   material.status === 'COMPLETED' ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-400 group-hover:bg-green-500 group-hover:text-white' :
-                   material.status === 'IN_PROGRESS' ? 'bg-orange-50 text-orange-600 dark:bg-orange-900/20 dark:text-orange-400 group-hover:bg-orange-500 group-hover:text-white' :
+                   isCompleted ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-400 group-hover:bg-green-500 group-hover:text-white' :
+                   isInProgress ? 'bg-orange-50 text-orange-600 dark:bg-orange-900/20 dark:text-orange-400 group-hover:bg-orange-500 group-hover:text-white' :
                    'bg-blue-50 text-primary dark:bg-blue-900/20 group-hover:bg-primary group-hover:text-white'
                 }`}>
-                  {material.status === 'COMPLETED' ? <Award size={24} /> :
-                   material.status === 'IN_PROGRESS' ? <Clock size={24} /> :
+                  {isCompleted ? <Award size={24} /> :
+                   isInProgress ? <Clock size={24} /> :
                    <FileText size={24} />}
                 </div>
                 <div>
@@ -295,10 +299,17 @@ export default function CourseDetail() {
                 </Link>
               </div>
             </div>
-          ))
+          );
+        })
         )}
-
       </div>
+      
+      {isOwnerOrAdmin && (
+        <div className="mt-12">
+          <CourseMonitoringDashboard courseId={Number(id)} />
+        </div>
+      )}
+
       
       {isOwnerOrAdmin && (
           <>
@@ -328,6 +339,105 @@ export default function CourseDetail() {
         onConfirm={confirmDialog.onConfirm}
         onClose={() => setConfirmDialog(prev => ({ ...prev, isOpen: false }))}
       />
+    </div>
+  );
+}
+
+function CourseMonitoringDashboard({ courseId }: { courseId: number }) {
+  const [page, setPage] = useState(1);
+  const [sort, setSort] = useState('newest');
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['course-monitoring', courseId, page, sort],
+    queryFn: () => fetchApi(`/courses/${courseId}/monitoring?page=${page}&sort=${sort}`)
+  });
+
+  const formatTime = (seconds: number) => {
+    if (seconds === 0) return "-";
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}m ${s}s`;
+  };
+
+  const formatDate = (dateString: string | null) => {
+    if (!dateString) return "-";
+    return new Date(dateString).toLocaleString();
+  };
+
+  return (
+    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden">
+      <div className="p-6 border-b border-slate-100 dark:border-slate-800/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white">Student Monitoring Dashboard</h2>
+          <p className="text-sm text-slate-500 mt-1">Track student progress and submissions in real-time.</p>
+        </div>
+        <select 
+          className="bg-slate-50 border border-slate-200 rounded-xl text-sm px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+          value={sort}
+          onChange={e => { setSort(e.target.value); setPage(1); }}
+        >
+          <option value="newest">Newest First</option>
+          <option value="oldest">Oldest First</option>
+          <option value="score_high">Highest Score</option>
+          <option value="score_low">Lowest Score</option>
+        </select>
+      </div>
+
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm text-left text-slate-600 dark:text-slate-400">
+          <thead className="text-xs text-slate-700 dark:text-slate-300 uppercase bg-slate-50 dark:bg-slate-800/50">
+            <tr>
+              <th className="px-6 py-4 font-semibold">Student</th>
+              <th className="px-6 py-4 font-semibold">Material</th>
+              <th className="px-6 py-4 font-semibold">Status</th>
+              <th className="px-6 py-4 font-semibold">Submission Date</th>
+              <th className="px-6 py-4 text-center font-semibold">Score</th>
+              <th className="px-6 py-4 text-right font-semibold">Time Spent</th>
+            </tr>
+          </thead>
+          <tbody>
+            {isLoading ? (
+              <tr><td colSpan={6} className="px-6 py-8 text-center text-slate-500">Loading data...</td></tr>
+            ) : data?.data?.length === 0 ? (
+              <tr><td colSpan={6} className="px-6 py-8 text-center text-slate-500">No student progress recorded yet.</td></tr>
+            ) : (
+              data?.data?.map((sub: any) => (
+                <tr key={sub.id} className="border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                  <td className="px-6 py-4">
+                    <div className="font-semibold text-slate-900 dark:text-white">{sub.student?.name}</div>
+                    <div className="text-xs text-slate-500">{sub.student?.email}</div>
+                  </td>
+                  <td className="px-6 py-4">{sub.material?.title}</td>
+                  <td className="px-6 py-4">
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                      sub.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
+                      sub.status === 'READY_FOR_CROSSWORD' ? 'bg-blue-100 text-blue-800' :
+                      'bg-orange-100 text-orange-800'
+                    }`}>
+                      {sub.status.replace(/_/g, ' ')}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">{formatDate(sub.submitted_at)}</td>
+                  <td className="px-6 py-4 text-center">
+                    <span className="font-bold text-slate-700 dark:text-slate-300">{sub.score}</span>
+                  </td>
+                  <td className="px-6 py-4 text-right whitespace-nowrap font-medium text-slate-700 dark:text-slate-300">
+                    {formatTime(sub.time_spent_seconds)}
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {data && data.last_page > 1 && (
+        <div className="flex justify-center items-center py-4 gap-2 border-t border-slate-100 dark:border-slate-800">
+          <Button variant="secondary" size="sm" disabled={page === 1} onClick={() => setPage(p => Math.max(1, p - 1))}>Previous</Button>
+          <span className="text-sm font-medium text-slate-600">Page {page} of {data.last_page}</span>
+          <Button variant="secondary" size="sm" disabled={page === data.last_page} onClick={() => setPage(p => Math.min(data.last_page, p + 1))}>Next</Button>
+        </div>
+      )}
     </div>
   );
 }

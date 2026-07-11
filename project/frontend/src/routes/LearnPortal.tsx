@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { fetchApi } from '../lib/api';
@@ -188,7 +188,14 @@ export default function LearnPortal() {
   });
 
   const [isPdfCompletedLocal, setIsPdfCompletedLocal] = useState(false);
-  const isPdfCompleted = mySubmission !== null || isPdfCompletedLocal;
+  const isPdfCompleted = (mySubmission?.status === 'READY_FOR_CROSSWORD' || mySubmission?.status === 'COMPLETED') || isPdfCompletedLocal;
+
+  // Trigger start reading exactly once on load
+  useEffect(() => {
+    if (user?.role === 'student' && material && !mySubmission && !submissionLoading) {
+       fetchApi(`/materials/${id}/start-read`, { method: 'POST' }).catch(() => {});
+    }
+  }, [user, material, id, mySubmission, submissionLoading]);
 
   const handlePdfComplete = async () => {
       if (!isPdfCompleted && user?.role === 'student') {
@@ -221,11 +228,15 @@ export default function LearnPortal() {
 
   return (
     <div className="flex flex-col h-[calc(100vh-8rem)]">
-      <div className="mb-4 flex items-center gap-4">
-        <Button onClick={() => navigate(`/courses/${courseId}`)} variant="ghost" size="sm" className="gap-2 text-slate-500 hover:text-slate-900 dark:hover:text-white">
-          <ArrowLeft size={16} /> Back to Course
+      <div className="mb-4 flex items-center gap-4 text-sm text-gray-500">
+        <Button onClick={() => navigate(`/courses/${courseId}`)} variant="ghost" size="sm" className="gap-2 text-slate-500 hover:text-slate-900 dark:hover:text-white mr-4">
+          <ArrowLeft size={16} /> Back
         </Button>
-        <h1 className="text-xl font-bold text-slate-900 dark:text-white">{material.title}</h1>
+        <span className="cursor-pointer hover:text-blue-500 transition-colors" onClick={() => navigate('/')}>Dashboard</span>
+        <span>/</span>
+        <span className="cursor-pointer hover:text-blue-500 transition-colors" onClick={() => navigate(`/courses/${courseId}`)}>Course</span>
+        <span>/</span>
+        <span className="font-semibold text-gray-900">{material.title}</span>
       </div>
       
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 flex-1 min-h-0 animate-in fade-in duration-500">
@@ -237,7 +248,7 @@ export default function LearnPortal() {
             <div className="flex gap-2">
               {isPdfCompleted && (
                  <span className="flex items-center gap-1 text-sm text-green-600 bg-green-50 px-2 py-1 rounded-md font-medium border border-green-200">
-                    <CheckSquare size={14} /> Completed
+                    <CheckSquare size={14} /> Ready for Crossword
                  </span>
               )}
             </div>

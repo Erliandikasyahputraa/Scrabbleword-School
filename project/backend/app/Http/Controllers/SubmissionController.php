@@ -5,129 +5,105 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Material;
 use App\Models\Submission;
-use App\Models\User;
+use App\Services\SubmissionService;
 
 class SubmissionController extends Controller
 {
-    public function store(Request $request, $materialId)
-    {
-        $request->validate([
-            'answers' => 'required|array',
-            'time_spent' => 'required|integer',
-            'hints_used' => 'required|integer',
-        ]);
+    protected $submissionService;
 
-        $material = Material::findOrFail($materialId);
-        
-        // Enrollment validation: Ensure student is actually enrolled in this course
+    public function __construct(SubmissionService $submissionService)
+    {
+        $this->submissionService = $submissionService;
+    }
+
+    public function startRead(Request $request, $materialId)
+    {
         $user = $request->user();
+        $material = Material::findOrFail($materialId);
+
         if (!$user->enrolledCourses()->where('course_id', $material->course_id)->exists()) {
             return response()->json(['message' => 'Unauthorized: You are not enrolled in this course.'], 403);
         }
 
-        // Duplicate submit prevention: check if they already submitted
-        $submission = Submission::where('student_id', $user->id)->where('material_id', $materialId)->first();
-        if ($submission && $submission->is_completed) {
-            return response()->json(['message' => 'You have already submitted this material.'], 400);
+        $submission = $this->submissionService->startReading($user->id, $materialId);
+        return response()->json(['message' => 'Started reading', 'submission' => $submission]);
+    }
+
+    public function markRead(Request $request, $materialId)
+    {
+        $user = $request->user();
+        $material = Material::findOrFail($materialId);
+
+        if (!$user->enrolledCourses()->where('course_id', $material->course_id)->exists()) {
+            return response()->json(['message' => 'Unauthorized: You are not enrolled in this course.'], 403);
         }
 
-        $studentAnswers = $request->answers;
-        $crosswordData = $material->crossword_data;
+        $submission = $this->submissionService->finishReading($user->id, $materialId);
+        return response()->json(['message' => 'PDF marked as read', 'submission' => $submission]);
+    }
+
+    public function store(Request $request, $materialId)
+    {
+        $request->validate([
+            'answers' => 'required|array'
+        ]);
+
+        $material = Material::findOrFail($materialId);
+        $user = $request->user();
         
-        if (!$crosswordData || !isset($crosswordData['words'])) {
-            return response()->json(['message' => 'Material does not contain a crossword.'], 400);
+        if (!$user->enrolledCourses()->where('course_id', $material->course_id)->exists()) {
+            return response()->json(['message' => 'Unauthorized: You are not enrolled in this course.'], 403);
         }
 
-        $correctWordsCount = 0;
-        $totalWords = count($crosswordData['words']);
-        
-        foreach ($crosswordData['words'] as $wordObj) {
-            $id = $wordObj['id'];
-            $correctWord = strtoupper($wordObj['word']);
-            $studentWord = strtoupper($studentAnswers[$id] ?? '');
-            
-            if ($studentWord === $correctWord) {
-                $correctWordsCount++;
-            }
-        }
-
-        $score = ($totalWords > 0) ? round(($correctWordsCount / $totalWords) * 100) : 0;
-        $incorrectWordsCount = $totalWords - $correctWordsCount;
-        
-        if ($submission) {
-            $submission->update([
-                'score' => $score,
-                'is_completed' => true
-            ]);
-        } else {
-            $submission = Submission::create([
-                'student_id' => $user->id,
-                'material_id' => $materialId,
-                'score' => $score,
-                'is_completed' => true
-            ]);
-        }
+        // Service handles duplicates, calculations, and updates
+        $submission = $this->submissionService->submitCrossword($user->id, $materialId, $request->answers);
 
         return response()->json([
             'message' => 'Crossword submitted successfully',
             'result' => [
-                'score' => $score,
-                'correct_words' => $correctWordsCount,
-                'incorrect_words' => $incorrectWordsCount,
-                'time_spent' => $request->time_spent,
-                'hints_used' => $request->hints_used,
+                'score' => $submission->score,
+                'correct_words' => $submission->correct_answers,
+                'incorrect_words' => $submission->wrong_answers,
+                'time_spent' => $submission->time_spent_seconds,
             ]
         ], 201);
     }
 
-    /**
-     * Submission history for the authenticated student.
-     */
     public function history(Request $request)
     {
-        $submissions = Submission::where('student_id', $request->user()->id)
-            ->with(['material:id,title,course_id', 'material.course:id,name'])
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $query = Submission::where('student_id', $request->user()->id)
+            ->with(['material:id,title,course_id', 'material.course:id,name']);
+
+        // Sorting
+        $sort = $request->query('sort', 'newest');
+        switch ($sort) {
+            case 'oldest':
+                $query->orderBy('created_at', 'asc');
+                break;
+            case 'highest_score':
+                $query->orderBy('score', 'desc')->orderBy('created_at', 'desc');
+                break;
+            case 'lowest_score':
+                $query->orderBy('score', 'asc')->orderBy('created_at', 'desc');
+                break;
+            case 'course':
+                // For course sorting, we might need a join or just order by material_id for simplicity in Eloquent without joins.
+                // To properly sort by course name, a join is required.
+                $query->join('materials', 'submissions.material_id', '=', 'materials.id')
+                      ->join('courses', 'materials.course_id', '=', 'courses.id')
+                      ->orderBy('courses.name', 'asc')
+                      ->select('submissions.*');
+                break;
+            case 'newest':
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+        $submissions = $query->paginate(10);
         return response()->json($submissions);
     }
 
-    /**
-     * Submission statistics for a material (teacher/admin only).
-     */
-    public function stats(Request $request, $materialId)
-    {
-        $user = $request->user();
-        
-        // Authorization: only teacher who owns the course, or admin
-        $material = Material::with('course:id,teacher_id')->findOrFail($materialId);
-        
-        if ($user->role === 'teacher' && $material->course->teacher_id !== $user->id) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-        
-        if ($user->role === 'student') {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
-        $submissions = Submission::where('material_id', $materialId)->get();
-        
-        // Total enrolled students for this course
-        $totalEnrolled = \App\Models\Enrollment::where('course_id', $material->course_id)->count();
-        $completed = $submissions->where('is_completed', true)->count();
-        $averageScore = $submissions->where('is_completed', true)->avg('score') ?? 0;
-
-        return response()->json([
-            'total' => $totalEnrolled,
-            'completed' => $completed,
-            'pending' => max(0, $totalEnrolled - $completed),
-            'average_score' => round($averageScore, 1),
-        ]);
-    }
-
-    /**
-     * Get the authenticated student's submission for a specific material.
-     */
     public function mySubmission(Request $request, $materialId)
     {
         $submission = Submission::where('student_id', $request->user()->id)
@@ -139,26 +115,6 @@ class SubmissionController extends Controller
         }
         
         return response()->json($submission);
-    }
-
-    /**
-     * Mark the PDF as read (IN_PROGRESS material status).
-     */
-    public function markRead(Request $request, $materialId)
-    {
-        $user = $request->user();
-        $material = Material::findOrFail($materialId);
-
-        if (!$user->enrolledCourses()->where('course_id', $material->course_id)->exists()) {
-            return response()->json(['message' => 'Unauthorized: You are not enrolled in this course.'], 403);
-        }
-
-        $submission = Submission::firstOrCreate(
-            ['student_id' => $user->id, 'material_id' => $materialId],
-            ['score' => 0, 'is_completed' => false]
-        );
-
-        return response()->json(['message' => 'PDF marked as read', 'submission' => $submission]);
     }
 }
 

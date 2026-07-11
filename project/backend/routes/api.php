@@ -30,6 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Course & Material Routes
     Route::get('/courses', [CourseController::class, 'index']);
     Route::get('/courses/{id}', [CourseController::class, 'show']);
+    Route::get('/courses/{id}/monitoring', [CourseController::class, 'monitoring']);
     // Both teacher and admin can create/delete courses (admin enforced inside controller too)
     Route::post('/courses', [CourseController::class, 'store']);
     Route::put('/courses/{id}', [CourseController::class, 'update']);
@@ -47,10 +48,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Submissions (student only — enforced by middleware AND controller)
     Route::post('/materials/{materialId}/submissions', [SubmissionController::class, 'store'])->middleware('student');
+    Route::post('/materials/{materialId}/start-read', [SubmissionController::class, 'startRead'])->middleware('student');
     Route::post('/materials/{materialId}/read', [SubmissionController::class, 'markRead'])->middleware('student');
     Route::get('/materials/{materialId}/my-submission', [SubmissionController::class, 'mySubmission'])->middleware('student');
     Route::get('/submissions/history', [SubmissionController::class, 'history'])->middleware('student');
-    // Submission stats for teacher/admin
-    Route::get('/materials/{materialId}/submission-stats', [SubmissionController::class, 'stats']);
 });
 

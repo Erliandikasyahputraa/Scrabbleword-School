@@ -11,6 +11,7 @@ import LearnPortal from "./routes/LearnPortal"
 import Approvals from "./routes/Approvals"
 import Courses from "./routes/Courses"
 import Users from "./routes/Users"
+import StudentHistory from "./routes/StudentHistory"
 import ErrorPage from "./routes/ErrorPage"
 
 import { Toaster } from "react-hot-toast"
@@ -33,6 +34,7 @@ function App() {
             <Route path="/courses" element={<Courses />} />
             <Route path="/users" element={<Users />} />
             <Route path="/approvals" element={<Approvals />} />
+            <Route path="/history" element={<StudentHistory />} />
             <Route path="/courses/:id" element={<CourseDetail />} />
             <Route path="/courses/:courseId/materials/:id" element={<LearnPortal />} />
             <Route path="*" element={<ErrorPage code={404} />} />
