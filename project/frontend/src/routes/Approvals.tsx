@@ -1,8 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../providers/AuthProvider';
 import { fetchApi } from '../lib/api';
-import { Check, X } from 'lucide-react';
+import { Check, X, CheckCircle } from 'lucide-react';
 import { Button } from '../components/ui/Button';
+import { toast } from 'react-hot-toast';
 
 type User = {
   id: number;
@@ -28,9 +29,11 @@ export default function Approvals() {
         method: 'PUT',
         body: JSON.stringify({ status })
       }),
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
+      toast.success(`User ${variables.status} successfully`);
       queryClient.invalidateQueries({ queryKey: ['pending-users'] });
-    }
+    },
+    onError: (err: any) => toast.error(err.message || 'Failed to update user status')
   });
 
   if (user?.role === 'student') {
@@ -61,8 +64,14 @@ export default function Approvals() {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
         </div>
       ) : pendingUsers.length === 0 ? (
-        <div className="text-center p-12 bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800">
-          <p className="text-slate-500 dark:text-slate-400">No pending users found. Everyone is approved!</p>
+        <div className="flex flex-col items-center justify-center text-center p-16 bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
+          <div className="w-20 h-20 bg-green-50 dark:bg-green-900/20 rounded-full flex items-center justify-center mb-4 text-green-500">
+            <CheckCircle size={40} />
+          </div>
+          <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">All Caught Up!</h3>
+          <p className="text-slate-500 dark:text-slate-400 max-w-md">
+            There are no pending users waiting for approval right now.
+          </p>
         </div>
       ) : (
         <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">

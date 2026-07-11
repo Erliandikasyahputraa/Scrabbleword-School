@@ -13,28 +13,33 @@ import Courses from "./routes/Courses"
 import Users from "./routes/Users"
 import ErrorPage from "./routes/ErrorPage"
 
+import { Toaster } from "react-hot-toast"
+
 function App() {
   return (
-    <AppProviders>
-      <Routes>
-        {/* Guest auth routes */}
-        <Route element={<GuestLayout />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Route>
+    <>
+      <Toaster position="top-right" />
+      <AppProviders>
+        <Routes>
+          {/* Guest auth routes */}
+          <Route element={<GuestLayout />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Route>
 
-        {/* Authenticated dashboard routes */}
-        <Route element={<AuthenticatedLayout />}>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/courses" element={<Courses />} />
-          <Route path="/users" element={<Users />} />
-          <Route path="/approvals" element={<Approvals />} />
-          <Route path="/courses/:id" element={<CourseDetail />} />
-          <Route path="/courses/:courseId/materials/:id" element={<LearnPortal />} />
-          <Route path="*" element={<ErrorPage code={404} />} />
-        </Route>
-      </Routes>
-    </AppProviders>
+          {/* Authenticated dashboard routes */}
+          <Route element={<AuthenticatedLayout />}>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/courses" element={<Courses />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/approvals" element={<Approvals />} />
+            <Route path="/courses/:id" element={<CourseDetail />} />
+            <Route path="/courses/:courseId/materials/:id" element={<LearnPortal />} />
+            <Route path="*" element={<ErrorPage code={404} />} />
+          </Route>
+        </Routes>
+      </AppProviders>
+    </>
   )
 }
 

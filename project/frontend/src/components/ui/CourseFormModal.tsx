@@ -4,6 +4,8 @@ import { Button } from './Button';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchApi } from '../../lib/api';
 
+import { toast } from 'react-hot-toast';
+
 type CourseFormModalProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -45,10 +47,11 @@ export function CourseFormModal({ isOpen, onClose, initialData }: CourseFormModa
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['course', initialData?.id ? String(initialData.id) : undefined] });
       queryClient.invalidateQueries({ queryKey: ['courses'] });
+      toast.success(initialData ? 'Course updated successfully' : 'Course created successfully');
       onClose();
     },
     onError: (error: any) => {
-      alert(`Error: ${error.message}`);
+      toast.error(`Error: ${error.message}`);
     }
   });
 

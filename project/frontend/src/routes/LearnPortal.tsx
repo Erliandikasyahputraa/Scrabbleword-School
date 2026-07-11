@@ -197,7 +197,7 @@ export default function LearnPortal() {
               setIsPdfCompletedLocal(true);
               refetchSubmission();
           } catch (e) {
-              console.error("Failed to mark PDF as read", e);
+              // Silent catch
           }
       }
   };

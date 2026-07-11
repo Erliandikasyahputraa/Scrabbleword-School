@@ -106,6 +106,35 @@ class CourseController extends Controller
                     $mat['status'] = 'NOT_STARTED';
                 }
             }
+        } elseif (in_array($user->role, ['teacher', 'admin'])) {
+            $enrolledCount = \App\Models\Enrollment::where('course_id', $id)->count();
+            $materialsCount = $course->materials()->count();
+            $studentsCompleted = 0;
+            
+            if ($materialsCount > 0 && $enrolledCount > 0) {
+                $completedSubmissions = \App\Models\Submission::whereIn('material_id', $course->materials()->pluck('id'))
+                    ->where('is_completed', true)
+                    ->get()
+                    ->groupBy('student_id');
+                    
+                foreach ($completedSubmissions as $studentId => $submissions) {
+                    if ($submissions->count() === $materialsCount) {
+                        $studentsCompleted++;
+                    }
+                }
+            }
+            
+            $completionRate = $enrolledCount > 0 ? round(($studentsCompleted / $enrolledCount) * 100) : 0;
+            $averageScore = \App\Models\Submission::whereIn('material_id', $course->materials()->pluck('id'))->avg('score') ?? 0;
+            $pendingStudents = max(0, $enrolledCount - $studentsCompleted);
+
+            $courseData['analytics'] = [
+                'students_enrolled' => $enrolledCount,
+                'students_completed' => $studentsCompleted,
+                'completion_rate' => $completionRate,
+                'average_score' => round($averageScore),
+                'pending_students' => $pendingStudents,
+            ];
         }
 
         return response()->json($courseData);

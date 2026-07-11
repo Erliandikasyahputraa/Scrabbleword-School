@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../providers/AuthProvider';
 import { fetchApi } from '../lib/api';
-import { PlusCircle, Edit, Trash2, X } from 'lucide-react';
+import { PlusCircle, Edit, Trash2, X, Users as UsersIcon } from 'lucide-react';
 import { Button } from '../components/ui/Button';
+import { ConfirmDialog } from '../components/ui/ConfirmDialog';
+import { toast } from 'react-hot-toast';
 
 type User = {
   id: number;
@@ -21,6 +23,18 @@ export default function Users() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [editingUserId, setEditingUserId] = useState<number | null>(null);
+
+  const [confirmDialog, setConfirmDialog] = useState<{
+    isOpen: boolean;
+    title: string;
+    description: string;
+    onConfirm: () => void;
+  }>({
+    isOpen: false,
+    title: '',
+    description: '',
+    onConfirm: () => {}
+  });
 
   // Form State
   const [formData, setFormData] = useState({
@@ -51,8 +65,10 @@ export default function Users() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
+      toast.success(isEditMode ? 'User updated successfully' : 'User created successfully');
       closeModal();
-    }
+    },
+    onError: (error: any) => toast.error(error.message || 'Failed to save user')
   });
 
   const deleteMutation = useMutation({
@@ -61,8 +77,10 @@ export default function Users() {
         method: 'DELETE'
       }),
     onSuccess: () => {
+      toast.success('User deleted successfully');
       queryClient.invalidateQueries({ queryKey: ['users'] });
-    }
+    },
+    onError: (error: any) => toast.error(error.message || 'Failed to delete user')
   });
 
   const openModal = (u?: User) => {
@@ -100,9 +118,12 @@ export default function Users() {
   };
 
   const handleDelete = (id: number) => {
-    if (window.confirm('Are you sure you want to delete this user?')) {
-      deleteMutation.mutate(id);
-    }
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Delete User',
+      description: 'Are you sure you want to delete this user? This action cannot be undone.',
+      onConfirm: () => deleteMutation.mutate(id)
+    });
   };
 
   if (user?.role !== 'admin') {
@@ -139,8 +160,14 @@ export default function Users() {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
         </div>
       ) : users.length === 0 ? (
-        <div className="text-center p-12 bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800">
-          <p className="text-slate-500 dark:text-slate-400">No users found.</p>
+        <div className="flex flex-col items-center justify-center text-center p-16 bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
+          <div className="w-20 h-20 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4 text-slate-400 dark:text-slate-500">
+            <UsersIcon size={40} />
+          </div>
+          <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">No Users Found</h3>
+          <p className="text-slate-500 dark:text-slate-400 max-w-md">
+            No users have registered or been created in the platform yet.
+          </p>
         </div>
       ) : (
         <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
@@ -288,6 +315,14 @@ export default function Users() {
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        title={confirmDialog.title}
+        description={confirmDialog.description}
+        onConfirm={confirmDialog.onConfirm}
+        onClose={() => setConfirmDialog(prev => ({ ...prev, isOpen: false }))}
+      />
     </div>
   );
 }

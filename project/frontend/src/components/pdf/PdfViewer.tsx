@@ -40,7 +40,7 @@ export default function PdfViewer({ url, onComplete }: PdfViewerProps) {
            onComplete();
         }
       } catch (error) {
-        console.error('Error loading PDF:', error);
+        // Silent error
       }
     };
 
@@ -90,9 +90,7 @@ export default function PdfViewer({ url, onComplete }: PdfViewerProps) {
         
         await renderTask.promise;
       } catch (error: any) {
-        if (error.name !== 'RenderingCancelledException') {
-          console.error('Error rendering page:', error);
-        }
+        // Silent error
       } finally {
         if (isActive) {
           setIsRendering(false);
@@ -131,8 +129,8 @@ export default function PdfViewer({ url, onComplete }: PdfViewerProps) {
 
   const toggleFullscreen = () => {
       if (!document.fullscreenElement) {
-          containerRef.current?.requestFullscreen().catch(err => {
-              console.error(`Error attempting to enable fullscreen: ${err.message}`);
+          containerRef.current?.requestFullscreen().catch(() => {
+              // Silent error
           });
       } else {
           document.exitFullscreen();

@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../providers/AuthProvider';
 import { fetchApi } from '../lib/api';
-import { PlusCircle, X } from 'lucide-react';
+import { PlusCircle, X, BookOpen } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { CourseCard } from '../components/ui/CourseCard';
+import { toast } from 'react-hot-toast';
 
 type Course = {
   id: number;
@@ -41,9 +42,10 @@ export default function Courses() {
       setIsModalOpen(false);
       setNewCourseName('');
       setNewCourseDesc('');
-      alert('Course created successfully!'); // MVP Toast
+      toast.success('Course created successfully!');
       navigate(`/courses/${data.id}`);
-    }
+    },
+    onError: (err: any) => toast.error(err.message || 'Failed to create course')
   });
 
   const handleCreateCourse = (e: React.FormEvent) => {
@@ -54,7 +56,7 @@ export default function Courses() {
 
   return (
     <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in duration-500">
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
           <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
             {user?.role === 'admin' ? 'All Courses' : user?.role === 'teacher' ? 'Your Courses' : 'Available Courses'}
@@ -80,8 +82,22 @@ export default function Courses() {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
         </div>
       ) : courses.length === 0 ? (
-        <div className="text-center p-12 bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800">
-          <p className="text-slate-500 dark:text-slate-400">No courses found.</p>
+        <div className="flex flex-col items-center justify-center text-center p-16 bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
+          <div className="w-20 h-20 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4 text-slate-400 dark:text-slate-500">
+            <BookOpen size={40} />
+          </div>
+          <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">No Courses Found</h3>
+          <p className="text-slate-500 dark:text-slate-400 max-w-md">
+            {user?.role === 'teacher' || user?.role === 'admin' 
+              ? "You haven't created any courses yet. Get started by creating your first course!" 
+              : "You are not enrolled in any courses yet. Please wait for your instructor to assign you to a course."}
+          </p>
+          {(user?.role === 'teacher' || user?.role === 'admin') && (
+             <Button className="mt-6 gap-2" onClick={() => setIsModalOpen(true)}>
+               <PlusCircle size={20} />
+               Create First Course
+             </Button>
+          )}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

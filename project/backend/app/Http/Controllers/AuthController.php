@@ -13,16 +13,40 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|in:teacher,student'
         ]);
+
+        $existingUser = User::where('email', $request->email)->first();
+        if ($existingUser) {
+            if ($existingUser->status === 'rejected') {
+                $existingUser->update([
+                    'name' => $request->name,
+                    'password' => Hash::make($request->password),
+                    'role' => $request->role,
+                    'status' => 'pending',
+                    'approved_at' => null,
+                    'rejected_reason' => null
+                ]);
+
+                return response()->json([
+                    'message' => 'Registrasi berhasil diperbarui. Akun Anda sedang menunggu persetujuan admin.',
+                    'user' => $existingUser
+                ], 201);
+            } else {
+                throw ValidationException::withMessages([
+                    'email' => ['The email has already been taken.']
+                ]);
+            }
+        }
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
+            'status' => 'pending'
         ]);
 
         return response()->json([

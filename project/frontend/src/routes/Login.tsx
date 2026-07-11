@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../providers/AuthProvider';
 import { Button } from '../components/ui/Button';
-import { BrainCircuit, Sparkles, Target, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { BrainCircuit, Sparkles, Target, ArrowRight, Eye, EyeOff, Loader2 } from 'lucide-react';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -144,7 +144,11 @@ export default function Login() {
             
             <div className="pt-2">
               <Button type="submit" disabled={isLoading} fullWidth className="h-12 text-base shadow-lg shadow-primary/25">
-                {isLoading ? 'Signing In...' : <><span className="mr-2">Sign In</span> <ArrowRight size={18} /></>}
+                {isLoading ? (
+                  <><Loader2 size={18} className="animate-spin mr-2" /> Signing In...</>
+                ) : (
+                  <><span className="mr-2">Sign In</span> <ArrowRight size={18} /></>
+                )}
               </Button>
             </div>
           </form>

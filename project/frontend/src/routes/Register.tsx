@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
-import { BrainCircuit, Sparkles, Target, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { BrainCircuit, Sparkles, Target, ArrowRight, Eye, EyeOff, Loader2 } from 'lucide-react';
 
 export default function Register() {
   const [name, setName] = useState('');
@@ -14,8 +14,6 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [success, setSuccess] = useState('');
-  // Removing unused login
-  // Removing unused navigate
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,7 +37,6 @@ export default function Register() {
         throw new Error(data.message || 'Registration failed');
       }
       setSuccess(data.message || 'Registration successful. Please wait for admin approval.');
-      // Clear form
       setName('');
       setEmail('');
       setPassword('');
@@ -224,7 +221,11 @@ export default function Register() {
             
             <div className="pt-4">
               <Button type="submit" disabled={isLoading} fullWidth className="h-12 text-base shadow-lg shadow-primary/25">
-                {isLoading ? 'Creating account...' : <><span className="mr-2">Register</span> <ArrowRight size={18} /></>}
+                {isLoading ? (
+                  <><Loader2 size={18} className="animate-spin mr-2" /> Creating account...</>
+                ) : (
+                  <><span className="mr-2">Register</span> <ArrowRight size={18} /></>
+                )}
               </Button>
             </div>
           </form>

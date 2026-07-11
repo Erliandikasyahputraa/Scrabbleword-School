@@ -27,7 +27,7 @@ class EnrollmentController extends Controller
 
         $enrolledStudentIds = Enrollment::where('course_id', $courseId)->pluck('student_id')->toArray();
         
-        $students = User::where('role', 'student')->get()->map(function($student) use ($enrolledStudentIds) {
+        $students = User::where('role', 'student')->where('status', 'approved')->get()->map(function($student) use ($enrolledStudentIds) {
             return [
                 'id' => $student->id,
                 'name' => $student->name,

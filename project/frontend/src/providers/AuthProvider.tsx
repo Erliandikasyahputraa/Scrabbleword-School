@@ -24,35 +24,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const loadUser = async () => {
+    const initAuth = async () => {
       if (token) {
         try {
           const userData = await fetchApi('/auth/me');
           setUser(userData);
         } catch (error) {
-          console.error("Failed to load user", error);
-          setToken(null);
-          setUser(null);
           localStorage.removeItem('auth_token');
+          // Silently fail auth
+        } finally {
+          setIsLoading(false);
         }
+      } else {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
+    initAuth();
+  }, []);
 
-    loadUser();
-  }, [token]);
-
-  const login = (newToken: string, newUser: User) => {
+  const login = (newToken: string, userData: User) => {
     localStorage.setItem('auth_token', newToken);
     setToken(newToken);
-    setUser(newUser);
+    setUser(userData);
   };
 
   const logout = async () => {
     try {
       await fetchApi('/auth/logout', { method: 'POST' });
     } catch (e) {
-      console.error(e);
+      // Ignore network errors on logout
     } finally {
       localStorage.removeItem('auth_token');
       setToken(null);
