@@ -9,6 +9,7 @@ import { Menu, X, Home, BookOpen, Users, ShieldCheck } from "lucide-react"
 export function AuthenticatedLayout() {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const { user, isLoading, logout } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
@@ -55,22 +56,22 @@ export function AuthenticatedLayout() {
 
   const NavLinks = () => (
     <>
-      <Link to="/" className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted text-muted-foreground hover:text-primary transition-colors font-medium">
+      <Link to="/" className={`flex items-center gap-3 p-3 rounded-lg font-medium transition-colors ${location.pathname === '/' ? 'bg-primary/10 text-primary' : 'hover:bg-muted text-muted-foreground hover:text-foreground'}`}>
         <span className="w-5 h-5 flex items-center justify-center"><Home size={20} /></span>
         {(!isCollapsed || isMobileMenuOpen) && <span>Dashboard</span>}
       </Link>
-      <Link to="/courses" className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted text-muted-foreground hover:text-primary transition-colors font-medium">
+      <Link to="/courses" className={`flex items-center gap-3 p-3 rounded-lg font-medium transition-colors ${location.pathname.startsWith('/courses') ? 'bg-primary/10 text-primary' : 'hover:bg-muted text-muted-foreground hover:text-foreground'}`}>
         <span className="w-5 h-5 flex items-center justify-center"><BookOpen size={20} /></span>
         {(!isCollapsed || isMobileMenuOpen) && <span>Courses</span>}
       </Link>
       {user?.role === 'admin' && (
-        <Link to="/users" className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted text-muted-foreground hover:text-primary transition-colors font-medium">
+        <Link to="/users" className={`flex items-center gap-3 p-3 rounded-lg font-medium transition-colors ${location.pathname.startsWith('/users') ? 'bg-primary/10 text-primary' : 'hover:bg-muted text-muted-foreground hover:text-foreground'}`}>
           <span className="w-5 h-5 flex items-center justify-center"><Users size={20} /></span>
           {(!isCollapsed || isMobileMenuOpen) && <span>Users</span>}
         </Link>
       )}
       {user?.role !== 'student' && (
-        <Link to="/approvals" className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted text-muted-foreground hover:text-primary transition-colors font-medium">
+        <Link to="/approvals" className={`flex items-center gap-3 p-3 rounded-lg font-medium transition-colors ${location.pathname.startsWith('/approvals') ? 'bg-primary/10 text-primary' : 'hover:bg-muted text-muted-foreground hover:text-foreground'}`}>
           <span className="w-5 h-5 flex items-center justify-center"><ShieldCheck size={20} /></span>
           {(!isCollapsed || isMobileMenuOpen) && <span>Approvals</span>}
         </Link>
@@ -145,17 +146,39 @@ export function AuthenticatedLayout() {
           
           <div className="flex flex-wrap items-center gap-2 sm:gap-4 ml-auto">
             <ThemeToggle />
-            <div className="flex items-center gap-3 sm:gap-4 border-l border-border pl-3 sm:pl-4">
-              <div className="flex flex-col items-end">
-                <span className="text-sm font-semibold truncate max-w-[120px] sm:max-w-[200px]">{user.name}</span>
-                <span className="text-xs text-muted-foreground capitalize">{user.role}</span>
-              </div>
+            <div className="flex items-center gap-3 sm:gap-4 border-l border-border pl-3 sm:pl-4 relative">
+              
               <button 
-                onClick={handleLogout}
-                className="text-sm font-medium text-destructive hover:text-destructive/80 px-3 py-1.5 rounded-md hover:bg-destructive/10 transition-colors"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="flex items-center gap-3 hover:bg-muted p-1.5 rounded-lg transition-colors text-left"
               >
-                Logout
+                <div className="flex flex-col items-end hidden sm:flex">
+                  <span className="text-sm font-semibold truncate max-w-[120px] sm:max-w-[200px] text-foreground">{user.name}</span>
+                  <span className="text-xs text-muted-foreground capitalize">{user.role}</span>
+                </div>
+                <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 text-primary flex items-center justify-center font-bold shrink-0">
+                  {user.name.charAt(0).toUpperCase()}
+                </div>
               </button>
+
+              {isDropdownOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setIsDropdownOpen(false)} />
+                  <div className="absolute right-0 top-full mt-2 w-48 bg-card border border-border rounded-xl shadow-lg py-1 z-50 animate-in fade-in slide-in-from-top-2">
+                    <div className="px-4 py-2 border-b border-border sm:hidden mb-1">
+                      <span className="text-sm font-semibold block text-foreground truncate">{user.name}</span>
+                      <span className="text-xs text-muted-foreground capitalize">{user.role}</span>
+                    </div>
+                    <button 
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2.5 text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors flex items-center gap-2"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                      Logout
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </header>

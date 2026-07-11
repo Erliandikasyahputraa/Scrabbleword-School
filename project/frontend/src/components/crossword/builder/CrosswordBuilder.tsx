@@ -91,35 +91,39 @@ export function CrosswordBuilder({ initialData, onChange }: CrosswordBuilderProp
       </div>
 
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-0">
-        {/* Left Col: Words Management */}
-        <div className="lg:col-span-4 flex flex-col space-y-4 overflow-y-auto">
-          <CrosswordWordInput onAddWord={handleAddWord} disabled={isGenerating} />
-          <CrosswordWordList words={words} onRemoveWord={handleRemoveWord} disabled={isGenerating} />
-          
-          <Button 
-            type="button" 
-            onClick={handleGenerate} 
-            fullWidth 
-            disabled={words.length < 2 || isGenerating}
-            className="h-12 mt-4 shadow-md bg-slate-900 hover:bg-slate-800 dark:bg-primary dark:hover:bg-primary/90 text-white"
-          >
-            {isGenerating ? (
-              <span className="flex items-center gap-2"><RefreshCw size={18} className="animate-spin" /> Generating...</span>
-            ) : (
-              <span className="flex items-center gap-2"><RefreshCw size={18} /> {generatedData ? 'Regenerate Layout' : 'Generate Crossword'}</span>
+        {/* Left Col: Words Management (25%) */}
+        <div className="lg:col-span-3 flex flex-col h-full overflow-hidden bg-muted/20 rounded-xl border border-border">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
+            <CrosswordWordInput onAddWord={handleAddWord} disabled={isGenerating} />
+            <CrosswordWordList words={words} onRemoveWord={handleRemoveWord} disabled={isGenerating} />
+            
+            {error && (
+              <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/50 rounded-lg flex items-start gap-2 animate-in slide-in-from-top-2">
+                 <AlertTriangle size={16} className="text-red-500 shrink-0 mt-0.5" />
+                 <p className="text-xs text-red-600 dark:text-red-400 leading-relaxed">{error}</p>
+              </div>
             )}
-          </Button>
-
-          {error && (
-            <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/50 rounded-xl flex items-start gap-3 animate-in slide-in-from-top-2">
-               <AlertTriangle size={20} className="text-red-500 shrink-0 mt-0.5" />
-               <p className="text-sm text-red-600 dark:text-red-400 leading-relaxed">{error}</p>
-            </div>
-          )}
+          </div>
+          
+          <div className="p-4 bg-card border-t border-border shrink-0 z-10 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+            <Button 
+              type="button" 
+              onClick={handleGenerate} 
+              fullWidth 
+              disabled={words.length < 2 || isGenerating}
+              className="h-11 shadow-sm bg-slate-900 hover:bg-slate-800 dark:bg-primary dark:hover:bg-primary/90 text-white font-semibold"
+            >
+              {isGenerating ? (
+                <span className="flex items-center gap-2"><RefreshCw size={16} className="animate-spin" /> Generating...</span>
+              ) : (
+                <span className="flex items-center gap-2"><RefreshCw size={16} /> {generatedData ? 'Regenerate' : 'Generate'}</span>
+              )}
+            </Button>
+          </div>
         </div>
 
-        {/* Right Col: Preview */}
-        <div className="lg:col-span-8 flex flex-col h-full overflow-hidden">
+        {/* Right Col: Preview (75%) */}
+        <div className="lg:col-span-9 flex flex-col h-full overflow-hidden bg-muted/10 rounded-xl border border-border p-4">
           {generatedData ? (
             <div className="animate-in fade-in zoom-in-95 duration-300 flex-1 flex flex-col min-h-0">
                <div className="flex items-center gap-2 mb-4 shrink-0 text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 p-3 rounded-lg border border-emerald-100 dark:border-emerald-900/30">

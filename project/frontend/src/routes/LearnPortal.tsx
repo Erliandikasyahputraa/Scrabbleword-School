@@ -152,12 +152,21 @@ function StudentCrosswordView({ material }: { material: any }) {
   return (
     <CrosswordProvider data={material.crossword_data}>
       <CrosswordToolbar />
-      <CardContent className="flex-1 overflow-auto custom-scrollbar p-4 sm:p-6 bg-muted/30">
-        <div className="flex flex-col items-center">
-          <CrosswordBoard />
+      <CardContent className="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-6 bg-muted/30">
+        <div className="flex flex-col xl:flex-row gap-6 xl:gap-8 items-start max-w-7xl mx-auto w-full">
+          {/* Left Col: Board + Submit */}
+          <div className="w-full xl:w-2/3 flex flex-col items-center gap-6 xl:sticky xl:top-0">
+            <CrosswordBoard />
+            <div className="w-full max-w-2xl mt-4">
+              <CrosswordSubmit materialId={Number(id)} />
+            </div>
+          </div>
+          
+          {/* Right Col: Clues */}
+          <div className="w-full xl:w-1/3">
+            <CrosswordClues />
+          </div>
         </div>
-        <CrosswordClues />
-        <CrosswordSubmit materialId={Number(id)} />
       </CardContent>
     </CrosswordProvider>
   );
@@ -239,7 +248,7 @@ export default function LearnPortal() {
         <span className="font-semibold text-foreground truncate max-w-[150px] sm:max-w-[300px]">{material.title}</span>
       </div>
       
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 sm:gap-8 flex-1 min-h-0 animate-in fade-in duration-500">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 sm:gap-6 flex-1 min-h-0 animate-in fade-in duration-500">
         
         {/* Left Column: PDF Viewer */}
         <Card className="flex flex-col min-h-[500px] xl:min-h-0 xl:h-full border-border shadow-md">

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
-import { BrainCircuit, Sparkles, Target, ArrowRight, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Sparkles, Target, ArrowRight, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Logo } from '../components/ui/Logo';
 
 export default function Register() {
   const [name, setName] = useState('');
@@ -57,11 +58,8 @@ export default function Register() {
         <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
         
         <div className="relative z-10">
-          <div className="flex items-center gap-3 mb-12">
-            <div className="bg-white/20 p-2 rounded-xl backdrop-blur-sm">
-              <BrainCircuit size={32} className="text-white" />
-            </div>
-            <span className="text-2xl font-bold tracking-tight">TekaTeki</span>
+          <div className="mb-12 text-white">
+             <Logo size={40} className="text-white drop-shadow-md" />
           </div>
           
           <h1 className="text-5xl font-bold tracking-tight leading-tight mb-6">
@@ -69,7 +67,7 @@ export default function Register() {
             of learning today.
           </h1>
           <p className="text-blue-100 text-lg max-w-md leading-relaxed">
-            Create an account to start your journey. Whether you are teaching or learning, TekaTeki gives you the tools to succeed.
+            Create an account to start your journey. Whether you are teaching or learning, Crossword Labs gives you the tools to succeed.
           </p>
         </div>
 
@@ -99,11 +97,8 @@ export default function Register() {
       <div className="flex-1 flex flex-col justify-center items-center p-8 sm:p-12 relative bg-slate-50 dark:bg-slate-950 lg:ml-[50%] min-h-screen">
         <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl p-8 sm:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none border border-slate-100 dark:border-slate-800 relative z-10 my-8">
           
-          <div className="lg:hidden flex items-center gap-2 mb-8 justify-center">
-            <div className="bg-primary/10 p-2 rounded-xl">
-              <BrainCircuit size={28} className="text-primary" />
-            </div>
-            <span className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">TekaTeki</span>
+          <div className="lg:hidden flex items-center justify-center mb-8">
+            <Logo size={36} className="text-primary" />
           </div>
 
           <div className="text-center mb-8">

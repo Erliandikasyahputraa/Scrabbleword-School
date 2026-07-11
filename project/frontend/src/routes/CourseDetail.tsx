@@ -148,7 +148,7 @@ export default function CourseDetail() {
       </div>
 
       {/* Hero Banner */}
-      <div className="bg-gradient-to-br from-primary to-blue-500 dark:from-primary/90 dark:to-primary/70 text-primary-foreground rounded-3xl p-6 lg:p-8 shadow-lg flex flex-col md:flex-row gap-6 md:gap-8 items-start relative overflow-hidden border-0">
+      <div className="bg-gradient-to-br from-primary to-blue-500 dark:from-primary/90 dark:to-primary/70 text-primary-foreground rounded-3xl p-6 lg:p-8 shadow-lg flex flex-col md:flex-row gap-6 md:gap-6 items-start relative overflow-hidden border-0">
         <div className="absolute top-[-20%] right-[-10%] w-64 h-64 bg-white/10 rounded-full blur-3xl z-0" />
         
         <div className="flex-1 space-y-4 w-full relative z-10">
@@ -265,6 +265,11 @@ export default function CourseDetail() {
                 </Button>
               )
             }
+            secondaryHelp={
+              isOwnerOrAdmin 
+                ? "Students will be notified when you publish new materials."
+                : undefined
+            }
           />
         ) : (
           course.materials.map((material, index) => {
@@ -297,7 +302,7 @@ export default function CourseDetail() {
               <div className="flex flex-col sm:flex-row gap-2 mt-2 sm:mt-0 w-full sm:w-auto shrink-0">
                 {isOwnerOrAdmin && (
                   <div className="flex gap-2 w-full sm:w-auto">
-                    <Button variant="ghost" size="sm" onClick={() => handleEditMaterial(material)} className="flex-1 sm:flex-none">Edit</Button>
+                    <Button variant="secondary" size="sm" onClick={() => handleEditMaterial(material)} className="flex-1 sm:flex-none">Edit</Button>
                     <Button variant="ghost" size="sm" className="flex-1 sm:flex-none text-destructive hover:bg-destructive/10 hover:text-destructive" onClick={() => handleDeleteMaterial(material.id)}>Delete</Button>
                   </div>
                 )}

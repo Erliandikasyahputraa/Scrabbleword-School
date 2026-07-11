@@ -1,11 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../providers/AuthProvider';
 import { fetchApi } from '../lib/api';
-import { Users, BookOpen, FileText, Puzzle, Trophy, Target, Percent, GraduationCap, CheckCircle, ArrowRight, PlayCircle } from 'lucide-react';
+import { Users, BookOpen, FileText, Puzzle, Trophy, Target, GraduationCap, CheckCircle, ArrowRight, PlayCircle, PlusCircle, ShieldCheck, Clock } from 'lucide-react';
 import { Card, CardContent } from '../components/ui/Card';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Spinner } from '../components/ui/LoadingSystem';
 import { TeacherIllustration, AchievementIllustration } from '../components/ui/Illustrations';
+import { Button } from '../components/ui/Button';
 
 type DashboardStats = {
   total_courses?: number;
@@ -29,240 +30,310 @@ type DashboardStats = {
 
 export default function Dashboard() {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const { data: stats, isLoading } = useQuery<DashboardStats>({
     queryKey: ['dashboard-stats'],
     queryFn: () => fetchApi('/dashboard/stats')
   });
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-[60vh]">
+        <Spinner className="w-10 h-10 text-primary" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6 sm:space-y-8 animate-in fade-in duration-500 pb-12">
-      {/* Hero Section */}
+      {/* 1. Hero Section */}
       <div className="bg-gradient-to-r from-primary to-blue-500 dark:from-primary/90 dark:to-primary/70 rounded-3xl p-6 sm:p-8 lg:p-10 text-primary-foreground shadow-lg relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="absolute top-[-20%] right-[-10%] w-64 h-64 bg-white/10 rounded-full blur-3xl z-0" />
         <div className="relative z-10 flex-1">
-          <h1 className="text-3xl sm:text-4xl lg:text-4xl font-bold tracking-tight mb-3">
-            Welcome back, {user?.name}! 👋
+          <p className="text-primary-foreground/80 font-medium mb-1 uppercase tracking-wider text-sm">Welcome Back,</p>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
+            {user?.name}
           </h1>
-          <p className="text-primary-foreground/90 text-base sm:text-lg max-w-xl leading-relaxed">
-            {user?.role === 'admin' && 'Here is the global platform overview. Monitor courses, users, and overall activity.'}
-            {user?.role === 'teacher' && 'Here is your overall teaching performance and statistics. Ready to build new puzzles?'}
-            {user?.role === 'student' && 'Ready to master new vocabularies today? Here is your learning progress.'}
+          
+          <p className="text-primary-foreground/90 text-base sm:text-lg max-w-xl leading-relaxed mb-8">
+            {user?.role === 'admin' && 'Keep the platform running smoothly. Monitor all active courses, review user registrations, and track overall platform health.'}
+            {user?.role === 'teacher' && 'Ready to inspire your students today? Create interactive learning materials and track your class performance.'}
+            {user?.role === 'student' && 'Continue your learning journey. Solve crosswords, read new materials, and master your vocabulary goals today.'}
           </p>
+
+          <div className="flex flex-wrap items-center gap-4">
+            {user?.role === 'admin' && (
+              <>
+                <Button variant="secondary" className="bg-white text-primary hover:bg-white/90 shadow-md" onClick={() => navigate('/users')}>Manage Users</Button>
+                <Button variant="ghost" className="text-white hover:bg-white/20 border border-white/30" onClick={() => navigate('/approvals')}>Review Approvals</Button>
+              </>
+            )}
+            {user?.role === 'teacher' && (
+              <>
+                <Button variant="secondary" className="bg-white text-primary hover:bg-white/90 shadow-md" onClick={() => navigate('/courses')}>Manage Courses</Button>
+                <Button variant="ghost" className="text-white hover:bg-white/20 border border-white/30" onClick={() => navigate('/approvals')}>Review Students</Button>
+              </>
+            )}
+            {user?.role === 'student' && (
+              <>
+                {stats?.continue_learning ? (
+                   <Button variant="secondary" className="bg-white text-primary hover:bg-white/90 shadow-md" onClick={() => navigate(`/courses/${stats.continue_learning.course_id}/materials/${stats.continue_learning.id}`)}>
+                     Resume Learning
+                   </Button>
+                ) : (
+                   <Button variant="secondary" className="bg-white text-primary hover:bg-white/90 shadow-md" onClick={() => navigate('/courses')}>
+                     Browse Courses
+                   </Button>
+                )}
+                <Button variant="ghost" className="text-white hover:bg-white/20 border border-white/30" onClick={() => navigate('/history')}>View History</Button>
+              </>
+            )}
+          </div>
         </div>
-        <div className="relative z-10 hidden sm:block shrink-0 opacity-90 drop-shadow-lg">
+        <div className="relative z-10 hidden md:block shrink-0 opacity-90 drop-shadow-lg max-w-[35%]">
            {user?.role === 'student' ? (
-             <AchievementIllustration size={160} className="text-white" />
+             <AchievementIllustration size={180} className="text-white ml-auto" />
            ) : (
-             <TeacherIllustration size={160} className="text-white" />
+             <TeacherIllustration size={180} className="text-white ml-auto" />
            )}
         </div>
       </div>
 
-      {isLoading ? (
-        <div className="flex justify-center p-8">
-          <Spinner className="w-10 h-10 text-primary" />
-        </div>
-      ) : (
-        <div className="space-y-5 sm:space-y-6">
-          
-          {/* Admin / Teacher UI */}
-          {(user?.role === 'admin' || user?.role === 'teacher') && (
+      {/* 2. Quick Actions */}
+      <div>
+        <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-4">Quick Actions</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5">
+          {user?.role === 'admin' && (
             <>
-              <div className="flex items-center justify-between mb-2">
-                <h2 className="text-2xl sm:text-3xl font-bold text-foreground">Overview & Statistics</h2>
-              </div>
-              
-              {user?.role === 'admin' && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-                  <StatCard icon={<GraduationCap className="text-primary" />} label="Total Teachers" value={stats?.total_teachers?.toString() || '0'} />
-                  <StatCard icon={<Users className="text-indigo-500" />} label="Total Students" value={stats?.total_students?.toString() || '0'} />
-                  <StatCard icon={<BookOpen className="text-purple-500" />} label="Total Courses" value={stats?.total_courses?.toString() || '0'} />
-                  <StatCard icon={<FileText className="text-success" />} label="Total Materials" value={stats?.total_materials?.toString() || '0'} />
-                </div>
-              )}
-              
-              {user?.role === 'teacher' && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-                  <StatCard icon={<BookOpen className="text-purple-500" />} label="Active Courses" value={stats?.total_courses?.toString() || '0'} />
-                  <StatCard icon={<Users className="text-primary" />} label="Total Students" value={stats?.total_students?.toString() || '0'} />
-                  <StatCard icon={<FileText className="text-success" />} label="Learning Materials" value={stats?.total_materials?.toString() || '0'} />
-                  <StatCard icon={<Puzzle className="text-warning" />} label="Crosswords" value={stats?.total_materials?.toString() || '0'} />
-                </div>
-              )}
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 pt-4 border-t border-border">
-                <Card className="border-border overflow-hidden relative">
-                  <div className="absolute top-0 right-0 p-4 sm:p-5 opacity-5 flex items-center justify-center">
-                    <Trophy className="w-[72px] h-[72px] sm:w-[96px] sm:h-[96px] lg:w-[120px] lg:h-[120px]" />
-                  </div>
-                  <CardContent className="p-5 sm:p-6 relative z-10">
-                    <p className="text-sm font-medium text-muted-foreground mb-1">Average Student Score</p>
-                    <div className="flex items-end gap-2 sm:gap-3">
-                      <h3 className="text-4xl sm:text-5xl font-bold text-foreground">{stats?.average_score}</h3>
-                      <span className="text-base sm:text-lg font-semibold text-muted-foreground mb-1">/ 100</span>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-border overflow-hidden relative">
-                  <div className="absolute top-0 right-0 p-4 sm:p-5 opacity-5 flex items-center justify-center">
-                    <Percent className="w-[72px] h-[72px] sm:w-[96px] sm:h-[96px] lg:w-[120px] lg:h-[120px]" />
-                  </div>
-                  <CardContent className="p-5 sm:p-6 relative z-10">
-                    <p className="text-sm font-medium text-muted-foreground mb-1">Completion Rate</p>
-                    <div className="flex items-end gap-2 sm:gap-3">
-                      <h3 className="text-4xl sm:text-5xl font-bold text-foreground">{stats?.completion_rate}%</h3>
-                    </div>
-                    <div className="w-full bg-muted h-2 mt-4 rounded-full overflow-hidden">
-                      <div className="bg-primary h-full rounded-full transition-all duration-1000" style={{ width: `${stats?.completion_rate || 0}%` }} />
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+              <QuickActionCard icon={<Users />} label="Manage Users" to="/users" />
+              <QuickActionCard icon={<ShieldCheck />} label="Review Approvals" to="/approvals" />
+              <QuickActionCard icon={<BookOpen />} label="Manage Courses" to="/courses" />
             </>
           )}
-
-          {/* Student Specific UI */}
+          {user?.role === 'teacher' && (
+            <>
+              <QuickActionCard icon={<PlusCircle />} label="Create Course" to="/courses" highlight />
+              <QuickActionCard icon={<BookOpen />} label="View Courses" to="/courses" />
+              <QuickActionCard icon={<ShieldCheck />} label="Review Students" to="/approvals" />
+            </>
+          )}
           {user?.role === 'student' && (
-            <div className="space-y-5 sm:space-y-6">
-              {stats?.is_fully_completed && stats?.total_materials! > 0 && (
-                <div className="bg-success/10 border border-success/20 text-success p-4 sm:p-5 rounded-2xl flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4">
-                  <Trophy size={48} className="text-success shrink-0 w-10 h-10 sm:w-12 sm:h-12" />
-                  <div>
-                    <h2 className="text-xl sm:text-2xl font-bold">Congratulations!</h2>
-                    <p className="text-foreground text-sm sm:text-base mt-1">You have successfully completed all your enrolled materials. Keep up the excellent work!</p>
-                  </div>
-                </div>
+            <>
+              {stats?.continue_learning ? (
+                <QuickActionCard icon={<PlayCircle />} label="Continue Learning" to={`/courses/${stats.continue_learning.course_id}/materials/${stats.continue_learning.id}`} highlight />
+              ) : (
+                <QuickActionCard icon={<Puzzle />} label="Browse Courses" to="/courses" highlight />
               )}
+              <QuickActionCard icon={<BookOpen />} label="My Courses" to="/courses" />
+              <QuickActionCard icon={<Clock />} label="View History" to="/history" />
+            </>
+          )}
+        </div>
+      </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
-                <Card className="md:col-span-2 border-border overflow-hidden relative shadow-md">
-                  <div className="absolute top-0 right-0 p-4 sm:p-5 opacity-5 flex items-center justify-center">
-                    <Target className="w-[72px] h-[72px] sm:w-[96px] sm:h-[96px] lg:w-[120px] lg:h-[120px]" />
-                  </div>
-                  <CardContent className="p-5 sm:p-6 relative z-10 flex flex-col justify-center h-full">
-                    <p className="text-sm font-medium text-muted-foreground mb-1">Overall Learning Progress</p>
-                    <div className="flex items-end gap-2 sm:gap-3 mb-4 sm:mb-6">
-                      <h3 className="text-5xl sm:text-6xl font-extrabold text-primary">{stats?.overall_progress}%</h3>
-                    </div>
-                    <div className="w-full bg-muted h-3 sm:h-4 rounded-full overflow-hidden shadow-inner">
-                      <div className="bg-primary h-full rounded-full transition-all duration-1000" style={{ width: `${stats?.overall_progress || 0}%` }} />
-                    </div>
-                    <p className="text-xs sm:text-sm text-muted-foreground mt-4 font-medium flex gap-4">
-                      <span><span className="font-bold text-foreground">{stats?.completed_count}</span> Completed</span>
-                      <span><span className="font-bold text-foreground">{stats?.estimated_remaining}</span> Remaining</span>
-                    </p>
-                  </CardContent>
-                </Card>
-                
-                {stats?.continue_learning ? (
-                  <Card className="bg-primary text-primary-foreground shadow-lg border-0 flex flex-col justify-between">
-                    <CardContent className="p-5 sm:p-6 h-full flex flex-col">
-                      <h3 className="text-primary-foreground/80 font-medium text-sm sm:text-base mb-1">Continue Learning</h3>
-                      <h4 className="text-xl sm:text-2xl font-bold mb-1 leading-tight">{stats.continue_learning.course?.name}</h4>
-                      <p className="text-primary-foreground/90 text-xs sm:text-sm mb-6 truncate">{stats.continue_learning.title}</p>
-                      
-                      <div className="mt-auto">
-                        <Link to={`/courses/${stats.continue_learning.course_id}/materials/${stats.continue_learning.id}`} className="bg-background text-primary hover:bg-background/90 w-full py-2 sm:py-2.5 px-4 rounded-xl text-sm sm:text-base font-bold flex items-center justify-center gap-2 transition-colors">
-                          <PlayCircle size={20} /> Resume Now
-                        </Link>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ) : (
-                  <Card className="border-border shadow-sm flex flex-col justify-center items-center text-center p-5 sm:p-6 bg-muted/50">
-                    <CheckCircle size={48} className="text-success mb-4 w-10 h-10 sm:w-12 sm:h-12" />
-                    <h3 className="text-lg sm:text-xl font-bold text-foreground">All Caught Up!</h3>
-                    <p className="text-muted-foreground mt-2 text-xs sm:text-sm">You have no pending materials to continue right now.</p>
-                  </Card>
-                )}
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
-                {/* Lists Section */}
-                <div>
-                  <h3 className="text-base sm:text-lg font-bold text-foreground mb-4 flex items-center gap-2">
-                    <PlayCircle className="text-primary" size={20}/> In Progress
-                  </h3>
-                  {stats?.in_progress && stats.in_progress.length > 0 ? (
-                    <div className="space-y-3">
-                      {stats.in_progress.map((m: any) => (
-                        <MaterialListCard key={m.id} material={m} />
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-muted-foreground italic text-xs sm:text-sm">No materials currently in progress.</p>
-                  )}
-                </div>
-
-                <div>
-                  <h3 className="text-base sm:text-lg font-bold text-foreground mb-4 flex items-center gap-2">
-                    <FileText className="text-muted-foreground" size={20}/> Not Started
-                  </h3>
-                  {stats?.not_started && stats.not_started.length > 0 ? (
-                    <div className="space-y-3">
-                      {stats.not_started.map((m: any) => (
-                        <MaterialListCard key={m.id} material={m} />
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-muted-foreground italic text-xs sm:text-sm">No new materials waiting.</p>
-                  )}
-                </div>
-                
-                <div className="md:col-span-2">
-                  <h3 className="text-base sm:text-lg font-bold text-foreground mb-4 flex items-center gap-2">
-                    <CheckCircle className="text-success" size={20}/> Recently Completed
-                  </h3>
-                  {stats?.completed && stats.completed.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {stats.completed.map((m: any) => (
-                        <MaterialListCard key={m.id} material={m} />
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-muted-foreground italic text-xs sm:text-sm">You haven't completed any materials yet.</p>
-                  )}
-                </div>
-              </div>
-
+      {/* 3. Recent Activity (Student) or Overview (Admin/Teacher) */}
+      {(user?.role === 'admin' || user?.role === 'teacher') && (
+        <>
+          <div className="flex items-center justify-between mb-4 mt-8">
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground">Platform Overview</h2>
+          </div>
+          
+          {user?.role === 'admin' && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+              <StatCard icon={<GraduationCap className="text-primary" />} label="Total Teachers" value={stats?.total_teachers?.toString() || '0'} context="Registered on platform" />
+              <StatCard icon={<Users className="text-indigo-500" />} label="Total Students" value={stats?.total_students?.toString() || '0'} context="Active learners" />
+              <StatCard icon={<BookOpen className="text-purple-500" />} label="Total Courses" value={stats?.total_courses?.toString() || '0'} context="Published courses" />
+              <StatCard icon={<FileText className="text-success" />} label="Total Materials" value={stats?.total_materials?.toString() || '0'} context="Lessons & Puzzles" />
+            </div>
+          )}
+          
+          {user?.role === 'teacher' && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+              <StatCard icon={<BookOpen className="text-purple-500" />} label="Active Courses" value={stats?.total_courses?.toString() || '0'} context="Managed by you" />
+              <StatCard icon={<Users className="text-primary" />} label="Total Students" value={stats?.total_students?.toString() || '0'} context="Enrolled in your courses" />
+              <StatCard icon={<FileText className="text-success" />} label="Learning Materials" value={stats?.total_materials?.toString() || '0'} context="PDFs & Documents" />
+              <StatCard icon={<Puzzle className="text-warning" />} label="Crosswords" value={stats?.total_materials?.toString() || '0'} context="Interactive puzzles" />
             </div>
           )}
 
-        </div>
+          {/* 4. Performance Statistics */}
+          <div className="mt-8">
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-4">Performance Insights</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+              <Card className="border-border overflow-hidden relative shadow-sm hover:shadow-md transition-shadow">
+                <CardContent className="p-5 sm:p-6 relative z-10 flex flex-col justify-center h-full">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 rounded-xl text-primary flex items-center justify-center mb-4">
+                    <Trophy size={20} className="sm:w-6 sm:h-6" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground mb-1">Average Student Score</p>
+                    <div className="flex items-baseline gap-2">
+                      <h3 className="text-4xl sm:text-5xl font-bold text-foreground">{stats?.average_score}</h3>
+                      <span className="text-base sm:text-lg font-semibold text-muted-foreground">/ 100</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-2">Across all active materials and puzzles.</p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-border overflow-hidden relative shadow-sm hover:shadow-md transition-shadow">
+                <CardContent className="p-5 sm:p-6 relative z-10 flex flex-col justify-center h-full">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-success/10 rounded-xl text-success flex items-center justify-center mb-4">
+                    <CheckCircle size={20} className="sm:w-6 sm:h-6" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground mb-1">Completion Rate</p>
+                    <h3 className="text-4xl sm:text-5xl font-bold text-foreground">{stats?.completion_rate}%</h3>
+                    <div className="w-full bg-muted h-2 mt-3 rounded-full overflow-hidden">
+                      <div className="bg-success h-full rounded-full transition-all duration-1000" style={{ width: `${stats?.completion_rate || 0}%` }} />
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-2">Students who finished assigned work.</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </>
       )}
+
+      {/* Student: Recent Activity & Progress */}
+      {user?.role === 'student' && (
+        <>
+          <div className="mt-8">
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-4">Your Progress</h2>
+            {stats?.is_fully_completed && stats?.total_materials! > 0 && (
+              <div className="bg-success/10 border border-success/20 text-success p-4 sm:p-5 rounded-2xl flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 mb-5">
+                <Trophy size={48} className="text-success shrink-0 w-10 h-10 sm:w-12 sm:h-12" />
+                <div>
+                  <h2 className="text-lg sm:text-xl font-bold">Congratulations!</h2>
+                  <p className="text-success/80 text-sm mt-1">You have successfully completed all your enrolled materials. Keep up the excellent work!</p>
+                </div>
+              </div>
+            )}
+
+            <Card className="border-border overflow-hidden relative shadow-sm">
+              <CardContent className="p-5 sm:p-6 relative z-10 flex flex-col justify-center h-full">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 rounded-xl text-primary flex items-center justify-center mb-4">
+                  <Target size={20} className="sm:w-6 sm:h-6" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground mb-1">Overall Completion</p>
+                  <h3 className="text-4xl sm:text-5xl font-bold text-primary mb-3">{stats?.overall_progress}%</h3>
+                  <div className="w-full bg-muted h-2 rounded-full overflow-hidden shadow-inner">
+                    <div className="bg-primary h-full rounded-full transition-all duration-1000" style={{ width: `${stats?.overall_progress || 0}%` }} />
+                  </div>
+                  <div className="flex gap-6 mt-4 border-t border-border pt-4">
+                    <div>
+                      <span className="text-xs text-muted-foreground block mb-1">Completed</span>
+                      <span className="font-bold text-foreground text-lg">{stats?.completed_count}</span>
+                    </div>
+                    <div>
+                      <span className="text-xs text-muted-foreground block mb-1">Remaining</span>
+                      <span className="font-bold text-foreground text-lg">{stats?.estimated_remaining}</span>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 mt-8">
+            <div>
+              <h3 className="text-base sm:text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+                <PlayCircle className="text-warning" size={20}/> In Progress
+              </h3>
+              {stats?.in_progress && stats.in_progress.length > 0 ? (
+                <div className="space-y-3">
+                  {stats.in_progress.map((m: any) => (
+                    <MaterialListCard key={m.id} material={m} />
+                  ))}
+                </div>
+              ) : (
+                <p className="text-muted-foreground italic text-sm p-4 bg-muted/30 rounded-xl border border-border border-dashed text-center">No materials currently in progress.</p>
+              )}
+            </div>
+
+            <div>
+              <h3 className="text-base sm:text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+                <FileText className="text-muted-foreground" size={20}/> Not Started
+              </h3>
+              {stats?.not_started && stats.not_started.length > 0 ? (
+                <div className="space-y-3">
+                  {stats.not_started.map((m: any) => (
+                    <MaterialListCard key={m.id} material={m} />
+                  ))}
+                </div>
+              ) : (
+                <p className="text-muted-foreground italic text-sm p-4 bg-muted/30 rounded-xl border border-border border-dashed text-center">No new materials waiting.</p>
+              )}
+            </div>
+            
+            <div className="md:col-span-2 mt-4">
+              <h3 className="text-base sm:text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+                <CheckCircle className="text-success" size={20}/> Recently Completed
+              </h3>
+              {stats?.completed && stats.completed.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {stats.completed.map((m: any) => (
+                    <MaterialListCard key={m.id} material={m} />
+                  ))}
+                </div>
+              ) : (
+                <p className="text-muted-foreground italic text-sm p-4 bg-muted/30 rounded-xl border border-border border-dashed text-center">You haven't completed any materials yet.</p>
+              )}
+            </div>
+          </div>
+        </>
+      )}
+
     </div>
   );
 }
 
-function StatCard({ icon, label, value }: { icon: React.ReactNode, label: string, value: string }) {
+function StatCard({ icon, label, value, context }: { icon: React.ReactNode, label: string, value: string, context?: string }) {
   return (
-    <Card hoverable className="border-border">
-      <CardContent className="p-4 lg:p-5 flex items-center gap-3 lg:gap-4">
-        <div className="p-2 lg:p-3 bg-muted rounded-2xl flex items-center justify-center shrink-0">
-          <div className="w-6 h-6 lg:w-8 lg:h-8 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full">
+    <Card hoverable className="border-border shadow-sm hover:-translate-y-1 transition-all duration-200 group">
+      <CardContent className="p-5 flex flex-col justify-between h-full">
+        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-muted rounded-xl flex items-center justify-center shrink-0 group-hover:bg-primary/10 transition-colors mb-4">
+          <div className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full">
             {icon}
           </div>
         </div>
-        <div className="min-w-0 flex-1">
-          <p className="text-xs sm:text-sm font-medium text-muted-foreground truncate">{label}</p>
-          <h4 className="text-2xl lg:text-3xl font-bold text-foreground mt-0.5 truncate">{value}</h4>
+        <div>
+          <p className="text-xs sm:text-sm font-medium text-muted-foreground line-clamp-1 mb-1">{label}</p>
+          <h4 className="text-2xl lg:text-3xl font-bold text-foreground truncate">{value}</h4>
+          {context && <p className="text-xs text-muted-foreground mt-1 opacity-80">{context}</p>}
         </div>
       </CardContent>
     </Card>
   )
 }
 
+function QuickActionCard({ icon, label, to, highlight = false }: { icon: React.ReactNode, label: string, to: string, highlight?: boolean }) {
+  return (
+    <Link to={to} className="block h-full">
+      <Card hoverable className={`h-full border-border shadow-sm hover:-translate-y-1 transition-all duration-200 group flex flex-col items-center justify-center text-center p-4 sm:p-5 ${highlight ? 'bg-primary/5 border-primary/20 hover:border-primary/40 hover:bg-primary/10' : 'bg-card'}`}>
+        <div className={`p-3 rounded-2xl mb-3 transition-colors ${highlight ? 'bg-primary text-primary-foreground shadow-md group-hover:scale-110' : 'bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary group-hover:scale-110'}`}>
+          {icon}
+        </div>
+        <span className={`text-sm font-semibold ${highlight ? 'text-primary' : 'text-foreground group-hover:text-primary'}`}>{label}</span>
+      </Card>
+    </Link>
+  )
+}
+
 function MaterialListCard({ material }: { material: any }) {
   return (
     <Link to={`/courses/${material.course_id}/materials/${material.id}`} className="block">
-      <div className="flex items-center justify-between p-3 sm:p-4 bg-card border border-border rounded-xl hover:shadow-md transition-shadow group">
+      <div className="flex items-center justify-between p-3 sm:p-4 bg-card border border-border rounded-xl hover:shadow-md hover:-translate-y-0.5 transition-all group">
         <div className="min-w-0 flex-1 mr-4">
           <h4 className="text-sm sm:text-base font-semibold text-foreground group-hover:text-primary transition-colors truncate">{material.title}</h4>
           <p className="text-xs text-muted-foreground mt-1 truncate">{material.course?.name}</p>
         </div>
-        <ArrowRight className="text-muted-foreground/50 group-hover:text-primary transition-colors shrink-0 w-4 h-4 sm:w-5 sm:h-5" />
+        <div className="p-2 bg-muted rounded-full group-hover:bg-primary/10 transition-colors shrink-0">
+          <ArrowRight className="text-muted-foreground/50 group-hover:text-primary transition-colors w-4 h-4" />
+        </div>
       </div>
     </Link>
   )

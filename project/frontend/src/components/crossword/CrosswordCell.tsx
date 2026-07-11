@@ -18,7 +18,7 @@ export function CrosswordCell({ row, col }: CrosswordCellProps) {
   const isPlayable = isCellPlayable(row, col);
   
   if (!isPlayable) {
-    return <div className="w-full h-full bg-slate-900/5 dark:bg-slate-800 rounded sm:rounded-md"></div>;
+    return <div className="w-full aspect-square bg-black dark:bg-black"></div>;
   }
 
   const number = getCellNumber(row, col);
@@ -28,20 +28,20 @@ export function CrosswordCell({ row, col }: CrosswordCellProps) {
 
   return (
     <div 
-      className={`relative w-full h-full flex items-center justify-center border sm:border-2 rounded sm:rounded-md transition-colors cursor-pointer select-none
-        ${isSelected ? 'bg-primary/20 border-primary text-primary font-bold shadow-[0_0_0_1px_rgba(59,130,246,0.3)] sm:shadow-[0_0_0_2px_rgba(59,130,246,0.3)] z-10' : 
-          inActiveWord ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800' : 
-          'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/50'
+      className={`relative w-full aspect-square flex items-center justify-center transition-colors cursor-pointer select-none
+        ${isSelected ? 'bg-primary/20 text-primary font-bold shadow-[inset_0_0_0_2px_rgba(37,99,235,0.5)] z-10' : 
+          inActiveWord ? 'bg-blue-50 dark:bg-blue-900/30' : 
+          'bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50'
         }
       `}
       onClick={() => handleCellClick(row, col)}
     >
       {number && (
-        <span className="absolute top-0.5 left-0.5 sm:top-1 sm:left-1 text-[8px] sm:text-[10px] md:text-xs font-bold text-slate-500 leading-none">
+        <span className="absolute top-0.5 left-1 text-[8px] sm:text-[10px] md:text-xs font-semibold text-slate-800 dark:text-slate-300 leading-none">
           {number}
         </span>
       )}
-      <span className="text-sm sm:text-lg md:text-xl lg:text-2xl uppercase font-semibold text-slate-800 dark:text-slate-100">
+      <span className="text-sm sm:text-lg md:text-xl lg:text-2xl uppercase font-bold text-slate-900 dark:text-slate-50">
         {answer}
       </span>
     </div>

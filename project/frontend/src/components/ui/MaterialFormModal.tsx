@@ -122,7 +122,7 @@ export function MaterialFormModal({ isOpen, onClose, courseId, initialData }: Ma
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-0 sm:p-4 animate-in fade-in duration-200">
-      <div className="bg-card w-full h-full rounded-none sm:w-[95vw] sm:h-[90vh] lg:w-[90vw] sm:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl relative overflow-y-auto flex flex-col">
+      <div className="bg-card w-full h-full rounded-none sm:w-[95vw] sm:h-[95vh] lg:w-[90vw] sm:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl relative overflow-hidden flex flex-col">
         <button 
           onClick={onClose}
           disabled={isUploading}
@@ -165,7 +165,7 @@ export function MaterialFormModal({ isOpen, onClose, courseId, initialData }: Ma
             <label className="block text-sm font-medium text-foreground">Interactive Puzzle Workspace (Optional)</label>
           </div>
           
-          <div className="flex-1 overflow-y-auto min-h-0 rounded-2xl border border-border">
+          <div className="flex-1 min-h-0 rounded-2xl">
             
             <CrosswordBuilder 
                initialData={crosswordJson ? JSON.parse(crosswordJson) : null}

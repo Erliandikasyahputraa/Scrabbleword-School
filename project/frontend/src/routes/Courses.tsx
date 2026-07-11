@@ -178,9 +178,14 @@ export default function Courses() {
             (user?.role === 'teacher' || user?.role === 'admin') && !search && !statusFilter && (
               <Button variant="primary" className="gap-2" onClick={() => setIsModalOpen(true)}>
                 <PlusCircle size={20} />
-                Create First Course
+                Create Course
               </Button>
             )
+          }
+          secondaryHelp={
+             (user?.role === 'teacher' || user?.role === 'admin') && !search && !statusFilter 
+             ? "Courses are the main containers for your reading materials and crosswords." 
+             : undefined
           }
         />
       ) : (

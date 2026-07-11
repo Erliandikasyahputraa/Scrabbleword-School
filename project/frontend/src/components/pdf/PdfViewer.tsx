@@ -146,9 +146,9 @@ export default function PdfViewer({ url, onComplete }: PdfViewerProps) {
   }, []);
 
   return (
-    <div ref={containerRef} className={`flex flex-col items-center w-full mx-auto bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 transition-all ${isFullscreen ? 'h-screen p-8' : 'max-w-4xl p-4 shadow-inner'}`}>
+    <div ref={containerRef} className={`flex flex-col items-center w-full mx-auto bg-card rounded-2xl transition-all duration-300 ${isFullscreen ? 'fixed inset-0 z-50 rounded-none bg-background' : 'max-w-5xl shadow-sm border border-border overflow-hidden'}`}>
       {/* Controls */}
-      <div className="flex flex-wrap items-center gap-4 bg-white dark:bg-slate-800 p-3 rounded-lg shadow-sm w-full justify-between mb-4 border border-slate-200 dark:border-slate-700">
+      <div className={`flex flex-wrap items-center gap-4 bg-card w-full justify-between border-b border-border z-10 ${isFullscreen ? 'p-4' : 'p-3 px-4'}`}>
         <div className="flex items-center gap-2">
           <button
             disabled={pageNum <= 1 || isRendering}
@@ -205,7 +205,7 @@ export default function PdfViewer({ url, onComplete }: PdfViewerProps) {
       </div>
 
       {/* PDF Canvas Container */}
-      <div className={`overflow-auto w-full border border-slate-200 dark:border-slate-700 bg-slate-300 dark:bg-slate-950 flex justify-center p-4 rounded-lg shadow-inner ${isFullscreen ? 'h-[calc(100vh-120px)]' : 'h-[600px]'}`}>
+      <div className={`overflow-auto w-full bg-muted/30 flex justify-center custom-scrollbar ${isFullscreen ? 'flex-1 p-8' : 'h-[600px] p-6'}`}>
         {!pdfDoc && (
           <div className="flex items-center justify-center h-full">
             <span className="text-slate-500 flex items-center gap-2">
@@ -216,7 +216,7 @@ export default function PdfViewer({ url, onComplete }: PdfViewerProps) {
         )}
         <canvas 
           ref={canvasRef} 
-          className="max-w-none shadow-md bg-white transition-all duration-200"
+          className="max-w-none shadow-xl bg-white border border-border/50"
         />
       </div>
     </div>

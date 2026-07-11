@@ -16,16 +16,16 @@ export function CrosswordBoard() {
   return (
     <div 
       ref={boardRef}
-      className={`w-full h-full p-2 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 focus:outline-none focus:ring-4 focus:ring-primary/20 ${isSubmitted ? 'opacity-80 pointer-events-none' : ''}`}
+      className={`w-full max-w-2xl mx-auto p-4 md:p-6 bg-white dark:bg-slate-900 rounded-lg shadow-sm focus:outline-none focus:ring-4 focus:ring-primary/20 ${isSubmitted ? 'opacity-80 pointer-events-none' : ''}`}
       tabIndex={0}
       onKeyDown={handleKeyDown}
       aria-label="Crossword Puzzle Board"
     >
       <div 
-        className="w-full h-full grid gap-0.5 sm:gap-1" 
+        className="w-full bg-black dark:bg-white/20 gap-[1px] border-2 border-black dark:border-white/20 p-[1px]" 
         style={{ 
-          gridTemplateColumns: `repeat(${data.grid.cols}, minmax(0, 1fr))`,
-          gridTemplateRows: `repeat(${data.grid.rows}, minmax(0, 1fr))`
+          display: 'grid',
+          gridTemplateColumns: `repeat(${data.grid.cols}, minmax(0, 1fr))`
         }}
       >
         {Array.from({ length: data.grid.rows }).map((_, rowIndex) => (
