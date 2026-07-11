@@ -19,7 +19,7 @@ export function CrosswordWordList({ words, onRemoveWord, disabled }: CrosswordWo
   }
 
   return (
-    <div className="space-y-2 max-h-64 overflow-y-auto custom-scrollbar pr-2">
+    <div className="space-y-2 pr-2">
       {words.map((item, index) => (
         <div 
           key={index} 

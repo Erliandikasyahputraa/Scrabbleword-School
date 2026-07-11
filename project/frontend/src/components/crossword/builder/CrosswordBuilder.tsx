@@ -86,71 +86,76 @@ export function CrosswordBuilder({ initialData, onChange, sidebarFooter }: Cross
   };
 
   return (
-    <div className="flex flex-col h-full space-y-6 bg-card rounded-2xl border border-border p-6 min-h-0 shadow-sm">
-      <div className="border-b border-border pb-4 mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shrink-0">
-        <div>
-          <h2 className="text-xl font-bold text-foreground">Interactive Puzzle Builder</h2>
-          <p className="text-sm text-muted-foreground mt-1">Add words and clues, then generate the layout automatically.</p>
-        </div>
-        <CrosswordThemeSelector />
-      </div>
-
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-0">
-        {/* Left Col: Preview (75%) */}
-        <div className="lg:col-span-9 flex flex-col h-full overflow-hidden bg-muted/10 rounded-xl border border-border p-4 order-last lg:order-first">
+    <div className="flex flex-col lg:grid lg:grid-cols-12 gap-8 w-full mt-4">
+      {/* Left Column: Preview (approx 70%) */}
+      <div className="lg:col-span-8 flex flex-col order-1 lg:order-none h-full">
+        <div className="w-full flex-1 flex flex-col min-h-[350px] md:min-h-[450px] lg:min-h-[550px] bg-muted/10 rounded-2xl border border-border p-4 relative">
           {generatedData ? (
-            <div className="animate-in fade-in zoom-in-95 duration-300 flex-1 flex flex-col min-h-0">
-               <div className="flex items-center gap-2 mb-4 shrink-0 text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 p-3 rounded-lg border border-emerald-100 dark:border-emerald-900/30">
+            <div className="animate-in fade-in zoom-in-95 duration-300 flex-1 flex flex-col w-full h-full">
+               <div className="flex items-center gap-2 mb-4 shrink-0 text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 p-3 rounded-xl border border-emerald-100 dark:border-emerald-900/30">
                   <CheckCircle2 size={18} />
                   <span className="font-semibold text-sm">Layout Generated Successfully</span>
                </div>
-               <div className="flex-1 min-h-0">
+               <div className="flex-1 w-full flex flex-col">
                  <CrosswordPreview data={generatedData} />
                </div>
             </div>
           ) : (
-            <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-center p-8 bg-muted/50 border-2 border-dashed border-border rounded-2xl">
-               <div className="mb-4 text-muted-foreground opacity-80">
-                  <EmptyCrosswordIllustration size={100} />
+            <div className="flex-1 flex flex-col items-center justify-center text-center p-8 bg-muted/30 border-2 border-dashed border-border/60 rounded-xl h-full">
+               <div className="mb-4 text-muted-foreground opacity-60">
+                  <EmptyCrosswordIllustration size={120} />
                </div>
-               <h3 className="text-foreground font-bold mb-2 text-lg">No Preview Available</h3>
-               <p className="text-sm text-muted-foreground max-w-[280px]">
-                  Add your words and click Generate to see the crossword layout here.
+               <h3 className="text-foreground font-bold mb-2 text-xl">No Preview Available</h3>
+               <p className="text-sm text-muted-foreground max-w-sm">
+                  Add words on the right and click Generate to see your interactive crossword layout here.
                </p>
             </div>
           )}
         </div>
+      </div>
 
-        {/* Right Col: Words Management (25%) */}
-        <div className="lg:col-span-3 flex flex-col h-full overflow-hidden bg-muted/20 rounded-xl border border-border order-first lg:order-last">
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
-            <CrosswordWordInput onAddWord={handleAddWord} disabled={isGenerating} />
-            <CrosswordWordList words={words} onRemoveWord={handleRemoveWord} disabled={isGenerating} />
-            
-            {error && (
-              <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/50 rounded-lg flex items-start gap-2 animate-in slide-in-from-top-2">
-                 <AlertTriangle size={16} className="text-red-500 shrink-0 mt-0.5" />
-                 <p className="text-xs text-red-600 dark:text-red-400 leading-relaxed">{error}</p>
-              </div>
+      {/* Right Column: Tools (approx 30%) */}
+      <div className="lg:col-span-4 flex flex-col space-y-6 order-2 lg:order-none">
+        <div className="flex flex-col space-y-2 order-5 lg:order-1">
+          <h3 className="text-lg font-bold text-foreground flex items-center justify-between">
+            <span>Add Word</span>
+            <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full font-semibold">{words.length} words</span>
+          </h3>
+          <CrosswordWordInput onAddWord={handleAddWord} disabled={isGenerating} />
+        </div>
+
+        <div className="flex flex-col space-y-2 order-6 lg:order-2">
+          <CrosswordWordList words={words} onRemoveWord={handleRemoveWord} disabled={isGenerating} />
+          {error && (
+            <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/50 rounded-xl flex items-start gap-2 animate-in slide-in-from-top-2 mt-4">
+               <AlertTriangle size={18} className="text-red-500 shrink-0 mt-0.5" />
+               <p className="text-sm text-red-600 dark:text-red-400 font-medium leading-relaxed">{error}</p>
+            </div>
+          )}
+        </div>
+
+        <div className="order-4 lg:order-3 pt-2">
+          <Button 
+            type="button" 
+            onClick={handleGenerate} 
+            fullWidth 
+            disabled={words.length < 2 || isGenerating}
+            className="h-12 shadow-sm font-bold text-base bg-slate-900 hover:bg-slate-800 dark:bg-primary dark:hover:bg-primary/90 text-white rounded-xl"
+          >
+            {isGenerating ? (
+              <span className="flex items-center gap-2"><RefreshCw size={18} className="animate-spin" /> Generating Layout...</span>
+            ) : (
+              <span className="flex items-center gap-2"><RefreshCw size={18} /> {generatedData ? 'Regenerate Layout' : 'Generate Layout'}</span>
             )}
-          </div>
-          
-          <div className="p-4 bg-card border-t border-border shrink-0 z-10 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] space-y-3">
-            <Button 
-              type="button" 
-              onClick={handleGenerate} 
-              fullWidth 
-              disabled={words.length < 2 || isGenerating}
-              className="h-11 shadow-sm bg-slate-900 hover:bg-slate-800 dark:bg-primary dark:hover:bg-primary/90 text-white font-semibold"
-            >
-              {isGenerating ? (
-                <span className="flex items-center gap-2"><RefreshCw size={16} className="animate-spin" /> Generating...</span>
-              ) : (
-                <span className="flex items-center gap-2"><RefreshCw size={16} /> {generatedData ? 'Regenerate' : 'Generate Layout'}</span>
-              )}
-            </Button>
-            {sidebarFooter}
-          </div>
+          </Button>
+        </div>
+
+        <div className="order-2 lg:order-4 pt-4 border-t border-border">
+          <CrosswordThemeSelector />
+        </div>
+
+        <div className="order-7 lg:order-5 pt-4 border-t border-border">
+          {sidebarFooter}
         </div>
       </div>
     </div>

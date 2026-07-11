@@ -122,80 +122,83 @@ export function MaterialFormModal({ isOpen, onClose, courseId, initialData }: Ma
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-0 sm:p-4 animate-in fade-in duration-200">
-      <div className="bg-card w-full h-full rounded-none sm:w-[95vw] sm:h-[95vh] lg:w-[90vw] sm:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl relative overflow-hidden flex flex-col">
-        <button 
-          onClick={onClose}
-          disabled={isUploading}
-          className="absolute top-4 right-4 sm:top-6 sm:right-6 text-muted-foreground hover:text-foreground disabled:opacity-50 transition-colors"
-        >
-          <X size={24} />
-        </button>
-        <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-4 sm:mb-6 pr-8 shrink-0">
-          {initialData ? 'Edit Material' : 'Add New Material'}
-        </h2>
-        <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0 space-y-4 overflow-y-auto lg:overflow-hidden p-1">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 shrink-0">
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-1">Material Title <span className="text-red-500">*</span></label>
-              <input
-                type="text"
-                required
-                disabled={isUploading}
-                value={title}
-                onChange={e => setTitle(e.target.value)}
-                className="w-full h-12 px-4 rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-foreground disabled:opacity-50"
-                placeholder="e.g. Chapter 1: Basic Vocabulary"
-              />
-            </div>
-            <div>
-              <CustomUploadField
-                file={pdfFile}
-                onChange={setPdfFile}
-                disabled={isUploading}
-                required={!initialData}
-                label={initialData ? "PDF Document (Leave empty to keep current)" : "PDF Document"}
-              />
-            </div>
-          </div>
-          <div className="flex items-center justify-between mb-2 mt-4 shrink-0">
-            <label className="block text-sm font-medium text-foreground">Interactive Puzzle Workspace</label>
-          </div>
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 overflow-y-auto animate-in fade-in duration-200">
+      <div className="min-h-screen p-0 sm:p-4 md:p-8 flex items-center justify-center pointer-events-none">
+        <div className="bg-card w-full max-w-7xl rounded-none sm:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl relative flex flex-col pointer-events-auto my-auto min-h-screen sm:min-h-0">
+          <button 
+            onClick={onClose}
+            disabled={isUploading}
+            className="absolute top-4 right-4 sm:top-6 sm:right-6 text-muted-foreground hover:text-foreground disabled:opacity-50 transition-colors z-10"
+          >
+            <X size={24} />
+          </button>
           
-          <div className="flex-1 min-h-[700px] lg:min-h-0 rounded-2xl flex flex-col">
-            <CrosswordBuilder 
-               initialData={crosswordJson ? JSON.parse(crosswordJson) : null}
-               onChange={(data) => {
-                 if (data) {
-                    setCrosswordJson(JSON.stringify(data));
-                 } else {
-                    setCrosswordJson('');
-                 }
-               }}
-               sidebarFooter={
-                 <div className="space-y-3">
-                   {isUploading && (
-                     <div className="p-3 bg-muted rounded-xl border border-border">
-                       <div className="flex justify-between items-center mb-2">
-                         <span className="text-xs font-medium text-foreground flex items-center gap-2">
-                            <div className="animate-spin h-3 w-3 border-2 border-primary border-t-transparent rounded-full" />
-                            Uploading...
-                         </span>
-                         <span className="text-xs font-bold text-primary">{uploadProgress}%</span>
-                       </div>
-                       <div className="w-full bg-slate-200 dark:bg-slate-700 h-1.5 rounded-full overflow-hidden">
-                         <div className="bg-primary h-full transition-all duration-300" style={{ width: `${uploadProgress}%` }} />
-                       </div>
-                     </div>
-                   )}
-                   <Button type="submit" fullWidth disabled={isUploading} className="h-11 shadow-sm font-semibold">
-                     {isUploading ? 'Saving...' : 'Save Material'}
-                   </Button>
-                 </div>
-               }
-            />
+          <div className="border-b border-border pb-4 mb-6 sticky top-0 bg-card z-20">
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground pr-8">
+              {initialData ? 'Edit Material' : 'Add New Material'}
+            </h2>
           </div>
-        </form>
+
+          <form onSubmit={handleSubmit} className="flex flex-col space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-foreground">Material Title <span className="text-red-500">*</span></label>
+                <input
+                  type="text"
+                  required
+                  disabled={isUploading}
+                  value={title}
+                  onChange={e => setTitle(e.target.value)}
+                  className="w-full h-12 px-4 rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-foreground disabled:opacity-50"
+                  placeholder="e.g. Chapter 1: Basic Vocabulary"
+                />
+              </div>
+              <div className="space-y-2">
+                <CustomUploadField
+                  file={pdfFile}
+                  onChange={setPdfFile}
+                  disabled={isUploading}
+                  required={!initialData}
+                  label={initialData ? "PDF Document (Leave empty to keep current)" : "PDF Document"}
+                />
+              </div>
+            </div>
+            
+            <div className="w-full">
+              <CrosswordBuilder 
+                 initialData={crosswordJson ? JSON.parse(crosswordJson) : null}
+                 onChange={(data) => {
+                   if (data) {
+                      setCrosswordJson(JSON.stringify(data));
+                   } else {
+                      setCrosswordJson('');
+                   }
+                 }}
+                 sidebarFooter={
+                   <div className="space-y-3 mt-6">
+                     {isUploading && (
+                       <div className="p-3 bg-muted rounded-xl border border-border">
+                         <div className="flex justify-between items-center mb-2">
+                           <span className="text-xs font-medium text-foreground flex items-center gap-2">
+                              <div className="animate-spin h-3 w-3 border-2 border-primary border-t-transparent rounded-full" />
+                              Uploading...
+                           </span>
+                           <span className="text-xs font-bold text-primary">{uploadProgress}%</span>
+                         </div>
+                         <div className="w-full bg-slate-200 dark:bg-slate-700 h-1.5 rounded-full overflow-hidden">
+                           <div className="bg-primary h-full transition-all duration-300" style={{ width: `${uploadProgress}%` }} />
+                         </div>
+                       </div>
+                     )}
+                     <Button type="submit" fullWidth disabled={isUploading} className="h-12 shadow-sm font-bold text-base">
+                       {isUploading ? 'Saving...' : 'Save Material'}
+                     </Button>
+                   </div>
+                 }
+              />
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

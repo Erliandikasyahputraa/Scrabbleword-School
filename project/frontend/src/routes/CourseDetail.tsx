@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchApi } from '../lib/api';
 import { useAuth } from '../providers/AuthProvider';
-import { FileText, ArrowLeft, PlayCircle, Clock, BarChart, Award, Percent } from 'lucide-react';
+import { FileText, ArrowLeft, PlayCircle, Clock, BarChart, Award } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Spinner } from '../components/ui/LoadingSystem';
 import { EmptyState } from '../components/ui/EmptyState';
@@ -201,12 +201,9 @@ export default function CourseDetail() {
               <span className="text-xs font-medium mb-1 opacity-90">Avg Score</span>
               <span className="text-xl sm:text-2xl font-bold">{course.analytics.average_score}</span>
             </div>
-            <div className="bg-white/20 p-3 rounded-xl shadow-sm border border-white/10 flex flex-col justify-center relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-2 opacity-10 flex items-center justify-center">
-                <Percent className="w-[72px] h-[72px] sm:w-[96px] sm:h-[96px] lg:w-[120px] lg:h-[120px]" />
-              </div>
-              <span className="text-xs font-medium mb-1 relative z-10 opacity-90">Rate</span>
-              <span className="text-xl sm:text-2xl font-bold relative z-10">{course.analytics.completion_rate}%</span>
+            <div className="bg-white/20 p-3 rounded-xl shadow-sm border border-white/10 flex flex-col justify-center">
+              <span className="text-xs font-medium mb-1 opacity-90">Rate</span>
+              <span className="text-xl sm:text-2xl font-bold">{course.analytics.completion_rate}%</span>
             </div>
           </div>
         ) : (

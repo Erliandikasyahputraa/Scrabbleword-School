@@ -1,14 +1,7 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import type { CrosswordTheme } from '../types/theme';
 import { themes, defaultTheme } from '../themes';
-
-interface CrosswordThemeContextType {
-  activeTheme: CrosswordTheme;
-  setTheme: (themeId: string) => void;
-  availableThemes: CrosswordTheme[];
-}
-
-const CrosswordThemeContext = createContext<CrosswordThemeContextType | undefined>(undefined);
+import { CrosswordThemeContext } from './CrosswordThemeContext';
 
 export function CrosswordThemeProvider({ children }: { children: React.ReactNode }) {
   const [activeTheme, setActiveTheme] = useState<CrosswordTheme>(defaultTheme);
