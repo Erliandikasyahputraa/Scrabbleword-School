@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../providers/AuthProvider';
+import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { BrainCircuit, Sparkles, Target, ArrowRight, Eye, EyeOff } from 'lucide-react';
 
