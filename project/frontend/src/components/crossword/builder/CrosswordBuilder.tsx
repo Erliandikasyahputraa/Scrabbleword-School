@@ -96,13 +96,7 @@ export function CrosswordBuilder({ initialData, onChange, mainHeader, sidebarFoo
           </div>
         )}
 
-        <div className="bg-card border border-border p-5 sm:p-6 rounded-2xl shadow-sm w-full">
-          <h3 className="text-lg font-bold text-foreground flex items-center justify-between mb-4">
-            <span>Add Word</span>
-            <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full font-semibold">{words.length} words added</span>
-          </h3>
-          <CrosswordWordInput onAddWord={handleAddWord} disabled={isGenerating} />
-        </div>
+        {/* Preview Panel is now the only thing in the left column */}
 
         {/* Preview Panel */}
         <div className="w-full flex flex-col bg-muted/10 rounded-2xl border border-border p-4 sm:p-6 shadow-sm overflow-hidden min-h-[400px] md:min-h-[500px]">
@@ -139,10 +133,24 @@ export function CrosswordBuilder({ initialData, onChange, mainHeader, sidebarFoo
       {/* Right Column: Tools (30%) */}
       <div className="lg:col-span-4 flex flex-col gap-6 lg:sticky lg:top-6 self-start w-full">
         
+        {/* Add Word */}
+        <div className="bg-card border border-border p-4 sm:p-5 rounded-2xl shadow-sm w-full">
+          <h3 className="text-base font-bold text-foreground flex items-center justify-between mb-4">
+            <span>Add Word</span>
+            <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full font-semibold">{words.length} words added</span>
+          </h3>
+          <CrosswordWordInput onAddWord={handleAddWord} disabled={isGenerating} />
+        </div>
+
+        {/* Theme Gallery (Mini) */}
+        <div className="bg-card border border-border rounded-2xl shadow-sm p-4 sm:p-5">
+          <CrosswordThemeSelector />
+        </div>
+
         {/* Word List */}
-        <div className="bg-card border border-border rounded-2xl shadow-sm p-4 sm:p-5 flex flex-col max-h-[60vh]">
+        <div className="bg-card border border-border rounded-2xl shadow-sm p-4 sm:p-5 flex flex-col min-h-0">
           <h3 className="text-base font-bold text-foreground mb-4">Word List</h3>
-          <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 min-h-[150px]">
+          <div className="flex-1 w-full min-h-[150px]">
             <CrosswordWordList words={words} onRemoveWord={handleRemoveWord} disabled={isGenerating} />
           </div>
           
@@ -169,10 +177,7 @@ export function CrosswordBuilder({ initialData, onChange, mainHeader, sidebarFoo
           )}
         </Button>
 
-        {/* Theme Gallery */}
-        <div className="bg-card border border-border rounded-2xl shadow-sm p-4 sm:p-5">
-          <CrosswordThemeSelector />
-        </div>
+        {/* Removed duplicate Theme Gallery as it is now above Word List */}
 
         {/* Save Footer */}
         {sidebarFooter && (

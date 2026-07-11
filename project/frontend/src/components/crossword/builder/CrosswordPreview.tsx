@@ -13,7 +13,7 @@ export function CrosswordPreview({ data }: CrosswordPreviewProps) {
       {/* HERO COMPONENT: The Crossword Board */}
       <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 overflow-hidden flex flex-col relative w-full h-auto min-h-[350px] flex-1 shadow-inner items-center justify-center">
         <div className="w-full h-full flex justify-center items-center overflow-hidden min-h-0">
-          <div className="pointer-events-none max-w-full max-h-full flex justify-center items-center">
+          <div className="pointer-events-none w-full h-full max-w-full max-h-full flex justify-center items-center">
             <CrosswordProvider data={data}>
               <CrosswordBoard />
             </CrosswordProvider>

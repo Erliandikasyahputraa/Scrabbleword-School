@@ -1,15 +1,17 @@
 import type { CrosswordTheme } from '../types/theme';
 
+
+
 export const educationTheme: CrosswordTheme = {
   id: 'education',
   name: 'Education',
-  background: 'bg-blue-50/50 bg-[url("data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' viewBox=\'0 0 100 100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%231e3a8a\' fill-opacity=\'0.04\' fill-rule=\'evenodd\'%3E%3Cpath d=\'M20 20 l10 5 l-10 5 l-10 -5 z M18 26 l2 1 l0 4 l-2 -1 z M22 26 l2 -1 l0 4 l-2 1 z\'/%3E%3Cpath d=\'M70 70 a5 5 0 1 0 10 0 a5 5 0 1 0 -10 0 M65 80 h20 v2 h-20 z M68 83 h14 v2 h-14 z\'/%3E%3C/g%3E%3C/svg%3E")]',
-  board: 'bg-blue-900 p-[2px] gap-[2px] border-2 border-blue-900 shadow-md rounded-xl overflow-hidden',
+  background: 'bg-blue-50/50 bg-[url("data:image/svg+xml,%3Csvg width=\'200\' height=\'200\' viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg font-size=\'20\' opacity=\'0.04\'%3E%3Ctext x=\'20\' y=\'30\'%3E📚%3C/text%3E%3Ctext x=\'80\' y=\'60\'%3E✏️%3C/text%3E%3Ctext x=\'140\' y=\'30\'%3E🎓%3C/text%3E%3Ctext x=\'40\' y=\'100\'%3E🌍%3C/text%3E%3Ctext x=\'120\' y=\'120\'%3E📐%3C/text%3E%3Ctext x=\'30\' y=\'160\'%3E🔬%3C/text%3E%3Ctext x=\'160\' y=\'170\'%3E🧪%3C/text%3E%3Ctext x=\'90\' y=\'180\'%3E📚%3C/text%3E%3C/g%3E%3C/svg%3E")]',
+  board: 'bg-blue-900 p-[2px] gap-[2px] border-4 border-blue-900 shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-xl',
   cell: 'bg-white',
-  blackCell: 'bg-blue-900/90',
-  selectedCell: 'bg-blue-100 ring-2 ring-blue-500 z-10',
-  completedCell: 'bg-emerald-50 text-emerald-900',
-  clueNumber: 'text-blue-900/60 font-bold',
-  hover: 'hover:bg-blue-50 transition-colors duration-150',
-  typography: 'text-blue-950 font-bold font-sans',
+  blackCell: 'bg-slate-950',
+  selectedCell: 'bg-yellow-100 ring-2 ring-yellow-400 z-10',
+  completedCell: 'bg-green-50 text-green-900',
+  clueNumber: 'text-slate-500 font-bold',
+  hover: 'hover:bg-slate-50 transition-colors duration-150',
+  typography: 'text-slate-900 font-bold font-sans',
 };
