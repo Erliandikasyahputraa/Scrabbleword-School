@@ -6,6 +6,9 @@ import { fetchApi } from '../lib/api';
 import { PlusCircle, X, BookOpen, Search } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { CourseCard } from '../components/ui/CourseCard';
+import { EmptyState } from '../components/ui/EmptyState';
+import { SkeletonCard } from '../components/ui/LoadingSystem';
+import { Input, Select } from '../components/ui/Input';
 import { toast } from 'react-hot-toast';
 
 type Course = {
@@ -42,16 +45,14 @@ export default function Courses() {
   const [sort, setSort] = useState('newest');
   const [page, setPage] = useState(1);
 
-  // Debounce search (300ms)
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearch(search);
-      setPage(1); // Reset page on new search
+      setPage(1);
     }, 300);
     return () => clearTimeout(handler);
   }, [search]);
 
-  // Reset page when filters change
   useEffect(() => {
     setPage(1);
   }, [statusFilter, sort]);
@@ -95,10 +96,10 @@ export default function Courses() {
     <div className="max-w-7xl mx-auto space-y-6 animate-in fade-in duration-500 pb-12">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-2">
         <div>
-          <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
+          <h2 className="text-3xl font-bold text-foreground">
             {user?.role === 'admin' ? 'All Courses' : user?.role === 'teacher' ? 'Your Courses' : 'Available Courses'}
           </h2>
-          <p className="text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-muted-foreground mt-1">
             {user?.role === 'admin' ? 'Manage all platform courses.' : user?.role === 'teacher' ? 'Manage the courses you teach.' : 'Explore and continue your learning.'}
           </p>
         </div>
@@ -115,14 +116,14 @@ export default function Courses() {
       </div>
 
       {/* Toolbar: Search, Filters, Sort */}
-      <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-4 items-center justify-between">
+      <div className="bg-card p-4 rounded-2xl shadow-sm border border-border flex flex-col md:flex-row gap-4 items-center justify-between">
         <div className="relative w-full md:max-w-md">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search size={18} className="text-slate-400" />
+            <Search size={18} className="text-muted-foreground" />
           </div>
-          <input 
+          <Input 
             type="text"
-            className="pl-10 w-full h-11 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm outline-none"
+            className="pl-10 h-11"
             placeholder="Search courses..."
             value={search}
             onChange={e => setSearch(e.target.value)}
@@ -130,8 +131,8 @@ export default function Courses() {
         </div>
         <div className="flex w-full md:w-auto items-center gap-3">
           {user?.role === 'student' && (
-            <select 
-              className="h-11 bg-slate-50 border border-slate-200 rounded-xl text-sm px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none w-full md:w-auto"
+            <Select 
+              className="h-11 w-full md:w-auto min-w-[140px]"
               value={statusFilter}
               onChange={e => setStatusFilter(e.target.value)}
             >
@@ -139,57 +140,44 @@ export default function Courses() {
               <option value="not_started">Not Started</option>
               <option value="in_progress">In Progress</option>
               <option value="completed">Completed</option>
-            </select>
+            </Select>
           )}
-          <select 
-            className="h-11 bg-slate-50 border border-slate-200 rounded-xl text-sm px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none w-full md:w-auto"
+          <Select 
+            className="h-11 w-full md:w-auto min-w-[140px]"
             value={sort}
             onChange={e => setSort(e.target.value)}
           >
             <option value="newest">Newest First</option>
             <option value="oldest">Oldest First</option>
-          </select>
+          </Select>
         </div>
       </div>
       
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {Array.from({ length: 6 }).map((_, i) => (
-             <div key={i} className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm animate-pulse h-64">
-                <div className="flex gap-3 mb-4">
-                   <div className="w-12 h-12 bg-slate-200 rounded-xl"></div>
-                   <div className="flex-1 space-y-2 py-1">
-                      <div className="h-4 bg-slate-200 rounded w-3/4"></div>
-                      <div className="h-3 bg-slate-200 rounded w-1/2"></div>
-                   </div>
-                </div>
-                <div className="space-y-2 mt-4">
-                   <div className="h-3 bg-slate-200 rounded w-full"></div>
-                   <div className="h-3 bg-slate-200 rounded w-full"></div>
-                </div>
-             </div>
+             <div key={i} className="h-64"><SkeletonCard /></div>
           ))}
         </div>
       ) : courses.length === 0 ? (
-        <div className="flex flex-col items-center justify-center text-center p-16 bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
-          <div className="w-20 h-20 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4 text-slate-400 dark:text-slate-500">
-            <BookOpen size={40} />
-          </div>
-          <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">No Courses Found</h3>
-          <p className="text-slate-500 dark:text-slate-400 max-w-md">
-            {search || statusFilter ? "Try adjusting your search or filters." :
-              (user?.role === 'teacher' || user?.role === 'admin' 
-              ? "You haven't created any courses yet. Get started by creating your first course!" 
-              : "You are not enrolled in any courses yet. Please wait for your instructor to assign you to a course.")
-            }
-          </p>
-          {(user?.role === 'teacher' || user?.role === 'admin') && !search && (
-             <Button className="mt-6 gap-2" onClick={() => setIsModalOpen(true)}>
-               <PlusCircle size={20} />
-               Create First Course
-             </Button>
-          )}
-        </div>
+        <EmptyState 
+          icon={<BookOpen size={40} />}
+          title="No Courses Found"
+          description={
+            search || statusFilter ? "Try adjusting your search or filters." :
+            (user?.role === 'teacher' || user?.role === 'admin' 
+            ? "You haven't created any courses yet. Get started by creating your first course!" 
+            : "You are not enrolled in any courses yet. Please wait for your instructor to assign you to a course.")
+          }
+          action={
+            (user?.role === 'teacher' || user?.role === 'admin') && !search && (
+              <Button className="gap-2" onClick={() => setIsModalOpen(true)}>
+                <PlusCircle size={20} />
+                Create First Course
+              </Button>
+            )
+          }
+        />
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -218,7 +206,7 @@ export default function Courses() {
                >
                  Previous
                </Button>
-               <span className="text-sm font-medium text-slate-600 px-4">
+               <span className="text-sm font-medium text-muted-foreground px-4">
                  Page {page} of {data.last_page}
                </span>
                <Button 
@@ -236,32 +224,31 @@ export default function Courses() {
       {/* Create Course Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 w-full max-w-md shadow-2xl relative">
+          <div className="bg-card rounded-3xl p-8 w-full max-w-md shadow-2xl relative border border-border">
             <button 
               onClick={() => setIsModalOpen(false)}
-              className="absolute top-6 right-6 text-slate-400 hover:text-slate-600 dark:hover:text-white"
+              className="absolute top-6 right-6 text-muted-foreground hover:text-foreground transition-colors"
             >
               <X size={24} />
             </button>
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Create New Course</h2>
+            <h2 className="text-2xl font-bold text-foreground mb-6">Create New Course</h2>
             <form onSubmit={handleCreateCourse} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Course Name</label>
-                <input
+                <label className="block text-sm font-medium text-foreground mb-1">Course Name</label>
+                <Input
                   type="text"
                   required
                   value={newCourseName}
                   onChange={e => setNewCourseName(e.target.value)}
-                  className="w-full h-12 px-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-slate-900 dark:text-white"
                   placeholder="e.g. Advanced English Grammar"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Description</label>
+                <label className="block text-sm font-medium text-foreground mb-1">Description</label>
                 <textarea
                   value={newCourseDesc}
                   onChange={e => setNewCourseDesc(e.target.value)}
-                  className="w-full p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-slate-900 dark:text-white resize-none"
+                  className="flex w-full rounded-xl border border-input bg-background px-3 py-2 text-sm text-foreground ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 transition-all resize-none min-h-[100px]"
                   rows={4}
                   placeholder="What will students learn in this course?"
                 />

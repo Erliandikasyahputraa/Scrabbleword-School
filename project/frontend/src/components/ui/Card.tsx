@@ -8,8 +8,8 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement> {
 export const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ className = '', hoverable = false, ...props }, ref) => {
     
-    const baseStyles = "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden"
-    const hoverStyles = hoverable ? "transition-all duration-300 hover:shadow-lg hover:-translate-y-1" : ""
+    const baseStyles = "bg-card text-card-foreground border border-border rounded-xl shadow-sm overflow-hidden"
+    const hoverStyles = hoverable ? "transition-all duration-300 hover:shadow-md hover:-translate-y-1" : ""
     
     return (
       <div ref={ref} className={`${baseStyles} ${hoverStyles} ${className}`} {...props} />
@@ -27,14 +27,14 @@ CardHeader.displayName = "CardHeader"
 
 export const CardTitle = forwardRef<HTMLHeadingElement, HTMLAttributes<HTMLHeadingElement>>(
   ({ className = '', ...props }, ref) => (
-    <h3 ref={ref} className={`font-bold text-xl tracking-tight text-slate-900 dark:text-white ${className}`} {...props} />
+    <h3 ref={ref} className={`font-bold text-xl tracking-tight text-foreground ${className}`} {...props} />
   )
 )
 CardTitle.displayName = "CardTitle"
 
 export const CardDescription = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLParagraphElement>>(
   ({ className = '', ...props }, ref) => (
-    <p ref={ref} className={`text-sm text-slate-500 dark:text-slate-400 ${className}`} {...props} />
+    <p ref={ref} className={`text-sm text-muted-foreground ${className}`} {...props} />
   )
 )
 CardDescription.displayName = "CardDescription"

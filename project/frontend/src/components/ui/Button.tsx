@@ -13,11 +13,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const baseStyles = "inline-flex items-center justify-center rounded-xl font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-95 disabled:opacity-50 disabled:pointer-events-none"
     
     const variants = {
-      primary: "bg-primary text-white hover:bg-primary/90 hover:shadow-md hover:-translate-y-0.5 focus:ring-primary",
-      secondary: "bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-700 focus:ring-slate-500",
-      outline: "border-2 border-slate-200 dark:border-slate-700 bg-transparent hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-slate-500",
-      ghost: "bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 focus:ring-slate-500",
-      danger: "bg-red-500 text-white hover:bg-red-600 focus:ring-red-500",
+      primary: "bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-md hover:-translate-y-0.5 focus:ring-ring",
+      secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80 focus:ring-ring",
+      outline: "border-2 border-input bg-transparent hover:bg-accent hover:text-accent-foreground text-foreground focus:ring-ring",
+      ghost: "bg-transparent hover:bg-muted text-foreground focus:ring-ring",
+      danger: "bg-destructive text-destructive-foreground hover:bg-destructive/90 focus:ring-destructive",
     }
 
     const sizes = {

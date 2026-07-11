@@ -5,6 +5,11 @@ import { fetchApi } from '../lib/api';
 import { useAuth } from '../providers/AuthProvider';
 import { FileText, ArrowLeft, PlayCircle, Clock, BarChart, Award, Percent } from 'lucide-react';
 import { Button } from '../components/ui/Button';
+import { Spinner } from '../components/ui/LoadingSystem';
+import { EmptyState } from '../components/ui/EmptyState';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../components/ui/Table';
+import { Badge } from '../components/ui/Badge';
+import { Select } from '../components/ui/Input';
 import ErrorPage from './ErrorPage';
 import { MaterialFormModal } from '../components/ui/MaterialFormModal';
 import { CourseFormModal } from '../components/ui/CourseFormModal';
@@ -111,7 +116,7 @@ export default function CourseDetail() {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[50vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        <Spinner className="w-12 h-12 text-primary" />
       </div>
     );
   }
@@ -127,7 +132,7 @@ export default function CourseDetail() {
       <div className="flex justify-between items-center">
         <Link 
           to="/courses" 
-          className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 font-medium transition-colors"
+          className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors"
         >
           <ArrowLeft size={18} />
           Back to Courses
@@ -136,17 +141,17 @@ export default function CourseDetail() {
           <div className="flex gap-2">
             <Button variant="outline" size="sm" onClick={() => setIsAssignmentModalOpen(true)}>Assign Students</Button>
             <Button variant="outline" size="sm" onClick={() => setIsCourseModalOpen(true)}>Edit Course</Button>
-            <Button variant="outline" size="sm" className="text-red-600 border-red-200 hover:bg-red-50" onClick={handleDeleteCourse}>Delete Course</Button>
+            <Button variant="outline" size="sm" className="text-destructive border-destructive hover:bg-destructive/10" onClick={handleDeleteCourse}>Delete Course</Button>
           </div>
         )}
       </div>
 
       {/* Hero Banner */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 lg:p-12 shadow-sm flex flex-col md:flex-row gap-8 items-start relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl -z-10" />
+      <div className="bg-card border border-border rounded-3xl p-8 lg:p-12 shadow-sm flex flex-col md:flex-row gap-8 items-start relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -z-10" />
         
         <div className="flex-1 space-y-4">
-          <div className="flex items-center gap-3 text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">
+          <div className="flex items-center gap-3 text-sm font-medium text-muted-foreground mb-2">
             <span className="flex items-center gap-1"><Clock size={16} /> Self-Paced</span>
             <span>•</span>
             <span className="flex items-center gap-1"><BarChart size={16} /> All Levels</span>
@@ -154,59 +159,59 @@ export default function CourseDetail() {
             <span className="flex items-center gap-1"><Award size={16} /> Auto-Scored Crossword</span>
           </div>
           
-          <h1 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
+          <h1 className="text-4xl font-bold tracking-tight text-foreground">
             {course.name}
           </h1>
           
-          <p className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed max-w-2xl">
+          <p className="text-muted-foreground text-lg leading-relaxed max-w-2xl">
             {course.description || "No description available for this course."}
           </p>
 
           <div className="pt-4 flex items-center gap-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center font-bold text-white text-lg shadow-sm">
+            <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center font-bold text-primary-foreground text-lg shadow-sm">
               {(course.teacher_name || 'T').charAt(0).toUpperCase()}
             </div>
             <div>
-              <p className="text-sm font-semibold text-slate-900 dark:text-white">
+              <p className="text-sm font-semibold text-foreground">
                 {course.teacher_name || 'Instructor'}
               </p>
-              <p className="text-xs text-slate-500">Course Instructor</p>
+              <p className="text-xs text-muted-foreground">Course Instructor</p>
             </div>
           </div>
         </div>
 
         {isOwnerOrAdmin && course.analytics ? (
-          <div className="w-full md:w-auto bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 grid grid-cols-2 gap-4">
+          <div className="w-full md:w-auto bg-muted/50 p-6 rounded-2xl border border-border grid grid-cols-2 gap-4">
             <div className="col-span-2 mb-2">
-              <h3 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+              <h3 className="font-semibold text-foreground flex items-center gap-2">
                 <BarChart size={18} className="text-primary" />
                 Course Analytics
               </h3>
             </div>
-            <div className="bg-white dark:bg-slate-900 p-4 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col">
-              <span className="text-xs text-slate-500 font-medium mb-1">Enrolled</span>
-              <span className="text-2xl font-bold text-blue-600">{course.analytics.students_enrolled}</span>
+            <div className="bg-card p-4 rounded-xl shadow-sm border border-border flex flex-col">
+              <span className="text-xs text-muted-foreground font-medium mb-1">Enrolled</span>
+              <span className="text-2xl font-bold text-primary">{course.analytics.students_enrolled}</span>
             </div>
-            <div className="bg-white dark:bg-slate-900 p-4 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col">
-              <span className="text-xs text-slate-500 font-medium mb-1">Completed</span>
-              <span className="text-2xl font-bold text-emerald-600">{course.analytics.students_completed}</span>
+            <div className="bg-card p-4 rounded-xl shadow-sm border border-border flex flex-col">
+              <span className="text-xs text-muted-foreground font-medium mb-1">Completed</span>
+              <span className="text-2xl font-bold text-success">{course.analytics.students_completed}</span>
             </div>
-            <div className="bg-white dark:bg-slate-900 p-4 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col">
-              <span className="text-xs text-slate-500 font-medium mb-1">Avg Score</span>
-              <span className="text-2xl font-bold text-orange-600">{course.analytics.average_score}</span>
+            <div className="bg-card p-4 rounded-xl shadow-sm border border-border flex flex-col">
+              <span className="text-xs text-muted-foreground font-medium mb-1">Avg Score</span>
+              <span className="text-2xl font-bold text-warning">{course.analytics.average_score}</span>
             </div>
-            <div className="bg-white dark:bg-slate-900 p-4 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col relative overflow-hidden">
+            <div className="bg-card p-4 rounded-xl shadow-sm border border-border flex flex-col relative overflow-hidden">
               <div className="absolute top-0 right-0 p-2 opacity-5"><Percent size={40} /></div>
-              <span className="text-xs text-slate-500 font-medium mb-1 relative z-10">Rate</span>
-              <span className="text-2xl font-bold text-purple-600 relative z-10">{course.analytics.completion_rate}%</span>
+              <span className="text-xs text-muted-foreground font-medium mb-1 relative z-10">Rate</span>
+              <span className="text-2xl font-bold text-secondary relative z-10">{course.analytics.completion_rate}%</span>
             </div>
           </div>
         ) : (
-          <div className="w-full md:w-auto bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col items-center text-center space-y-4">
-            <div className="w-24 h-24 bg-white dark:bg-slate-900 rounded-full shadow-sm flex items-center justify-center mb-2">
+          <div className="w-full md:w-auto bg-muted/50 p-6 rounded-2xl border border-border flex flex-col items-center text-center space-y-4">
+            <div className="w-24 h-24 bg-card rounded-full shadow-sm flex items-center justify-center mb-2">
               <div className="relative">
                 <svg className="w-20 h-20 transform -rotate-90">
-                  <circle cx="40" cy="40" r="36" stroke="currentColor" strokeWidth="8" fill="transparent" className="text-slate-100 dark:text-slate-800" />
+                  <circle cx="40" cy="40" r="36" stroke="currentColor" strokeWidth="8" fill="transparent" className="text-muted" />
                   <circle 
                     cx="40" 
                     cy="40" 
@@ -219,17 +224,17 @@ export default function CourseDetail() {
                     className="text-primary transition-all duration-1000" 
                   />
                 </svg>
-                <span className="absolute inset-0 flex items-center justify-center text-lg font-bold text-slate-700 dark:text-slate-300">{course.progress || 0}%</span>
+                <span className="absolute inset-0 flex items-center justify-center text-lg font-bold text-foreground">{course.progress || 0}%</span>
               </div>
             </div>
-            <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Course Progress</p>
+            <p className="text-sm font-medium text-muted-foreground">Course Progress</p>
             <Button fullWidth>Resume Course</Button>
           </div>
         )}
       </div>
 
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+        <h2 className="text-2xl font-bold text-foreground">
           Course Syllabus
         </h2>
         {isOwnerOrAdmin && (
@@ -237,47 +242,47 @@ export default function CourseDetail() {
         )}
       </div>
       
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm divide-y divide-slate-100 dark:divide-slate-800/50 overflow-hidden">
+      <div className="bg-card border border-border rounded-2xl shadow-sm divide-y divide-border overflow-hidden">
         
         {course.materials.length === 0 ? (
-          <div className="p-16 flex flex-col items-center text-center">
-            <div className="w-20 h-20 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4 text-slate-400 dark:text-slate-500">
-              <FileText size={40} />
-            </div>
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">No Materials Yet</h3>
-            <p className="text-slate-500 dark:text-slate-400 max-w-md">
-              {isOwnerOrAdmin 
+          <EmptyState
+            icon={<FileText size={40} />}
+            title="No Materials Yet"
+            description={
+              isOwnerOrAdmin 
                 ? "Get started by adding a PDF guide or an interactive crossword puzzle for your students." 
-                : "The instructor hasn't added any learning materials to this course yet. Check back later!"}
-            </p>
-            {isOwnerOrAdmin && (
-              <Button className="mt-6" onClick={() => { setEditingMaterial(null); setIsMaterialModalOpen(true); }}>
-                Add First Material
-              </Button>
-            )}
-          </div>
+                : "The instructor hasn't added any learning materials to this course yet. Check back later!"
+            }
+            action={
+              isOwnerOrAdmin && (
+                <Button onClick={() => { setEditingMaterial(null); setIsMaterialModalOpen(true); }}>
+                  Add First Material
+                </Button>
+              )
+            }
+          />
         ) : (
           course.materials.map((material, index) => {
             const isCompleted = material.status === 'COMPLETED';
             const isInProgress = material.status === 'READING' || material.status === 'READY_FOR_CROSSWORD';
             
             return (
-            <div key={material.id} className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors group">
+            <div key={material.id} className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-muted/50 transition-colors group">
               <div className="flex items-start gap-4">
                 <div className={`p-3 rounded-xl transition-colors mt-1 sm:mt-0 ${
-                   isCompleted ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-400 group-hover:bg-green-500 group-hover:text-white' :
-                   isInProgress ? 'bg-orange-50 text-orange-600 dark:bg-orange-900/20 dark:text-orange-400 group-hover:bg-orange-500 group-hover:text-white' :
-                   'bg-blue-50 text-primary dark:bg-blue-900/20 group-hover:bg-primary group-hover:text-white'
+                   isCompleted ? 'bg-success/10 text-success group-hover:bg-success group-hover:text-success-foreground' :
+                   isInProgress ? 'bg-warning/10 text-warning group-hover:bg-warning group-hover:text-warning-foreground' :
+                   'bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground'
                 }`}>
                   {isCompleted ? <Award size={24} /> :
                    isInProgress ? <Clock size={24} /> :
                    <FileText size={24} />}
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white group-hover:text-primary transition-colors">
+                  <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                     Chapter {index + 1}: {material.title}
                   </h3>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-xl">
+                  <p className="text-sm text-muted-foreground mt-1 max-w-xl">
                     {material.pdf_path ? "Read the PDF guide" : "Review the material"} 
                     {material.crossword_data ? " and solve the interactive crossword puzzle to test your knowledge." : "."}
                   </p>
@@ -288,11 +293,11 @@ export default function CourseDetail() {
                 {isOwnerOrAdmin && (
                   <>
                     <Button variant="outline" size="sm" onClick={() => handleEditMaterial(material)}>Edit</Button>
-                    <Button variant="outline" size="sm" className="text-red-600 border-red-200" onClick={() => handleDeleteMaterial(material.id)}>Delete</Button>
+                    <Button variant="outline" size="sm" className="text-destructive border-destructive" onClick={() => handleDeleteMaterial(material.id)}>Delete</Button>
                   </>
                 )}
                 <Link to={`/courses/${id}/materials/${material.id}`}>
-                  <Button variant="outline" className="w-full sm:w-auto gap-2 group-hover:bg-primary group-hover:text-white group-hover:border-primary">
+                  <Button variant="outline" className="w-full sm:w-auto gap-2 group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary">
                     <PlayCircle size={18} />
                     Start Module
                   </Button>
@@ -366,17 +371,17 @@ function CourseMonitoringDashboard({ courseId, materials }: { courseId: number, 
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden">
-      <div className="p-6 border-b border-slate-100 dark:border-slate-800/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden">
+      <div className="p-6 border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white">Student Monitoring Dashboard</h2>
-          <p className="text-sm text-slate-500 mt-1">Track student progress and submissions in real-time.</p>
+          <h2 className="text-xl font-bold text-foreground">Student Monitoring Dashboard</h2>
+          <p className="text-sm text-muted-foreground mt-1">Track student progress and submissions in real-time.</p>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex flex-col">
-            <span className="text-xs text-slate-500 font-medium mb-1">Sort</span>
-            <select 
-              className="bg-slate-50 border border-slate-200 rounded-xl text-sm px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+            <span className="text-xs text-muted-foreground font-medium mb-1">Sort</span>
+            <Select 
+              className="h-10 text-sm py-1"
               value={sort}
               onChange={e => { setSort(e.target.value); setPage(1); }}
             >
@@ -384,12 +389,12 @@ function CourseMonitoringDashboard({ courseId, materials }: { courseId: number, 
               <option value="oldest">Oldest First</option>
               <option value="score_high">Highest Score</option>
               <option value="score_low">Lowest Score</option>
-            </select>
+            </Select>
           </div>
           <div className="flex flex-col">
-            <span className="text-xs text-slate-500 font-medium mb-1">Material</span>
-            <select 
-              className="bg-slate-50 border border-slate-200 rounded-xl text-sm px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+            <span className="text-xs text-muted-foreground font-medium mb-1">Material</span>
+            <Select 
+              className="h-10 text-sm py-1"
               value={materialFilter}
               onChange={e => { setMaterialFilter(e.target.value); setPage(1); }}
             >
@@ -399,63 +404,61 @@ function CourseMonitoringDashboard({ courseId, materials }: { courseId: number, 
                   Chapter {idx + 1}: {mat.title}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
         </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm text-left text-slate-600 dark:text-slate-400">
-          <thead className="text-xs text-slate-700 dark:text-slate-300 uppercase bg-slate-50 dark:bg-slate-800/50">
-            <tr>
-              <th className="px-6 py-4 font-semibold">Student</th>
-              <th className="px-6 py-4 font-semibold">Material</th>
-              <th className="px-6 py-4 font-semibold">Status</th>
-              <th className="px-6 py-4 font-semibold">Submission Date</th>
-              <th className="px-6 py-4 text-center font-semibold">Score</th>
-              <th className="px-6 py-4 text-right font-semibold">Time Spent</th>
-            </tr>
-          </thead>
-          <tbody>
-            {isLoading ? (
-              <tr><td colSpan={6} className="px-6 py-8 text-center text-slate-500">Loading data...</td></tr>
-            ) : data?.data?.length === 0 ? (
-              <tr><td colSpan={6} className="px-6 py-8 text-center text-slate-500">No student progress recorded yet.</td></tr>
-            ) : (
-              data?.data?.map((sub: any) => (
-                <tr key={sub.id} className="border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                  <td className="px-6 py-4">
-                    <div className="font-semibold text-slate-900 dark:text-white">{sub.student?.name}</div>
-                    <div className="text-xs text-slate-500">{sub.student?.email}</div>
-                  </td>
-                  <td className="px-6 py-4">{sub.material?.title}</td>
-                  <td className="px-6 py-4">
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                      sub.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
-                      sub.status === 'READY_FOR_CROSSWORD' ? 'bg-blue-100 text-blue-800' :
-                      'bg-orange-100 text-orange-800'
-                    }`}>
-                      {sub.status.replace(/_/g, ' ')}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">{formatDate(sub.submitted_at)}</td>
-                  <td className="px-6 py-4 text-center">
-                    <span className="font-bold text-slate-700 dark:text-slate-300">{sub.score}</span>
-                  </td>
-                  <td className="px-6 py-4 text-right whitespace-nowrap font-medium text-slate-700 dark:text-slate-300">
-                    {formatTime(sub.time_spent_seconds)}
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Student</TableHead>
+            <TableHead>Material</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Submission Date</TableHead>
+            <TableHead className="text-center">Score</TableHead>
+            <TableHead className="text-right">Time Spent</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {isLoading ? (
+            <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">Loading data...</TableCell></TableRow>
+          ) : data?.data?.length === 0 ? (
+            <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">No student progress recorded yet.</TableCell></TableRow>
+          ) : (
+            data?.data?.map((sub: any) => (
+              <TableRow key={sub.id}>
+                <TableCell>
+                  <div className="font-semibold text-foreground">{sub.student?.name}</div>
+                  <div className="text-xs text-muted-foreground">{sub.student?.email}</div>
+                </TableCell>
+                <TableCell>{sub.material?.title}</TableCell>
+                <TableCell>
+                  <Badge variant={
+                    sub.status === 'COMPLETED' ? 'success' :
+                    sub.status === 'READY_FOR_CROSSWORD' ? 'default' :
+                    'warning'
+                  }>
+                    {sub.status.replace(/_/g, ' ')}
+                  </Badge>
+                </TableCell>
+                <TableCell className="whitespace-nowrap">{formatDate(sub.submitted_at)}</TableCell>
+                <TableCell className="text-center">
+                  <span className="font-bold text-foreground">{sub.score}</span>
+                </TableCell>
+                <TableCell className="text-right whitespace-nowrap font-medium text-foreground">
+                  {formatTime(sub.time_spent_seconds)}
+                </TableCell>
+              </TableRow>
+            ))
+          )}
+        </TableBody>
+      </Table>
 
       {data && data.last_page > 1 && (
-        <div className="flex justify-center items-center py-4 gap-2 border-t border-slate-100 dark:border-slate-800">
+        <div className="flex justify-center items-center py-4 gap-2 border-t border-border">
           <Button variant="secondary" size="sm" disabled={page === 1} onClick={() => setPage(p => Math.max(1, p - 1))}>Previous</Button>
-          <span className="text-sm font-medium text-slate-600">Page {page} of {data.last_page}</span>
+          <span className="text-sm font-medium text-muted-foreground">Page {page} of {data.last_page}</span>
           <Button variant="secondary" size="sm" disabled={page === data.last_page} onClick={() => setPage(p => Math.min(data.last_page, p + 1))}>Next</Button>
         </div>
       )}
