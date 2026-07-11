@@ -10,7 +10,7 @@ interface CrosswordPreviewProps {
 export function CrosswordPreview({ data }: CrosswordPreviewProps) {
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+      <div className="grid grid-cols-2 gap-3 mb-4">
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 flex items-center gap-3">
           <div className="bg-blue-50 dark:bg-blue-900/20 p-2 rounded-lg text-blue-500">
              <Hash size={18} />

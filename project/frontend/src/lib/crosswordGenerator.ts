@@ -14,6 +14,16 @@ export interface PlacedWord {
   number?: number;
 }
 
+// Helper to shuffle array
+function shuffleArray<T>(array: T[]): T[] {
+  const newArr = [...array];
+  for (let i = newArr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+  }
+  return newArr;
+}
+
 export function generateCrossword(inputWords: CrosswordInputWord[]): PlacedWord[] {
   if (inputWords.length === 0) return [];
 
@@ -21,9 +31,36 @@ export function generateCrossword(inputWords: CrosswordInputWord[]): PlacedWord[
   const words = inputWords
     .map(w => ({ word: w.word.trim().toUpperCase(), clue: w.clue.trim() }))
     .filter(w => w.word.length > 0)
-    .sort((a, b) => b.word.length - a.word.length);
+    .sort((a, b) => b.word.length - a.word.length); // Start by sorting longest first
 
   if (words.length === 0) return [];
+
+  const maxAttempts = 50;
+  let lastError = null;
+
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    try {
+      return attemptGeneration(words, attempt);
+    } catch (e: any) {
+      lastError = e;
+      // Continue to next attempt
+    }
+  }
+  
+  throw new Error(lastError?.message || "Unable to generate a valid crossword layout after 50 attempts. Try adding words with more common intersecting letters.");
+}
+
+function attemptGeneration(
+  originalWords: { word: string; clue: string }[],
+  attempt: number
+): PlacedWord[] {
+  let words = [...originalWords];
+  
+  // Attempt 0 uses strictly longest-first. 
+  // Subsequent attempts introduce randomness to word order.
+  if (attempt > 0) {
+    words = shuffleArray(words);
+  }
 
   const placed: PlacedWord[] = [];
   const grid = new Map<string, string>(); // 'row,col' => 'A'
@@ -47,9 +84,9 @@ export function generateCrossword(inputWords: CrosswordInputWord[]): PlacedWord[
   // Attempt to place remaining words
   for (let wIdx = 1; wIdx < words.length; wIdx++) {
     const current = words[wIdx];
-    let bestIntersection: { row: number; col: number; direction: 'across' | 'down'; score: number } | null = null;
+    let bestIntersections: { row: number; col: number; direction: 'across' | 'down'; score: number }[] = [];
 
-    // Search for intersections with already placed words
+    // Search for intersections with ALL already placed words to find ALL possible valid spots
     for (const p of placed) {
       for (let i = 0; i < current.word.length; i++) {
         const charToMatch = current.word[i];
@@ -62,36 +99,41 @@ export function generateCrossword(inputWords: CrosswordInputWord[]): PlacedWord[
             const proposedCol = p.direction === 'across' ? p.col + j : p.col - i;
 
             if (isValidPlacement(current.word, proposedRow, proposedCol, proposedDir, grid)) {
-              // Score could be based on bounding box size (keep it small)
-              // For simplicity, just take the first valid one
-              bestIntersection = { row: proposedRow, col: proposedCol, direction: proposedDir, score: 0 };
-              break; // Found one valid placement for this character
+              // Calculate score: how many intersections does this placement create in total?
+              const score = calculateIntersections(current.word, proposedRow, proposedCol, proposedDir, grid);
+              bestIntersections.push({ row: proposedRow, col: proposedCol, direction: proposedDir, score });
             }
           }
         }
-        if (bestIntersection) break;
       }
-      if (bestIntersection) break;
     }
 
-    if (!bestIntersection) {
+    if (bestIntersections.length === 0) {
       throw new Error(`Could not find a valid intersection for the word: ${current.word}`);
     }
+
+    // Sort by best score (most intersections) descending
+    bestIntersections.sort((a, b) => b.score - a.score);
+    
+    // Pick the best one. If there are ties for the best score, pick randomly among them to vary layouts.
+    const highestScore = bestIntersections[0].score;
+    const topChoices = bestIntersections.filter(i => i.score === highestScore);
+    const chosen = topChoices[Math.floor(Math.random() * topChoices.length)];
 
     // Place it
     placed.push({
       id: `temp-${wIdx}`,
       word: current.word,
       clue: current.clue,
-      row: bestIntersection.row,
-      col: bestIntersection.col,
-      direction: bestIntersection.direction,
+      row: chosen.row,
+      col: chosen.col,
+      direction: chosen.direction,
       length: current.word.length
     });
 
     for (let i = 0; i < current.word.length; i++) {
-      const r = bestIntersection.direction === 'down' ? bestIntersection.row + i : bestIntersection.row;
-      const c = bestIntersection.direction === 'across' ? bestIntersection.col + i : bestIntersection.col;
+      const r = chosen.direction === 'down' ? chosen.row + i : chosen.row;
+      const c = chosen.direction === 'across' ? chosen.col + i : chosen.col;
       grid.set(`${r},${c}`, current.word[i]);
     }
   }
@@ -132,6 +174,24 @@ export function generateCrossword(inputWords: CrosswordInputWord[]): PlacedWord[
   }
 
   return normalized;
+}
+
+function calculateIntersections(
+  word: string,
+  startRow: number,
+  startCol: number,
+  direction: 'across' | 'down',
+  grid: Map<string, string>
+): number {
+  let count = 0;
+  for (let i = 0; i < word.length; i++) {
+    const r = direction === 'down' ? startRow + i : startRow;
+    const c = direction === 'across' ? startCol + i : startCol;
+    if (grid.has(`${r},${c}`)) {
+      count++;
+    }
+  }
+  return count;
 }
 
 function isValidPlacement(

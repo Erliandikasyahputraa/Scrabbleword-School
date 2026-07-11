@@ -62,6 +62,10 @@ export function CrosswordBuilder({ initialData, onChange }: CrosswordBuilderProp
     setIsGenerating(true);
     setError('');
     
+    // Reset previous layout state immediately to avoid stale grid reuse
+    setGeneratedData(null);
+    onChange(null);
+    
     // Simulate slight delay for better UX feeling of "generation"
     setTimeout(() => {
       try {
