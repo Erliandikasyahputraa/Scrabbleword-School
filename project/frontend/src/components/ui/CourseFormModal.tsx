@@ -65,34 +65,34 @@ export function CourseFormModal({ isOpen, onClose, initialData }: CourseFormModa
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 w-full max-w-md shadow-2xl relative">
+      <div className="bg-card rounded-3xl p-6 sm:p-8 w-[95vw] sm:max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto">
         <button 
           onClick={onClose}
-          className="absolute top-6 right-6 text-slate-400 hover:text-slate-600 dark:hover:text-white"
+          className="absolute top-4 right-4 sm:top-6 sm:right-6 text-muted-foreground hover:text-foreground transition-colors"
         >
           <X size={24} />
         </button>
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-6 pr-8">
           {initialData ? 'Edit Course' : 'Create New Course'}
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Course Name</label>
+            <label className="block text-sm font-medium text-foreground mb-1">Course Name</label>
             <input
               type="text"
               required
               value={name}
               onChange={e => setName(e.target.value)}
-              className="w-full h-12 px-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-slate-900 dark:text-white"
+              className="w-full h-12 px-4 rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-foreground"
               placeholder="e.g. Advanced English Grammar"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Description</label>
+            <label className="block text-sm font-medium text-foreground mb-1">Description</label>
             <textarea
               value={description}
               onChange={e => setDescription(e.target.value)}
-              className="w-full p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-slate-900 dark:text-white resize-none"
+              className="w-full p-4 rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-foreground resize-none"
               rows={4}
               placeholder="What will students learn in this course?"
             />

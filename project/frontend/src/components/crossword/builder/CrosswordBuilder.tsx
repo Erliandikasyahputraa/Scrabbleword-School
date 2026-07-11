@@ -5,6 +5,7 @@ import { CrosswordWordList } from './CrosswordWordList';
 import { CrosswordPreview } from './CrosswordPreview';
 import { Button } from '../../ui/Button';
 import { RefreshCw, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { EmptyCrosswordIllustration } from '../../ui/Illustrations';
 import type { CrosswordData } from '../../../types/crossword';
 
 interface CrosswordBuilderProps {
@@ -83,15 +84,15 @@ export function CrosswordBuilder({ initialData, onChange }: CrosswordBuilderProp
   };
 
   return (
-    <div className="space-y-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
-      <div className="border-b border-slate-100 dark:border-slate-800 pb-4 mb-4">
-        <h2 className="text-xl font-bold text-slate-900 dark:text-white">Interactive Puzzle Builder</h2>
-        <p className="text-sm text-slate-500 mt-1">Add words and clues, then generate the layout automatically.</p>
+    <div className="flex flex-col h-full space-y-6 bg-card rounded-2xl border border-border p-6 min-h-0 shadow-sm">
+      <div className="border-b border-border pb-4 mb-4">
+        <h2 className="text-xl font-bold text-foreground">Interactive Puzzle Builder</h2>
+        <p className="text-sm text-muted-foreground mt-1">Add words and clues, then generate the layout automatically.</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-0">
         {/* Left Col: Words Management */}
-        <div className="space-y-4">
+        <div className="lg:col-span-4 flex flex-col space-y-4 overflow-y-auto">
           <CrosswordWordInput onAddWord={handleAddWord} disabled={isGenerating} />
           <CrosswordWordList words={words} onRemoveWord={handleRemoveWord} disabled={isGenerating} />
           
@@ -118,22 +119,24 @@ export function CrosswordBuilder({ initialData, onChange }: CrosswordBuilderProp
         </div>
 
         {/* Right Col: Preview */}
-        <div>
+        <div className="lg:col-span-8 flex flex-col h-full overflow-hidden">
           {generatedData ? (
-            <div className="animate-in fade-in zoom-in-95 duration-300">
-               <div className="flex items-center gap-2 mb-4 text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 p-3 rounded-lg border border-emerald-100 dark:border-emerald-900/30">
+            <div className="animate-in fade-in zoom-in-95 duration-300 flex-1 flex flex-col min-h-0">
+               <div className="flex items-center gap-2 mb-4 shrink-0 text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 p-3 rounded-lg border border-emerald-100 dark:border-emerald-900/30">
                   <CheckCircle2 size={18} />
                   <span className="font-semibold text-sm">Layout Generated Successfully</span>
                </div>
-               <CrosswordPreview data={generatedData} />
+               <div className="flex-1 min-h-0">
+                 <CrosswordPreview data={generatedData} />
+               </div>
             </div>
           ) : (
-            <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-center p-8 bg-slate-50 dark:bg-slate-900/30 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl">
-               <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4">
-                  <RefreshCw size={24} className="text-slate-400" />
+            <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-center p-8 bg-muted/50 border-2 border-dashed border-border rounded-2xl">
+               <div className="mb-4 text-muted-foreground opacity-80">
+                  <EmptyCrosswordIllustration size={100} />
                </div>
-               <h3 className="text-slate-900 dark:text-white font-medium mb-2">No Preview Available</h3>
-               <p className="text-sm text-slate-500 max-w-[250px]">
+               <h3 className="text-foreground font-bold mb-2 text-lg">No Preview Available</h3>
+               <p className="text-sm text-muted-foreground max-w-[280px]">
                   Add your words and click Generate to see the crossword layout here.
                </p>
             </div>

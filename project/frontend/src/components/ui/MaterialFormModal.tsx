@@ -121,48 +121,51 @@ export function MaterialFormModal({ isOpen, onClose, courseId, initialData }: Ma
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 w-full max-w-2xl shadow-2xl relative max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-0 sm:p-4 animate-in fade-in duration-200">
+      <div className="bg-card w-full h-full rounded-none sm:w-[95vw] sm:h-[90vh] lg:w-[90vw] sm:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl relative overflow-y-auto flex flex-col">
         <button 
           onClick={onClose}
           disabled={isUploading}
-          className="absolute top-6 right-6 text-slate-400 hover:text-slate-600 dark:hover:text-white disabled:opacity-50"
+          className="absolute top-4 right-4 sm:top-6 sm:right-6 text-muted-foreground hover:text-foreground disabled:opacity-50 transition-colors"
         >
           <X size={24} />
         </button>
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-4 sm:mb-6 pr-8 shrink-0">
           {initialData ? 'Edit Material' : 'Add New Material'}
         </h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Title</label>
-            <input
-              type="text"
-              required
-              disabled={isUploading}
-              value={title}
-              onChange={e => setTitle(e.target.value)}
-              className="w-full h-12 px-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-slate-900 dark:text-white disabled:opacity-50"
-              placeholder="e.g. Chapter 1: Introduction"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-              PDF Document {initialData && '(Leave empty to keep current)'}
-            </label>
-            <input
-              type="file"
-              accept="application/pdf"
-              disabled={isUploading}
-              required={!initialData}
-              onChange={e => setPdfFile(e.target.files?.[0] || null)}
-              className="w-full h-12 px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white disabled:opacity-50"
-            />
-          </div>
-          <div>
-            <div className="flex items-center justify-between mb-2">
-               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Interactive Puzzle (Optional)</label>
+        <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0 space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 shrink-0">
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-1">Title</label>
+              <input
+                type="text"
+                required
+                disabled={isUploading}
+                value={title}
+                onChange={e => setTitle(e.target.value)}
+                className="w-full h-12 px-4 rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-foreground disabled:opacity-50"
+                placeholder="e.g. Chapter 1: Introduction"
+              />
             </div>
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-1">
+                PDF Document {initialData && '(Leave empty to keep current)'}
+              </label>
+              <input
+                type="file"
+                accept="application/pdf"
+                disabled={isUploading}
+                required={!initialData}
+                onChange={e => setPdfFile(e.target.files?.[0] || null)}
+                className="w-full h-12 px-4 py-2 rounded-xl border border-border bg-background text-foreground disabled:opacity-50"
+              />
+            </div>
+          </div>
+          <div className="flex items-center justify-between mb-2 mt-4 shrink-0">
+            <label className="block text-sm font-medium text-foreground">Interactive Puzzle Workspace (Optional)</label>
+          </div>
+          
+          <div className="flex-1 overflow-y-auto min-h-0 rounded-2xl border border-border">
             
             <CrosswordBuilder 
                initialData={crosswordJson ? JSON.parse(crosswordJson) : null}
@@ -177,9 +180,9 @@ export function MaterialFormModal({ isOpen, onClose, courseId, initialData }: Ma
           </div>
           
           {isUploading && (
-            <div className="mt-4 p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700">
+            <div className="mt-4 p-4 bg-muted rounded-xl border border-border">
               <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-medium text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                <span className="text-sm font-medium text-foreground flex items-center gap-2">
                    <div className="animate-spin h-4 w-4 border-2 border-primary border-t-transparent rounded-full" />
                    Uploading PDF...
                 </span>
@@ -194,7 +197,7 @@ export function MaterialFormModal({ isOpen, onClose, courseId, initialData }: Ma
             </div>
           )}
 
-          <Button type="submit" fullWidth disabled={isUploading} className="h-12 mt-4">
+          <Button type="submit" fullWidth disabled={isUploading} className="h-12 shrink-0">
             {isUploading ? 'Uploading...' : 'Save Material & Crossword'}
           </Button>
         </form>

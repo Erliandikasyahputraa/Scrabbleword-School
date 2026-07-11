@@ -16,34 +16,35 @@ interface CourseCardProps {
 
 export function CourseCard({ id, title, description, materialCount, progress, completionRate, studentCount, teacherName, teacherAvatarInitial }: CourseCardProps) {
   return (
-    <Card hoverable className="group border-border bg-card transition-all duration-300">
-      <CardHeader>
-        <div className="flex items-start justify-between mb-2">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-primary/10 text-primary rounded-xl group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
-              <BookOpen size={24} />
+    <Card hoverable className="group border-border bg-card transition-all duration-200 flex flex-col h-full hover:-translate-y-1 hover:shadow-lg shadow-sm">
+      <CardHeader className="p-4 sm:p-6 pb-2 sm:pb-4 flex-none">
+        <div className="flex items-start justify-between mb-2 gap-2">
+          <div className="flex items-start gap-3 w-full">
+            <div className="p-2 sm:p-2.5 bg-primary/10 text-primary rounded-xl group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-200 shrink-0 shadow-sm">
+              <BookOpen size={20} strokeWidth={2} className="sm:w-6 sm:h-6" />
             </div>
-            <div>
-              <CardTitle className="text-xl font-bold group-hover:text-primary transition-colors line-clamp-1">{title}</CardTitle>
+            <div className="min-w-0 flex-1">
+              <CardTitle className="text-lg sm:text-xl font-bold group-hover:text-primary transition-colors line-clamp-1">{title}</CardTitle>
               {teacherName && (
-                <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1.5">
-                  <span className="flex items-center justify-center w-4 h-4 rounded-full bg-muted text-[10px] font-bold text-muted-foreground">
+                <p className="text-xs text-muted-foreground mt-1.5 flex items-center gap-1.5">
+                  <span className="flex items-center justify-center w-4 h-4 rounded-full bg-muted text-[10px] font-bold text-muted-foreground shrink-0">
                     {teacherAvatarInitial}
                   </span>
-                  Created by {teacherName}
+                  <span className="truncate">Created by {teacherName}</span>
                 </p>
               )}
             </div>
           </div>
         </div>
-        <CardDescription className="text-muted-foreground line-clamp-2 mt-2">
+        <CardDescription className="text-sm text-muted-foreground line-clamp-2 mt-2 sm:mt-3">
           {description}
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      
+      <CardContent className="p-4 sm:p-6 pt-0 sm:pt-0 flex-1">
         {progress !== undefined && (
           <div className="mt-2">
-            <div className="flex justify-between items-center mb-1">
+            <div className="flex justify-between items-center mb-1.5">
               <span className="text-xs font-semibold text-muted-foreground">Your Progress</span>
               <span className="text-xs font-bold text-foreground">{progress}%</span>
             </div>
@@ -57,7 +58,7 @@ export function CourseCard({ id, title, description, materialCount, progress, co
         )}
         {completionRate !== undefined && (
           <div className="mt-2">
-            <div className="flex justify-between items-center mb-1">
+            <div className="flex justify-between items-center mb-1.5">
               <span className="text-xs font-semibold text-muted-foreground">Class Completion Rate</span>
               <span className="text-xs font-bold text-foreground">{completionRate}%</span>
             </div>
@@ -70,23 +71,24 @@ export function CourseCard({ id, title, description, materialCount, progress, co
           </div>
         )}
       </CardContent>
-      <CardFooter className="flex justify-between items-center pt-2 border-t border-border/50 mt-4">
-        <div className="flex flex-col">
-          <span className="text-sm font-medium text-muted-foreground">
+      
+      <CardFooter className="p-4 sm:p-6 flex flex-wrap justify-between items-center gap-3 border-t border-border/50 mt-auto">
+        <div className="flex flex-col min-w-0">
+          <span className="text-xs sm:text-sm font-medium text-muted-foreground truncate">
             {materialCount} Material{materialCount !== 1 ? 's' : ''}
           </span>
           {studentCount !== undefined && (
-            <span className="text-xs text-muted-foreground/70">
+            <span className="text-xs text-muted-foreground/70 truncate mt-0.5">
               {studentCount} Student{studentCount !== 1 ? 's' : ''}
             </span>
           )}
         </div>
         <Link 
           to={`/courses/${id}`} 
-          className="text-sm font-semibold text-primary flex items-center gap-1 group/link hover:text-primary/80 transition-colors"
+          className="text-sm font-semibold text-primary flex items-center gap-1 group/link hover:text-primary/80 transition-colors whitespace-nowrap ml-auto"
         >
           View Details 
-          <ArrowRight size={16} className="group-hover/link:translate-x-1 transition-transform" />
+          <ArrowRight size={16} className="group-hover/link:translate-x-1 transition-transform shrink-0" />
         </Link>
       </CardFooter>
     </Card>

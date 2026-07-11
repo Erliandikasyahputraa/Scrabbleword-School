@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../providers/AuthProvider';
 import { fetchApi } from '../lib/api';
-import { PlusCircle, X, BookOpen, Search } from 'lucide-react';
+import { PlusCircle, X, Search } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { CourseCard } from '../components/ui/CourseCard';
 import { EmptyState } from '../components/ui/EmptyState';
+import { SearchIllustration, DocumentIllustration } from '../components/ui/Illustrations';
 import { SkeletonCard } from '../components/ui/LoadingSystem';
 import { Input, Select } from '../components/ui/Input';
 import { toast } from 'react-hot-toast';
@@ -93,46 +94,50 @@ export default function Courses() {
   const courses = data?.data || [];
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6 animate-in fade-in duration-500 pb-12">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-2">
-        <div>
-          <h2 className="text-3xl font-bold text-foreground">
+    <div className="space-y-4 sm:space-y-6 animate-in fade-in duration-500 pb-12">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-primary to-blue-500 dark:from-primary/90 dark:to-primary/70 rounded-3xl p-6 sm:p-8 text-primary-foreground shadow-lg relative overflow-hidden flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
+        <div className="absolute top-[-20%] right-[-10%] w-64 h-64 bg-white/10 rounded-full blur-3xl z-0" />
+        <div className="relative z-10">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight mb-2">
             {user?.role === 'admin' ? 'All Courses' : user?.role === 'teacher' ? 'Your Courses' : 'Available Courses'}
           </h2>
-          <p className="text-muted-foreground mt-1">
-            {user?.role === 'admin' ? 'Manage all platform courses.' : user?.role === 'teacher' ? 'Manage the courses you teach.' : 'Explore and continue your learning.'}
+          <p className="text-primary-foreground/90 text-sm sm:text-base max-w-xl">
+            {user?.role === 'admin' ? 'Manage all platform courses and curriculums.' : user?.role === 'teacher' ? 'Manage the courses you teach and build materials.' : 'Explore your enrolled courses and continue learning.'}
           </p>
         </div>
+        
         {(user?.role === 'teacher' || user?.role === 'admin') && (
-          <Button 
-            variant="primary" 
-            className="gap-2 font-semibold"
-            onClick={() => setIsModalOpen(true)}
-          >
-            <PlusCircle size={20} />
-            Create Course
-          </Button>
+          <div className="relative z-10 w-full sm:w-auto">
+            <Button 
+              className="w-full sm:w-auto gap-2 bg-background text-primary hover:bg-background/90 border-0 font-bold shadow-md hover:shadow-lg transition-all"
+              onClick={() => setIsModalOpen(true)}
+            >
+              <PlusCircle size={20} />
+              Create Course
+            </Button>
+          </div>
         )}
       </div>
 
       {/* Toolbar: Search, Filters, Sort */}
-      <div className="bg-card p-4 rounded-2xl shadow-sm border border-border flex flex-col md:flex-row gap-4 items-center justify-between">
-        <div className="relative w-full md:max-w-md">
+      <div className="bg-card p-4 rounded-2xl shadow-sm border border-border flex flex-col lg:flex-row gap-3 sm:gap-4 items-center justify-between">
+        <div className="relative w-full lg:flex-grow">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <Search size={18} className="text-muted-foreground" />
           </div>
           <Input 
             type="text"
-            className="pl-10 h-11"
+            className="pl-10 h-11 w-full"
             placeholder="Search courses..."
             value={search}
             onChange={e => setSearch(e.target.value)}
           />
         </div>
-        <div className="flex w-full md:w-auto items-center gap-3">
+        <div className="flex flex-col sm:flex-row w-full lg:w-auto items-center gap-3">
           {user?.role === 'student' && (
             <Select 
-              className="h-11 w-full md:w-auto min-w-[140px]"
+              className="h-11 w-full lg:min-w-[160px]"
               value={statusFilter}
               onChange={e => setStatusFilter(e.target.value)}
             >
@@ -143,7 +148,7 @@ export default function Courses() {
             </Select>
           )}
           <Select 
-            className="h-11 w-full md:w-auto min-w-[140px]"
+            className="h-11 w-full lg:min-w-[160px]"
             value={sort}
             onChange={e => setSort(e.target.value)}
           >
@@ -154,24 +159,24 @@ export default function Courses() {
       </div>
       
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {Array.from({ length: 6 }).map((_, i) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          {Array.from({ length: 8 }).map((_, i) => (
              <div key={i} className="h-64"><SkeletonCard /></div>
           ))}
         </div>
       ) : courses.length === 0 ? (
         <EmptyState 
-          icon={<BookOpen size={40} />}
-          title="No Courses Found"
+          icon={search || statusFilter ? <SearchIllustration size={100} /> : <DocumentIllustration size={100} />}
+          title={search || statusFilter ? "No Results Found" : "No Courses Available"}
           description={
-            search || statusFilter ? "Try adjusting your search or filters." :
+            search || statusFilter ? "We couldn't find any courses matching your filters. Try adjusting your search." :
             (user?.role === 'teacher' || user?.role === 'admin' 
             ? "You haven't created any courses yet. Get started by creating your first course!" 
             : "You are not enrolled in any courses yet. Please wait for your instructor to assign you to a course.")
           }
           action={
-            (user?.role === 'teacher' || user?.role === 'admin') && !search && (
-              <Button className="gap-2" onClick={() => setIsModalOpen(true)}>
+            (user?.role === 'teacher' || user?.role === 'admin') && !search && !statusFilter && (
+              <Button variant="primary" className="gap-2" onClick={() => setIsModalOpen(true)}>
                 <PlusCircle size={20} />
                 Create First Course
               </Button>
@@ -180,7 +185,7 @@ export default function Courses() {
         />
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {courses.map(course => (
               <CourseCard 
                 key={course.id}
@@ -198,9 +203,10 @@ export default function Courses() {
           </div>
 
           {data && data.last_page > 1 && (
-            <div className="flex justify-center items-center mt-8 gap-2">
+            <div className="flex flex-col sm:flex-row justify-center items-center mt-8 gap-4">
                <Button 
                  variant="secondary" 
+                 className="w-full sm:w-auto"
                  disabled={page === 1}
                  onClick={() => setPage(p => Math.max(1, p - 1))}
                >
@@ -211,6 +217,7 @@ export default function Courses() {
                </span>
                <Button 
                  variant="secondary" 
+                 className="w-full sm:w-auto"
                  disabled={page === data.last_page}
                  onClick={() => setPage(p => Math.min(data.last_page, p + 1))}
                >
@@ -224,14 +231,14 @@ export default function Courses() {
       {/* Create Course Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-card rounded-3xl p-8 w-full max-w-md shadow-2xl relative border border-border">
+          <div className="bg-card rounded-3xl p-6 sm:p-8 w-[95vw] md:max-w-md shadow-2xl relative border border-border">
             <button 
               onClick={() => setIsModalOpen(false)}
-              className="absolute top-6 right-6 text-muted-foreground hover:text-foreground transition-colors"
+              className="absolute top-4 sm:top-6 right-4 sm:right-6 text-muted-foreground hover:text-foreground transition-colors"
             >
               <X size={24} />
             </button>
-            <h2 className="text-2xl font-bold text-foreground mb-6">Create New Course</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-6">Create New Course</h2>
             <form onSubmit={handleCreateCourse} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-foreground mb-1">Course Name</label>

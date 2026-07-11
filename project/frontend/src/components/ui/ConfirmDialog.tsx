@@ -26,35 +26,35 @@ export function ConfirmDialog({
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4 animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 w-full max-w-md shadow-2xl relative">
+      <div className="bg-card rounded-3xl p-6 w-[95vw] sm:max-w-md shadow-2xl relative">
         <button 
           onClick={onClose}
-          className="absolute top-6 right-6 text-slate-400 hover:text-slate-600 dark:hover:text-white"
+          className="absolute top-4 right-4 sm:top-6 sm:right-6 text-muted-foreground hover:text-foreground transition-colors"
         >
           <X size={20} />
         </button>
-        <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
+        <h2 className="text-xl font-bold text-foreground mb-2 pr-8">
           {title}
         </h2>
         
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6 mt-4">
           {isDestructive && (
-            <div className="bg-red-100 dark:bg-red-900/30 p-3 rounded-full text-red-600 dark:text-red-400 shrink-0">
+            <div className="bg-destructive/10 p-3 rounded-full text-destructive shrink-0">
               <AlertTriangle size={24} />
             </div>
           )}
-          <p className="text-slate-600 dark:text-slate-300">
+          <p className="text-sm sm:text-base text-muted-foreground">
             {description}
           </p>
         </div>
         
-        <div className="flex justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
-          <Button variant="outline" onClick={onClose}>
+        <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-4 border-t border-border">
+          <Button variant="outline" onClick={onClose} className="w-full sm:w-auto">
             {cancelText}
           </Button>
           <Button 
             variant="primary"
-            className={isDestructive ? 'bg-red-600 hover:bg-red-700 shadow-red-500/25 text-white' : ''}
+            className={`w-full sm:w-auto ${isDestructive ? 'bg-destructive hover:bg-destructive/90 shadow-destructive/25 text-destructive-foreground' : ''}`}
             onClick={() => {
               onConfirm();
               onClose();

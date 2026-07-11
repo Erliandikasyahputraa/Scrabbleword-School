@@ -3,6 +3,8 @@ import { useAuth } from '../providers/AuthProvider';
 import { fetchApi } from '../lib/api';
 import { Check, X, CheckCircle } from 'lucide-react';
 import { Button } from '../components/ui/Button';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../components/ui/Table';
+import { Badge } from '../components/ui/Badge';
 import { toast } from 'react-hot-toast';
 
 type User = {
@@ -38,20 +40,22 @@ export default function Approvals() {
 
   if (user?.role === 'student') {
     return (
-      <div className="p-12 text-center text-red-500 font-bold">
-        Unauthorized access
+      <div className="flex justify-center p-12">
+        <div className="text-center text-destructive font-bold">
+          Unauthorized access
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500">
-      <div className="flex items-center justify-between mb-6">
+    <div className="max-w-5xl mx-auto space-y-6 sm:space-y-8 animate-in fade-in duration-500 pb-12">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
         <div>
-          <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
+          <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
             User Approvals
           </h2>
-          <p className="text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-sm sm:text-base text-muted-foreground mt-1">
             {user?.role === 'admin' 
               ? 'Review and approve pending student and teacher registrations.' 
               : 'Review and approve pending student registrations.'}
@@ -64,61 +68,64 @@ export default function Approvals() {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
         </div>
       ) : pendingUsers.length === 0 ? (
-        <div className="flex flex-col items-center justify-center text-center p-16 bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
-          <div className="w-20 h-20 bg-green-50 dark:bg-green-900/20 rounded-full flex items-center justify-center mb-4 text-green-500">
+        <div className="flex flex-col items-center justify-center text-center p-16 bg-card rounded-3xl border border-border shadow-sm">
+          <div className="w-20 h-20 bg-success/10 rounded-full flex items-center justify-center mb-4 text-success">
             <CheckCircle size={40} />
           </div>
-          <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">All Caught Up!</h3>
-          <p className="text-slate-500 dark:text-slate-400 max-w-md">
+          <h3 className="text-xl font-bold text-foreground mb-2">All Caught Up!</h3>
+          <p className="text-muted-foreground max-w-md">
             There are no pending users waiting for approval right now.
           </p>
         </div>
       ) : (
-        <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
-                <th className="p-4 font-semibold text-slate-600 dark:text-slate-300">Name</th>
-                <th className="p-4 font-semibold text-slate-600 dark:text-slate-300">Email</th>
-                <th className="p-4 font-semibold text-slate-600 dark:text-slate-300">Role</th>
-                <th className="p-4 font-semibold text-slate-600 dark:text-slate-300 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-              {pendingUsers.map(u => (
-                <tr key={u.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="p-4 text-slate-900 dark:text-slate-100 font-medium">{u.name}</td>
-                  <td className="p-4 text-slate-500 dark:text-slate-400">{u.email}</td>
-                  <td className="p-4">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${
-                      u.role === 'teacher' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' 
-                      : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                    }`}>
-                      {u.role}
-                    </span>
-                  </td>
-                  <td className="p-4 flex items-center justify-end gap-2">
-                    <Button 
-                      variant="primary"
-                      className="bg-emerald-500 hover:bg-emerald-600 shadow-emerald-500/25 !px-3"
-                      disabled={updateStatusMutation.isPending}
-                      onClick={() => updateStatusMutation.mutate({ id: u.id, status: 'approved' })}
-                    >
-                      <Check size={16} className="mr-1" /> Approve
-                    </Button>
-                    <Button 
-                      variant="secondary"
-                      className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 !px-3"
-                      disabled={updateStatusMutation.isPending}
-                      onClick={() => updateStatusMutation.mutate({ id: u.id, status: 'rejected' })}
-                    >
-                      <X size={16} className="mr-1" /> Reject
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="bg-card rounded-3xl shadow-sm border border-border overflow-hidden">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Role</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {pendingUsers.map(u => (
+                  <TableRow key={u.id}>
+                    <TableCell className="font-medium whitespace-nowrap">{u.name}</TableCell>
+                    <TableCell className="text-muted-foreground whitespace-nowrap">{u.email}</TableCell>
+                    <TableCell>
+                      <Badge variant={
+                        u.role === 'teacher' ? 'default' : 'secondary'
+                      } className="capitalize">
+                        {u.role}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex justify-end gap-2">
+                        <Button 
+                          variant="primary"
+                          className="bg-success hover:bg-success/90 shadow-success/25 !px-3"
+                          disabled={updateStatusMutation.isPending}
+                          onClick={() => updateStatusMutation.mutate({ id: u.id, status: 'approved' })}
+                        >
+                          <Check size={16} className="sm:mr-1" /> <span className="hidden sm:inline">Approve</span>
+                        </Button>
+                        <Button 
+                          variant="secondary"
+                          className="text-destructive hover:text-destructive hover:bg-destructive/10 !px-3"
+                          disabled={updateStatusMutation.isPending}
+                          onClick={() => updateStatusMutation.mutate({ id: u.id, status: 'rejected' })}
+                        >
+                          <X size={16} className="sm:mr-1" /> <span className="hidden sm:inline">Reject</span>
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       )}
     </div>

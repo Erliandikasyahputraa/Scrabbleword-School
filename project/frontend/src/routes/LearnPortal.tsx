@@ -23,7 +23,7 @@ function TeacherCrosswordView({ materialId }: { materialId: number }) {
 
   if (isLoading) {
     return (
-      <div className="flex-1 flex items-center justify-center">
+      <div className="flex-1 flex items-center justify-center min-h-[300px]">
         <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary" />
       </div>
     );
@@ -32,57 +32,57 @@ function TeacherCrosswordView({ materialId }: { materialId: number }) {
   const stats = submissions ?? { total: 0, completed: 0, average_score: 0, pending: 0 };
 
   return (
-    <CardContent className="flex-1 overflow-auto p-6 bg-slate-50/50 dark:bg-slate-900/50">
-      <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-6">Submission Summary</h3>
-      <div className="grid grid-cols-2 gap-4 mb-6">
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-700 flex items-center gap-4">
+    <CardContent className="flex-1 overflow-auto p-6 bg-muted/30">
+      <h3 className="text-lg font-bold text-foreground mb-6">Submission Summary</h3>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+        <div className="bg-card rounded-2xl p-5 border border-border flex items-center gap-4">
           <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
             <Users size={22} className="text-blue-500" />
           </div>
           <div>
-            <p className="text-2xl font-bold text-slate-900 dark:text-white">{stats.total}</p>
-            <p className="text-sm text-slate-500">Total Students</p>
+            <p className="text-2xl font-bold text-foreground">{stats.total}</p>
+            <p className="text-sm text-muted-foreground">Total Students</p>
           </div>
         </div>
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-700 flex items-center gap-4">
+        <div className="bg-card rounded-2xl p-5 border border-border flex items-center gap-4">
           <div className="p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl">
             <CheckSquare size={22} className="text-emerald-500" />
           </div>
           <div>
-            <p className="text-2xl font-bold text-slate-900 dark:text-white">{stats.completed}</p>
-            <p className="text-sm text-slate-500">Completed</p>
+            <p className="text-2xl font-bold text-foreground">{stats.completed}</p>
+            <p className="text-sm text-muted-foreground">Completed</p>
           </div>
         </div>
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-700 flex items-center gap-4">
+        <div className="bg-card rounded-2xl p-5 border border-border flex items-center gap-4">
           <div className="p-3 bg-orange-50 dark:bg-orange-900/20 rounded-xl">
             <Clock size={22} className="text-orange-500" />
           </div>
           <div>
-            <p className="text-2xl font-bold text-slate-900 dark:text-white">{stats.pending}</p>
-            <p className="text-sm text-slate-500">Pending</p>
+            <p className="text-2xl font-bold text-foreground">{stats.pending}</p>
+            <p className="text-sm text-muted-foreground">Pending</p>
           </div>
         </div>
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-700 flex items-center gap-4">
+        <div className="bg-card rounded-2xl p-5 border border-border flex items-center gap-4">
           <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-xl">
             <BarChart2 size={22} className="text-purple-500" />
           </div>
           <div>
-            <p className="text-2xl font-bold text-slate-900 dark:text-white">{stats.average_score ?? 0}</p>
-            <p className="text-sm text-slate-500">Avg Score</p>
+            <p className="text-2xl font-bold text-foreground">{stats.average_score ?? 0}</p>
+            <p className="text-sm text-muted-foreground">Avg Score</p>
           </div>
         </div>
       </div>
 
       {/* Completion bar */}
       {stats.total > 0 && (
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-700">
+        <div className="bg-card rounded-2xl p-5 border border-border">
           <div className="flex justify-between items-center mb-2">
-            <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Completion Rate</p>
-            <p className="text-sm font-bold text-slate-900 dark:text-white">
+            <p className="text-sm font-medium text-muted-foreground">Completion Rate</p>
+            <p className="text-sm font-bold text-foreground">
               {Math.round((stats.completed / stats.total) * 100)}%
             </p>
           </div>
-          <div className="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2">
+          <div className="w-full bg-muted rounded-full h-2">
             <div
               className="bg-primary h-2 rounded-full transition-all duration-700"
               style={{ width: `${Math.round((stats.completed / stats.total) * 100)}%` }}
@@ -113,26 +113,26 @@ function StudentCrosswordView({ material }: { material: any }) {
 
   if (isLoading) {
     return (
-      <CardContent className="flex-1 flex flex-col items-center justify-center p-8 bg-slate-50/50 dark:bg-slate-900/50">
+      <CardContent className="flex-1 flex flex-col items-center justify-center p-8 bg-muted/30 min-h-[300px]">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
-        <p className="text-slate-500">Checking submission status...</p>
+        <p className="text-muted-foreground">Checking submission status...</p>
       </CardContent>
     );
   }
 
   if (submission && submission.is_completed) {
     return (
-      <CardContent className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-slate-50/50 dark:bg-slate-900/50">
-        <div className="mt-8 p-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl text-center w-full max-w-md animate-in zoom-in duration-300">
-          <div className="mx-auto flex justify-center text-green-500 mb-3">
+      <CardContent className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-muted/30 min-h-[300px]">
+        <div className="mt-8 p-6 bg-success/10 border border-success/20 rounded-xl text-center w-full max-w-md animate-in zoom-in duration-300">
+          <div className="mx-auto flex justify-center text-success mb-3">
             <CheckSquare size={48} />
           </div>
-          <h3 className="text-xl font-bold text-green-800 dark:text-green-300 mb-2">Already Submitted</h3>
-          <p className="text-green-600 dark:text-green-400 mb-4">
+          <h3 className="text-xl font-bold text-success mb-2">Already Submitted</h3>
+          <p className="text-success/80 mb-4">
             Submitted on {new Date(submission.updated_at || submission.created_at).toLocaleDateString()}
           </p>
-          <div className="text-4xl font-black text-green-600 dark:text-green-400 mb-6">
-            {submission.score} <span className="text-xl text-green-600/70">pts</span>
+          <div className="text-4xl font-black text-success mb-6">
+            {submission.score} <span className="text-xl text-success/70">pts</span>
           </div>
         </div>
       </CardContent>
@@ -141,8 +141,8 @@ function StudentCrosswordView({ material }: { material: any }) {
 
   if (!material.crossword_data) {
     return (
-      <CardContent className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-slate-50/50 dark:bg-slate-900/50">
-        <p className="text-slate-500 dark:text-slate-400 max-w-md mx-auto mb-8 leading-relaxed">
+      <CardContent className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-muted/30 min-h-[300px]">
+        <p className="text-muted-foreground max-w-md mx-auto mb-8 leading-relaxed">
           No crossword puzzle available for this material.
         </p>
       </CardContent>
@@ -152,7 +152,7 @@ function StudentCrosswordView({ material }: { material: any }) {
   return (
     <CrosswordProvider data={material.crossword_data}>
       <CrosswordToolbar />
-      <CardContent className="flex-1 overflow-auto custom-scrollbar p-6 bg-slate-50/50 dark:bg-slate-900/50">
+      <CardContent className="flex-1 overflow-auto custom-scrollbar p-4 sm:p-6 bg-muted/30">
         <div className="flex flex-col items-center">
           <CrosswordBoard />
         </div>
@@ -227,34 +227,34 @@ export default function LearnPortal() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-8rem)]">
-      <div className="mb-4 flex items-center gap-4 text-sm text-gray-500">
-        <Button onClick={() => navigate(`/courses/${courseId}`)} variant="ghost" size="sm" className="gap-2 text-slate-500 hover:text-slate-900 dark:hover:text-white mr-4">
-          <ArrowLeft size={16} /> Back
+    <div className="flex flex-col min-h-[calc(100vh-8rem)] xl:h-[calc(100vh-8rem)] pb-12 xl:pb-0">
+      <div className="mb-4 flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
+        <Button onClick={() => navigate(`/courses/${courseId}`)} variant="ghost" size="sm" className="gap-1 sm:gap-2 text-muted-foreground hover:text-foreground sm:mr-4 px-2 sm:px-3">
+          <ArrowLeft size={16} /> <span className="hidden sm:inline">Back</span>
         </Button>
-        <span className="cursor-pointer hover:text-blue-500 transition-colors" onClick={() => navigate('/')}>Dashboard</span>
+        <span className="cursor-pointer hover:text-primary transition-colors" onClick={() => navigate('/')}>Dashboard</span>
         <span>/</span>
-        <span className="cursor-pointer hover:text-blue-500 transition-colors" onClick={() => navigate(`/courses/${courseId}`)}>Course</span>
+        <span className="cursor-pointer hover:text-primary transition-colors" onClick={() => navigate(`/courses/${courseId}`)}>Course</span>
         <span>/</span>
-        <span className="font-semibold text-gray-900">{material.title}</span>
+        <span className="font-semibold text-foreground truncate max-w-[150px] sm:max-w-[300px]">{material.title}</span>
       </div>
       
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 flex-1 min-h-0 animate-in fade-in duration-500">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 sm:gap-8 flex-1 min-h-0 animate-in fade-in duration-500">
         
         {/* Left Column: PDF Viewer */}
-        <Card className="flex flex-col h-full border-slate-200 dark:border-slate-800 shadow-md">
-          <CardHeader className="flex flex-row items-center justify-between py-4 border-b border-slate-100 dark:border-slate-800/50 bg-slate-50/50 dark:bg-slate-900/50 shrink-0">
-            <CardTitle className="text-lg">Learning Material</CardTitle>
+        <Card className="flex flex-col min-h-[500px] xl:min-h-0 xl:h-full border-border shadow-md">
+          <CardHeader className="flex flex-row items-center justify-between py-4 border-b border-border/50 bg-muted/30 shrink-0">
+            <CardTitle className="text-base sm:text-lg">Learning Material</CardTitle>
             <div className="flex gap-2">
               {isPdfCompleted && (
-                 <span className="flex items-center gap-1 text-sm text-green-600 bg-green-50 px-2 py-1 rounded-md font-medium border border-green-200">
-                    <CheckSquare size={14} /> Ready for Crossword
+                 <span className="flex items-center gap-1 text-xs sm:text-sm text-success bg-success/10 px-2 py-1 rounded-md font-medium border border-success/20">
+                    <CheckSquare size={14} /> <span className="hidden sm:inline">Ready for Crossword</span>
                  </span>
               )}
             </div>
           </CardHeader>
-          <CardContent className="flex-1 p-0 overflow-hidden bg-slate-100 dark:bg-slate-950/50 relative">
-            <div className="absolute inset-0 p-4 overflow-auto custom-scrollbar">
+          <CardContent className="flex-1 p-0 overflow-hidden bg-muted/10 relative h-[500px] xl:h-auto">
+            <div className="absolute inset-0 p-2 sm:p-4 overflow-auto custom-scrollbar">
               <PdfViewer 
                  url={getPdfUrl(material.pdf_path)} 
                  onComplete={handlePdfComplete} 
@@ -264,9 +264,9 @@ export default function LearnPortal() {
         </Card>
 
         {/* Right Column: Crossword — role-gated */}
-        <Card className="flex flex-col h-full border-slate-200 dark:border-slate-800 shadow-md overflow-hidden relative">
-          <CardHeader className="py-4 border-b border-slate-100 dark:border-slate-800/50 bg-slate-50/50 dark:bg-slate-900/50 shrink-0">
-            <CardTitle className="text-lg">
+        <Card className="flex flex-col min-h-[500px] xl:min-h-0 xl:h-full border-border shadow-md overflow-hidden relative">
+          <CardHeader className="py-4 border-b border-border/50 bg-muted/30 shrink-0">
+            <CardTitle className="text-base sm:text-lg">
               {isTeacherOrAdmin ? 'Student Submissions' : 'Crossword Puzzle'}
             </CardTitle>
           </CardHeader>
@@ -275,13 +275,13 @@ export default function LearnPortal() {
             <TeacherCrosswordView materialId={Number(id)} />
           ) : (
             !isPdfCompleted ? (
-              <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-slate-50/50 dark:bg-slate-900/50 relative">
-                  <div className="absolute inset-0 bg-slate-100/50 dark:bg-slate-900/50 backdrop-blur-[2px] z-10 flex flex-col items-center justify-center p-6">
-                      <div className="w-16 h-16 bg-slate-200 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4 shadow-inner">
-                          <CheckSquare size={32} className="text-slate-400" />
+              <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-muted/30 relative min-h-[300px]">
+                  <div className="absolute inset-0 bg-background/50 backdrop-blur-[2px] z-10 flex flex-col items-center justify-center p-6">
+                      <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4 shadow-inner">
+                          <CheckSquare size={32} className="text-muted-foreground" />
                       </div>
-                      <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Finish Reading First</h3>
-                      <p className="text-slate-500 dark:text-slate-400 max-w-sm">
+                      <h3 className="text-xl font-bold text-foreground mb-2">Finish Reading First</h3>
+                      <p className="text-muted-foreground max-w-sm">
                           Please read through all pages of the PDF document to unlock the crossword puzzle.
                       </p>
                   </div>
