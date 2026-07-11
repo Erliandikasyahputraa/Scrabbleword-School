@@ -133,40 +133,41 @@ export function MaterialFormModal({ isOpen, onClose, courseId, initialData }: Ma
             <X size={24} />
           </button>
           
-          <div className="border-b border-border pb-4 mb-6 sticky top-0 bg-card z-20">
+          <div className="border-b border-border pb-4 mb-6 shrink-0">
             <h2 className="text-xl sm:text-2xl font-bold text-foreground pr-8">
               {initialData ? 'Edit Material' : 'Add New Material'}
             </h2>
           </div>
 
-          <form onSubmit={handleSubmit} className="flex flex-col space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-foreground">Material Title <span className="text-red-500">*</span></label>
-                <input
-                  type="text"
-                  required
-                  disabled={isUploading}
-                  value={title}
-                  onChange={e => setTitle(e.target.value)}
-                  className="w-full h-12 px-4 rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-foreground disabled:opacity-50"
-                  placeholder="e.g. Chapter 1: Basic Vocabulary"
-                />
-              </div>
-              <div className="space-y-2">
-                <CustomUploadField
-                  file={pdfFile}
-                  onChange={setPdfFile}
-                  disabled={isUploading}
-                  required={!initialData}
-                  label={initialData ? "PDF Document (Leave empty to keep current)" : "PDF Document"}
-                />
-              </div>
-            </div>
-            
-            <div className="w-full">
+          <form onSubmit={handleSubmit} className="flex-1 flex flex-col min-h-0">
+            <div className="w-full flex-1 min-h-0 flex flex-col">
               <CrosswordBuilder 
                  initialData={crosswordJson ? JSON.parse(crosswordJson) : null}
+                 mainHeader={
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-card border border-border p-5 sm:p-6 rounded-2xl shadow-sm mb-6 w-full">
+                     <div className="space-y-2">
+                       <label className="block text-sm font-medium text-foreground">Material Title <span className="text-red-500">*</span></label>
+                       <input
+                         type="text"
+                         required
+                         disabled={isUploading}
+                         value={title}
+                         onChange={e => setTitle(e.target.value)}
+                         className="w-full h-12 px-4 rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-foreground disabled:opacity-50 transition-shadow"
+                         placeholder="e.g. Chapter 1: Basic Vocabulary"
+                       />
+                     </div>
+                     <div className="space-y-2">
+                       <CustomUploadField
+                         file={pdfFile}
+                         onChange={setPdfFile}
+                         disabled={isUploading}
+                         required={!initialData}
+                         label={initialData ? "PDF Document (Leave empty to keep current)" : "PDF Document"}
+                       />
+                     </div>
+                   </div>
+                 }
                  onChange={(data) => {
                    if (data) {
                       setCrosswordJson(JSON.stringify(data));
@@ -175,9 +176,9 @@ export function MaterialFormModal({ isOpen, onClose, courseId, initialData }: Ma
                    }
                  }}
                  sidebarFooter={
-                   <div className="space-y-3 mt-6">
+                   <div className="flex flex-col gap-3">
                      {isUploading && (
-                       <div className="p-3 bg-muted rounded-xl border border-border">
+                       <div className="p-3 bg-muted rounded-xl border border-border shrink-0">
                          <div className="flex justify-between items-center mb-2">
                            <span className="text-xs font-medium text-foreground flex items-center gap-2">
                               <div className="animate-spin h-3 w-3 border-2 border-primary border-t-transparent rounded-full" />
@@ -190,7 +191,7 @@ export function MaterialFormModal({ isOpen, onClose, courseId, initialData }: Ma
                          </div>
                        </div>
                      )}
-                     <Button type="submit" fullWidth disabled={isUploading} className="h-12 shadow-sm font-bold text-base">
+                     <Button type="submit" fullWidth disabled={isUploading} className="h-12 shadow-sm font-bold text-base shrink-0">
                        {isUploading ? 'Saving...' : 'Save Material'}
                      </Button>
                    </div>

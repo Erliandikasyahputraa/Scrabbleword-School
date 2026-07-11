@@ -1,24 +1,24 @@
-import { classicPaperTheme } from './classicPaper';
-import { blueprintTheme } from './blueprint';
-import { modernGridTheme } from './modernGrid';
-import { dotGridTheme } from './dotGrid';
-import { crosswordPatternTheme } from './crosswordPattern';
-import { graphPaperTheme } from './graphPaper';
+import { classicTheme } from './classic';
+import { educationTheme } from './education';
+import { batikTheme } from './batik';
+import { spaceTheme } from './space';
+import { technologyTheme } from './technology';
+import { natureTheme } from './nature';
 
 export const themes = [
-  classicPaperTheme,
-  blueprintTheme,
-  modernGridTheme,
-  dotGridTheme,
-  crosswordPatternTheme,
-  graphPaperTheme
+  classicTheme,
+  educationTheme,
+  batikTheme,
+  spaceTheme,
+  technologyTheme,
+  natureTheme
 ];
 
-export const defaultTheme = classicPaperTheme;
+export const defaultTheme = classicTheme;
 
-export * from './classicPaper';
-export * from './blueprint';
-export * from './modernGrid';
-export * from './dotGrid';
-export * from './crosswordPattern';
-export * from './graphPaper';
+export * from './classic';
+export * from './education';
+export * from './batik';
+export * from './space';
+export * from './technology';
+export * from './nature';

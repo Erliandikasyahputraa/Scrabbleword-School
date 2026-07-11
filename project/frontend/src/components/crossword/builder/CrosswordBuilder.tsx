@@ -12,10 +12,11 @@ import type { CrosswordData } from '../../../types/crossword';
 interface CrosswordBuilderProps {
   initialData?: CrosswordData | null;
   onChange: (data: CrosswordData | null) => void;
+  mainHeader?: React.ReactNode;
   sidebarFooter?: React.ReactNode;
 }
 
-export function CrosswordBuilder({ initialData, onChange, sidebarFooter }: CrosswordBuilderProps) {
+export function CrosswordBuilder({ initialData, onChange, mainHeader, sidebarFooter }: CrosswordBuilderProps) {
   const [words, setWords] = useState<CrosswordInputWord[]>([]);
   const [generatedData, setGeneratedData] = useState<CrosswordData | null>(null);
   const [error, setError] = useState<string>('');
@@ -86,77 +87,99 @@ export function CrosswordBuilder({ initialData, onChange, sidebarFooter }: Cross
   };
 
   return (
-    <div className="flex flex-col lg:grid lg:grid-cols-12 gap-8 w-full mt-4">
-      {/* Left Column: Preview (approx 70%) */}
-      <div className="lg:col-span-8 flex flex-col order-1 lg:order-none h-full">
-        <div className="w-full flex-1 flex flex-col min-h-[350px] md:min-h-[450px] lg:min-h-[550px] bg-muted/10 rounded-2xl border border-border p-4 relative">
+    <div className="flex flex-col lg:grid lg:grid-cols-12 gap-6 xl:gap-8 w-full">
+      {/* Left Column: Editor Workspace (70%) */}
+      <div className="lg:col-span-8 flex flex-col gap-6 w-full">
+        {mainHeader && (
+          <div className="w-full">
+            {mainHeader}
+          </div>
+        )}
+
+        <div className="bg-card border border-border p-5 sm:p-6 rounded-2xl shadow-sm w-full">
+          <h3 className="text-lg font-bold text-foreground flex items-center justify-between mb-4">
+            <span>Add Word</span>
+            <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full font-semibold">{words.length} words added</span>
+          </h3>
+          <CrosswordWordInput onAddWord={handleAddWord} disabled={isGenerating} />
+        </div>
+
+        {/* Preview Panel */}
+        <div className="w-full flex flex-col bg-muted/10 rounded-2xl border border-border p-4 sm:p-6 shadow-sm overflow-hidden min-h-[400px] md:min-h-[500px]">
           {generatedData ? (
-            <div className="animate-in fade-in zoom-in-95 duration-300 flex-1 flex flex-col w-full h-full">
-               <div className="flex items-center gap-2 mb-4 shrink-0 text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 p-3 rounded-xl border border-emerald-100 dark:border-emerald-900/30">
-                  <CheckCircle2 size={18} />
-                  <span className="font-semibold text-sm">Layout Generated Successfully</span>
+            <div className="animate-in fade-in zoom-in-95 duration-300 w-full flex flex-col flex-1">
+               <div className="flex items-center justify-between mb-4 shrink-0 bg-card p-3 rounded-xl border border-border shadow-sm">
+                  <div className="flex items-center gap-2 text-success">
+                    <CheckCircle2 size={18} />
+                    <span className="font-semibold text-sm">Layout Generated Successfully</span>
+                  </div>
+                  <div className="flex items-center gap-4 text-xs font-medium text-muted-foreground">
+                     <span>{generatedData.grid.cols} × {generatedData.grid.rows} Grid</span>
+                     <span>{generatedData.words.length} Words</span>
+                  </div>
                </div>
-               <div className="flex-1 w-full flex flex-col">
+               <div className="flex-1 w-full flex flex-col justify-center items-center min-h-[300px]">
                  <CrosswordPreview data={generatedData} />
                </div>
             </div>
           ) : (
-            <div className="flex-1 flex flex-col items-center justify-center text-center p-8 bg-muted/30 border-2 border-dashed border-border/60 rounded-xl h-full">
+            <div className="flex-1 flex flex-col items-center justify-center text-center p-8 bg-muted/30 border-2 border-dashed border-border/60 rounded-xl h-full min-h-[300px]">
                <div className="mb-4 text-muted-foreground opacity-60">
                   <EmptyCrosswordIllustration size={120} />
                </div>
                <h3 className="text-foreground font-bold mb-2 text-xl">No Preview Available</h3>
                <p className="text-sm text-muted-foreground max-w-sm">
-                  Add words on the right and click Generate to see your interactive crossword layout here.
+                  Add words using the form above, then click Generate to see your interactive crossword layout here.
                </p>
             </div>
           )}
         </div>
       </div>
 
-      {/* Right Column: Tools (approx 30%) */}
-      <div className="lg:col-span-4 flex flex-col space-y-6 order-2 lg:order-none">
-        <div className="flex flex-col space-y-2 order-5 lg:order-1">
-          <h3 className="text-lg font-bold text-foreground flex items-center justify-between">
-            <span>Add Word</span>
-            <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full font-semibold">{words.length} words</span>
-          </h3>
-          <CrosswordWordInput onAddWord={handleAddWord} disabled={isGenerating} />
-        </div>
-
-        <div className="flex flex-col space-y-2 order-6 lg:order-2">
-          <CrosswordWordList words={words} onRemoveWord={handleRemoveWord} disabled={isGenerating} />
+      {/* Right Column: Tools (30%) */}
+      <div className="lg:col-span-4 flex flex-col gap-6 lg:sticky lg:top-6 self-start w-full">
+        
+        {/* Word List */}
+        <div className="bg-card border border-border rounded-2xl shadow-sm p-4 sm:p-5 flex flex-col max-h-[60vh]">
+          <h3 className="text-base font-bold text-foreground mb-4">Word List</h3>
+          <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 min-h-[150px]">
+            <CrosswordWordList words={words} onRemoveWord={handleRemoveWord} disabled={isGenerating} />
+          </div>
+          
           {error && (
-            <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/50 rounded-xl flex items-start gap-2 animate-in slide-in-from-top-2 mt-4">
+            <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/50 rounded-xl flex items-start gap-2 animate-in slide-in-from-top-2 mt-4 shrink-0">
                <AlertTriangle size={18} className="text-red-500 shrink-0 mt-0.5" />
                <p className="text-sm text-red-600 dark:text-red-400 font-medium leading-relaxed">{error}</p>
             </div>
           )}
         </div>
 
-        <div className="order-4 lg:order-3 pt-2">
-          <Button 
-            type="button" 
-            onClick={handleGenerate} 
-            fullWidth 
-            disabled={words.length < 2 || isGenerating}
-            className="h-12 shadow-sm font-bold text-base bg-slate-900 hover:bg-slate-800 dark:bg-primary dark:hover:bg-primary/90 text-white rounded-xl"
-          >
-            {isGenerating ? (
-              <span className="flex items-center gap-2"><RefreshCw size={18} className="animate-spin" /> Generating Layout...</span>
-            ) : (
-              <span className="flex items-center gap-2"><RefreshCw size={18} /> {generatedData ? 'Regenerate Layout' : 'Generate Layout'}</span>
-            )}
-          </Button>
-        </div>
+        {/* Generate */}
+        <Button 
+          type="button" 
+          onClick={handleGenerate} 
+          fullWidth 
+          disabled={words.length < 2 || isGenerating}
+          className="h-12 shadow-sm font-bold text-base bg-slate-900 hover:bg-slate-800 dark:bg-primary dark:hover:bg-primary/90 text-white rounded-xl"
+        >
+          {isGenerating ? (
+            <span className="flex items-center gap-2"><RefreshCw size={18} className="animate-spin" /> Generating...</span>
+          ) : (
+            <span className="flex items-center gap-2"><RefreshCw size={18} /> {generatedData ? 'Regenerate Layout' : 'Generate Layout'}</span>
+          )}
+        </Button>
 
-        <div className="order-2 lg:order-4 pt-4 border-t border-border">
+        {/* Theme Gallery */}
+        <div className="bg-card border border-border rounded-2xl shadow-sm p-4 sm:p-5">
           <CrosswordThemeSelector />
         </div>
 
-        <div className="order-7 lg:order-5 pt-4 border-t border-border">
-          {sidebarFooter}
-        </div>
+        {/* Save Footer */}
+        {sidebarFooter && (
+          <div className="bg-card border border-border rounded-2xl shadow-sm p-4 sm:p-5 mt-2">
+            {sidebarFooter}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -151,21 +151,19 @@ function StudentCrosswordView({ material }: { material: any }) {
 
   return (
     <CrosswordProvider data={material.crossword_data}>
-      <CrosswordToolbar />
-      <CardContent className="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-6 bg-muted/30">
-        <div className="flex flex-col xl:flex-row gap-6 xl:gap-8 items-start max-w-7xl mx-auto w-full">
-          {/* Left Col: Board + Submit */}
-          <div className="w-full xl:w-2/3 flex flex-col items-center gap-6 xl:sticky xl:top-0">
-            <CrosswordBoard />
-            <div className="w-full max-w-2xl mt-4">
-              <CrosswordSubmit materialId={Number(id)} />
-            </div>
-          </div>
-          
-          {/* Right Col: Clues */}
-          <div className="w-full xl:w-1/3">
-            <CrosswordClues />
-          </div>
+      <CardContent className="p-4 sm:p-6 bg-muted/30 flex flex-col gap-6">
+        {/* Top: Toolbar */}
+        <CrosswordToolbar />
+        
+        {/* Middle: Board */}
+        <div className="flex justify-center w-full">
+          <CrosswordBoard />
+        </div>
+        
+        {/* Bottom: Clues & Submit tightly coupled */}
+        <div className="flex flex-col gap-6 w-full max-w-2xl mx-auto">
+          <CrosswordClues />
+          <CrosswordSubmit materialId={Number(id)} />
         </div>
       </CardContent>
     </CrosswordProvider>
@@ -236,7 +234,7 @@ export default function LearnPortal() {
   };
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-8rem)] xl:h-[calc(100vh-8rem)] pb-12 xl:pb-0">
+    <div className="flex flex-col pb-12 xl:pb-24">
       <div className="mb-4 flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
         <Button onClick={() => navigate(`/courses/${courseId}`)} variant="ghost" size="sm" className="gap-1 sm:gap-2 text-muted-foreground hover:text-foreground sm:mr-4 px-2 sm:px-3">
           <ArrowLeft size={16} /> <span className="hidden sm:inline">Back</span>
@@ -248,11 +246,11 @@ export default function LearnPortal() {
         <span className="font-semibold text-foreground truncate max-w-[150px] sm:max-w-[300px]">{material.title}</span>
       </div>
       
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 sm:gap-6 flex-1 min-h-0 animate-in fade-in duration-500">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 sm:gap-8 flex-1 animate-in fade-in duration-500">
         
         {/* Left Column: PDF Viewer */}
-        <Card className="flex flex-col min-h-[500px] xl:min-h-0 xl:h-full border-border shadow-md">
-          <CardHeader className="flex flex-row items-center justify-between py-4 border-b border-border/50 bg-muted/30 shrink-0">
+        <Card className="flex flex-col border-border shadow-md">
+          <CardHeader className="flex flex-row items-center justify-between py-4 border-b border-border/50 bg-muted/30">
             <CardTitle className="text-base sm:text-lg">Learning Material</CardTitle>
             <div className="flex gap-2">
               {isPdfCompleted && (
@@ -262,8 +260,8 @@ export default function LearnPortal() {
               )}
             </div>
           </CardHeader>
-          <CardContent className="flex-1 p-0 overflow-hidden bg-muted/10 relative h-[500px] xl:h-auto">
-            <div className="absolute inset-0 p-2 sm:p-4 overflow-auto custom-scrollbar">
+          <CardContent className="p-0 bg-muted/10">
+            <div className="p-2 sm:p-4 w-full">
               <PdfViewer 
                  url={getPdfUrl(material.pdf_path)} 
                  onComplete={handlePdfComplete} 
@@ -273,12 +271,13 @@ export default function LearnPortal() {
         </Card>
 
         {/* Right Column: Crossword — role-gated */}
-        <Card className="flex flex-col min-h-[500px] xl:min-h-0 xl:h-full border-border shadow-md overflow-hidden relative">
-          <CardHeader className="py-4 border-b border-border/50 bg-muted/30 shrink-0">
-            <CardTitle className="text-base sm:text-lg">
-              {isTeacherOrAdmin ? 'Student Submissions' : 'Crossword Puzzle'}
-            </CardTitle>
-          </CardHeader>
+        <div className="xl:sticky xl:top-6 self-start">
+          <Card className="flex flex-col border-border shadow-md overflow-hidden">
+            <CardHeader className="py-4 border-b border-border/50 bg-muted/30">
+              <CardTitle className="text-base sm:text-lg">
+                {isTeacherOrAdmin ? 'Student Submissions' : 'Crossword Puzzle'}
+              </CardTitle>
+            </CardHeader>
 
           {isTeacherOrAdmin ? (
             <TeacherCrosswordView materialId={Number(id)} />
@@ -299,7 +298,8 @@ export default function LearnPortal() {
               <StudentCrosswordView material={material} />
             )
           )}
-        </Card>
+          </Card>
+        </div>
       </div>
     </div>
   );

@@ -12,14 +12,8 @@ export function CrosswordPreview({ data }: CrosswordPreviewProps) {
     <div className="flex flex-col h-full space-y-4">
       {/* HERO COMPONENT: The Crossword Board */}
       <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 overflow-hidden flex flex-col relative w-full h-auto min-h-[350px] flex-1 shadow-inner items-center justify-center">
-        <div className="w-full h-full flex justify-center items-center">
-          <div 
-             className="pointer-events-none origin-center w-full max-w-full flex justify-center"
-             style={{
-               aspectRatio: '1 / 1',
-               maxHeight: '100%'
-             }}
-          >
+        <div className="w-full h-full flex justify-center items-center overflow-hidden min-h-0">
+          <div className="pointer-events-none max-w-full max-h-full flex justify-center items-center">
             <CrosswordProvider data={data}>
               <CrosswordBoard />
             </CrosswordProvider>

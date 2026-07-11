@@ -8,7 +8,7 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement> {
 export const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ className = '', hoverable = false, ...props }, ref) => {
     
-    const baseStyles = "bg-card text-card-foreground border border-border rounded-xl shadow-sm overflow-hidden"
+    const baseStyles = "bg-card text-card-foreground border border-border rounded-2xl shadow-sm overflow-hidden"
     const hoverStyles = hoverable ? "transition-all duration-300 hover:shadow-md hover:-translate-y-1" : ""
     
     return (
