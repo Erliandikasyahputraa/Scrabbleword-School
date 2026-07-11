@@ -110,7 +110,7 @@ export default function Courses() {
         {(user?.role === 'teacher' || user?.role === 'admin') && (
           <div className="relative z-10 w-full sm:w-auto">
             <Button 
-              className="w-full sm:w-auto gap-2 bg-background text-primary hover:bg-background/90 border-0 font-bold shadow-md hover:shadow-lg transition-all"
+              className="w-full sm:w-auto gap-2 bg-white text-blue-700 hover:bg-slate-50 border-0 font-bold shadow-md hover:shadow-lg transition-all"
               onClick={() => setIsModalOpen(true)}
             >
               <PlusCircle size={20} />

@@ -3,6 +3,7 @@ import { type CrosswordInputWord, generateCrosswordData } from '../../../lib/cro
 import { CrosswordWordInput } from './CrosswordWordInput';
 import { CrosswordWordList } from './CrosswordWordList';
 import { CrosswordPreview } from './CrosswordPreview';
+import { CrosswordThemeSelector } from '../CrosswordThemeSelector';
 import { Button } from '../../ui/Button';
 import { RefreshCw, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { EmptyCrosswordIllustration } from '../../ui/Illustrations';
@@ -85,14 +86,42 @@ export function CrosswordBuilder({ initialData, onChange }: CrosswordBuilderProp
 
   return (
     <div className="flex flex-col h-full space-y-6 bg-card rounded-2xl border border-border p-6 min-h-0 shadow-sm">
-      <div className="border-b border-border pb-4 mb-4">
-        <h2 className="text-xl font-bold text-foreground">Interactive Puzzle Builder</h2>
-        <p className="text-sm text-muted-foreground mt-1">Add words and clues, then generate the layout automatically.</p>
+      <div className="border-b border-border pb-4 mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shrink-0">
+        <div>
+          <h2 className="text-xl font-bold text-foreground">Interactive Puzzle Builder</h2>
+          <p className="text-sm text-muted-foreground mt-1">Add words and clues, then generate the layout automatically.</p>
+        </div>
+        <CrosswordThemeSelector />
       </div>
 
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-0">
-        {/* Left Col: Words Management (25%) */}
-        <div className="lg:col-span-3 flex flex-col h-full overflow-hidden bg-muted/20 rounded-xl border border-border">
+        {/* Left Col: Preview (75%) */}
+        <div className="lg:col-span-9 flex flex-col h-full overflow-hidden bg-muted/10 rounded-xl border border-border p-4 order-last lg:order-first">
+          {generatedData ? (
+            <div className="animate-in fade-in zoom-in-95 duration-300 flex-1 flex flex-col min-h-0">
+               <div className="flex items-center gap-2 mb-4 shrink-0 text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 p-3 rounded-lg border border-emerald-100 dark:border-emerald-900/30">
+                  <CheckCircle2 size={18} />
+                  <span className="font-semibold text-sm">Layout Generated Successfully</span>
+               </div>
+               <div className="flex-1 min-h-0">
+                 <CrosswordPreview data={generatedData} />
+               </div>
+            </div>
+          ) : (
+            <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-center p-8 bg-muted/50 border-2 border-dashed border-border rounded-2xl">
+               <div className="mb-4 text-muted-foreground opacity-80">
+                  <EmptyCrosswordIllustration size={100} />
+               </div>
+               <h3 className="text-foreground font-bold mb-2 text-lg">No Preview Available</h3>
+               <p className="text-sm text-muted-foreground max-w-[280px]">
+                  Add your words and click Generate to see the crossword layout here.
+               </p>
+            </div>
+          )}
+        </div>
+
+        {/* Right Col: Words Management (25%) */}
+        <div className="lg:col-span-3 flex flex-col h-full overflow-hidden bg-muted/20 rounded-xl border border-border order-first lg:order-last">
           <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
             <CrosswordWordInput onAddWord={handleAddWord} disabled={isGenerating} />
             <CrosswordWordList words={words} onRemoveWord={handleRemoveWord} disabled={isGenerating} />
@@ -120,31 +149,6 @@ export function CrosswordBuilder({ initialData, onChange }: CrosswordBuilderProp
               )}
             </Button>
           </div>
-        </div>
-
-        {/* Right Col: Preview (75%) */}
-        <div className="lg:col-span-9 flex flex-col h-full overflow-hidden bg-muted/10 rounded-xl border border-border p-4">
-          {generatedData ? (
-            <div className="animate-in fade-in zoom-in-95 duration-300 flex-1 flex flex-col min-h-0">
-               <div className="flex items-center gap-2 mb-4 shrink-0 text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 p-3 rounded-lg border border-emerald-100 dark:border-emerald-900/30">
-                  <CheckCircle2 size={18} />
-                  <span className="font-semibold text-sm">Layout Generated Successfully</span>
-               </div>
-               <div className="flex-1 min-h-0">
-                 <CrosswordPreview data={generatedData} />
-               </div>
-            </div>
-          ) : (
-            <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-center p-8 bg-muted/50 border-2 border-dashed border-border rounded-2xl">
-               <div className="mb-4 text-muted-foreground opacity-80">
-                  <EmptyCrosswordIllustration size={100} />
-               </div>
-               <h3 className="text-foreground font-bold mb-2 text-lg">No Preview Available</h3>
-               <p className="text-sm text-muted-foreground max-w-[280px]">
-                  Add your words and click Generate to see the crossword layout here.
-               </p>
-            </div>
-          )}
         </div>
       </div>
     </div>

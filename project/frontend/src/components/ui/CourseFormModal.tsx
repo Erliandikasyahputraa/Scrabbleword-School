@@ -64,8 +64,8 @@ export function CourseFormModal({ isOpen, onClose, initialData }: CourseFormModa
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
-      <div className="bg-card rounded-3xl p-6 sm:p-8 w-[95vw] sm:max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-0 sm:p-4 animate-in fade-in duration-200">
+      <div className="bg-card rounded-none sm:rounded-3xl p-6 sm:p-8 w-full h-full sm:w-[95vw] sm:h-auto sm:max-w-md shadow-2xl relative sm:max-h-[90vh] overflow-y-auto flex flex-col">
         <button 
           onClick={onClose}
           className="absolute top-4 right-4 sm:top-6 sm:right-6 text-muted-foreground hover:text-foreground transition-colors"

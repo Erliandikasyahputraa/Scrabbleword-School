@@ -19,7 +19,7 @@ export const TeacherIllustration = ({ className = '', size = 120 }: Illustration
 
 // Empty Crossword
 export const EmptyCrosswordIllustration = ({ className = '', size = 120 }: IllustrationProps) => (
-  <svg width={size} height={size} viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+  <svg width={size} height={size} viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" className={`${className} animate-[pulse_3s_ease-in-out_infinite]`}>
     <circle cx="60" cy="60" r="50" className="fill-slate-100 dark:fill-slate-800" />
     <rect x="30" y="30" width="60" height="60" rx="8" className="fill-primary/10" />
     <rect x="35" y="35" width="15" height="15" rx="2" className="fill-primary/40" />
@@ -34,7 +34,7 @@ export const EmptyCrosswordIllustration = ({ className = '', size = 120 }: Illus
 
 // Empty State / Search
 export const SearchIllustration = ({ className = '', size = 120 }: IllustrationProps) => (
-  <svg width={size} height={size} viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+  <svg width={size} height={size} viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" className={`${className} animate-[pulse_3s_ease-in-out_infinite]`}>
     <circle cx="60" cy="60" r="50" className="fill-accent/10" />
     <circle cx="50" cy="50" r="20" className="fill-primary/20" stroke="currentColor" strokeWidth="4" />
     <path d="M65 65L85 85" stroke="currentColor" strokeWidth="6" strokeLinecap="round" />

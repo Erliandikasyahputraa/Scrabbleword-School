@@ -65,24 +65,24 @@ export default function Dashboard() {
           <div className="flex flex-wrap items-center gap-4">
             {user?.role === 'admin' && (
               <>
-                <Button variant="secondary" className="bg-white text-primary hover:bg-white/90 shadow-md" onClick={() => navigate('/users')}>Manage Users</Button>
+                <Button variant="secondary" className="bg-white text-blue-700 hover:bg-blue-50 shadow-md border-0" onClick={() => navigate('/users')}>Manage Users</Button>
                 <Button variant="ghost" className="text-white hover:bg-white/20 border border-white/30" onClick={() => navigate('/approvals')}>Review Approvals</Button>
               </>
             )}
             {user?.role === 'teacher' && (
               <>
-                <Button variant="secondary" className="bg-white text-primary hover:bg-white/90 shadow-md" onClick={() => navigate('/courses')}>Manage Courses</Button>
+                <Button variant="secondary" className="bg-white text-blue-700 hover:bg-blue-50 shadow-md border-0" onClick={() => navigate('/courses')}>Manage Courses</Button>
                 <Button variant="ghost" className="text-white hover:bg-white/20 border border-white/30" onClick={() => navigate('/approvals')}>Review Students</Button>
               </>
             )}
             {user?.role === 'student' && (
               <>
                 {stats?.continue_learning ? (
-                   <Button variant="secondary" className="bg-white text-primary hover:bg-white/90 shadow-md" onClick={() => navigate(`/courses/${stats.continue_learning.course_id}/materials/${stats.continue_learning.id}`)}>
+                   <Button variant="secondary" className="bg-white text-blue-700 hover:bg-blue-50 shadow-md border-0" onClick={() => navigate(`/courses/${stats.continue_learning.course_id}/materials/${stats.continue_learning.id}`)}>
                      Resume Learning
                    </Button>
                 ) : (
-                   <Button variant="secondary" className="bg-white text-primary hover:bg-white/90 shadow-md" onClick={() => navigate('/courses')}>
+                   <Button variant="secondary" className="bg-white text-blue-700 hover:bg-blue-50 shadow-md border-0" onClick={() => navigate('/courses')}>
                      Browse Courses
                    </Button>
                 )}

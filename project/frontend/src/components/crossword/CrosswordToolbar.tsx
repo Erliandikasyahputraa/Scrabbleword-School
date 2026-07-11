@@ -1,6 +1,7 @@
 import { useCrossword } from '../../hooks/useCrossword';
 import { Button } from '../ui/Button';
 import { Lightbulb, Clock } from 'lucide-react';
+import { CrosswordThemeSelector } from './CrosswordThemeSelector';
 
 export function CrosswordToolbar() {
   const { hintsRemaining, useHint, isSubmitted, timeSpent } = useCrossword();
@@ -19,6 +20,7 @@ export function CrosswordToolbar() {
       </div>
       
       <div className="flex items-center gap-3">
+        <CrosswordThemeSelector />
         <Button 
           variant="outline" 
           size="sm" 

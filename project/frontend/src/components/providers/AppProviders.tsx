@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { BrowserRouter } from "react-router-dom"
 import { AuthProvider } from "../../providers/AuthProvider"
 import { ThemeProvider } from "../../providers/ThemeProvider"
+import { CrosswordThemeProvider } from "../../providers/CrosswordThemeProvider"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,9 +22,11 @@ export function AppProviders({ children }: AppProvidersProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-        <BrowserRouter>
-          <AuthProvider>{children}</AuthProvider>
-        </BrowserRouter>
+        <CrosswordThemeProvider>
+          <BrowserRouter>
+            <AuthProvider>{children}</AuthProvider>
+          </BrowserRouter>
+        </CrosswordThemeProvider>
       </ThemeProvider>
     </QueryClientProvider>
   )

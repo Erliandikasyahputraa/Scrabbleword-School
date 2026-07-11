@@ -133,7 +133,7 @@ export function MaterialFormModal({ isOpen, onClose, courseId, initialData }: Ma
         <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-4 sm:mb-6 pr-8 shrink-0">
           {initialData ? 'Edit Material' : 'Add New Material'}
         </h2>
-        <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0 space-y-4">
+        <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0 space-y-4 overflow-y-auto lg:overflow-hidden p-1">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 shrink-0">
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">Title</label>
@@ -165,7 +165,7 @@ export function MaterialFormModal({ isOpen, onClose, courseId, initialData }: Ma
             <label className="block text-sm font-medium text-foreground">Interactive Puzzle Workspace (Optional)</label>
           </div>
           
-          <div className="flex-1 min-h-0 rounded-2xl">
+          <div className="flex-1 min-h-[600px] lg:min-h-0 rounded-2xl flex flex-col">
             
             <CrosswordBuilder 
                initialData={crosswordJson ? JSON.parse(crosswordJson) : null}
