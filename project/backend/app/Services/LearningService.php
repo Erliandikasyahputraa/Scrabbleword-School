@@ -62,31 +62,33 @@ class LearningService
     {
         $totalStudents = Enrollment::where('course_id', $courseId)->count();
         $materialIds = Material::where('course_id', $courseId)->pluck('id');
+        $materialCount = $materialIds->count();
         
         $submissions = Submission::whereIn('material_id', $materialIds)->get();
         
-        $completed = $submissions->whereNotNull('submitted_at')->count();
-        $ready = $submissions->whereNull('submitted_at')->whereNotNull('reading_finished_at')->count();
-        $reading = $submissions->whereNull('reading_finished_at')->whereNotNull('started_at')->count();
-        
-        // Total expected submissions = students * materials
-        $totalExpected = $totalStudents * $materialIds->count();
-        $notStarted = max(0, $totalExpected - $submissions->count());
-        
         $completedSubmissions = $submissions->whereNotNull('submitted_at');
+        
+        $totalExpected = $totalStudents * $materialCount;
+        $completionRate = $totalExpected > 0 ? round(($completedSubmissions->count() / $totalExpected) * 100) : 0;
+        
+        $studentsCompleted = 0;
+        if ($materialCount > 0) {
+            $studentsCompleted = $completedSubmissions->groupBy('student_id')
+                ->filter(function($studentSubmissions) use ($materialCount) {
+                    return $studentSubmissions->count() == $materialCount;
+                })->count();
+        }
+
         $avgScore = $completedSubmissions->avg('score') ?? 0;
-        $maxScore = $completedSubmissions->max('score') ?? 0;
-        $minScore = $completedSubmissions->min('score') ?? 0;
 
         return [
-            'total_students' => $totalStudents,
-            'completed' => $completed,
-            'ready' => $ready,
-            'reading' => $reading,
-            'not_started' => $notStarted,
+            'students_enrolled' => $totalStudents,
+            'students_completed' => $studentsCompleted,
+            'completion_rate' => $completionRate,
             'average_score' => round($avgScore, 1),
-            'highest_score' => $maxScore,
-            'lowest_score' => $minScore,
+            // Kept for backward compatibility
+            'ready' => $submissions->whereNull('submitted_at')->whereNotNull('reading_finished_at')->count(),
+            'reading' => $submissions->whereNull('reading_finished_at')->whereNotNull('started_at')->count(),
         ];
     }
 }

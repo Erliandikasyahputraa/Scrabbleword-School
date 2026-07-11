@@ -207,6 +207,12 @@ class CourseController extends Controller
         $query = \App\Models\Submission::with(['student:id,name,email', 'material:id,title'])
             ->whereIn('material_id', $materialIds);
 
+        // Filter by material
+        $materialId = $request->query('material_id', 'all');
+        if ($materialId !== 'all') {
+            $query->where('material_id', $materialId);
+        }
+
         // Sort by
         $sort = $request->query('sort', 'newest');
         if ($sort === 'oldest') {

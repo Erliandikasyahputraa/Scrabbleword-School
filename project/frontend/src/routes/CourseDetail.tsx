@@ -306,7 +306,7 @@ export default function CourseDetail() {
       
       {isOwnerOrAdmin && (
         <div className="mt-12">
-          <CourseMonitoringDashboard courseId={Number(id)} />
+          <CourseMonitoringDashboard courseId={Number(id)} materials={course.materials} />
         </div>
       )}
 
@@ -343,13 +343,14 @@ export default function CourseDetail() {
   );
 }
 
-function CourseMonitoringDashboard({ courseId }: { courseId: number }) {
+function CourseMonitoringDashboard({ courseId, materials }: { courseId: number, materials: Material[] }) {
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState('newest');
+  const [materialFilter, setMaterialFilter] = useState('all');
 
   const { data, isLoading } = useQuery({
-    queryKey: ['course-monitoring', courseId, page, sort],
-    queryFn: () => fetchApi(`/courses/${courseId}/monitoring?page=${page}&sort=${sort}`)
+    queryKey: ['course-monitoring', courseId, page, sort, materialFilter],
+    queryFn: () => fetchApi(`/courses/${courseId}/monitoring?page=${page}&sort=${sort}&material_id=${materialFilter}`)
   });
 
   const formatTime = (seconds: number) => {
@@ -371,16 +372,36 @@ function CourseMonitoringDashboard({ courseId }: { courseId: number }) {
           <h2 className="text-xl font-bold text-slate-900 dark:text-white">Student Monitoring Dashboard</h2>
           <p className="text-sm text-slate-500 mt-1">Track student progress and submissions in real-time.</p>
         </div>
-        <select 
-          className="bg-slate-50 border border-slate-200 rounded-xl text-sm px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-          value={sort}
-          onChange={e => { setSort(e.target.value); setPage(1); }}
-        >
-          <option value="newest">Newest First</option>
-          <option value="oldest">Oldest First</option>
-          <option value="score_high">Highest Score</option>
-          <option value="score_low">Lowest Score</option>
-        </select>
+        <div className="flex items-center gap-3">
+          <div className="flex flex-col">
+            <span className="text-xs text-slate-500 font-medium mb-1">Sort</span>
+            <select 
+              className="bg-slate-50 border border-slate-200 rounded-xl text-sm px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+              value={sort}
+              onChange={e => { setSort(e.target.value); setPage(1); }}
+            >
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+              <option value="score_high">Highest Score</option>
+              <option value="score_low">Lowest Score</option>
+            </select>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-xs text-slate-500 font-medium mb-1">Material</span>
+            <select 
+              className="bg-slate-50 border border-slate-200 rounded-xl text-sm px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+              value={materialFilter}
+              onChange={e => { setMaterialFilter(e.target.value); setPage(1); }}
+            >
+              <option value="all">All Materials</option>
+              {materials.map((mat, idx) => (
+                <option key={mat.id} value={mat.id}>
+                  Chapter {idx + 1}: {mat.title}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
       </div>
 
       <div className="overflow-x-auto">
