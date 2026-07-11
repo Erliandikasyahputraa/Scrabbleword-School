@@ -96,28 +96,68 @@ class DatabaseSeeder extends Seeder
         }
 
         // 6. Enroll Students & Generate Submissions
-        // Enroll all students in all courses for maximum dashboard data
-        foreach ($students as $student) {
+        // Create 5 distinct learning states for manual QA
+        foreach ($students as $index => $student) {
             foreach ($courses as $course) {
                 Enrollment::create([
                     'student_id' => $student->id,
                     'course_id' => $course->id,
                 ]);
 
-                // Simulate random progress
                 $materials = Material::where('course_id', $course->id)->get();
+                
                 foreach ($materials as $material) {
-                    $chance = rand(1, 100);
-                    if ($chance <= 70) {
-                        // 70% chance they started or finished it
-                        $isCompleted = rand(1, 100) <= 80; // Of those, 80% finished
-                        $score = $isCompleted && $material->crossword_data ? rand(60, 100) : 0;
-                        
+                    $hasCrossword = !is_null($material->crossword_data);
+
+                    if ($index === 0) {
+                        // Student 1: 0% Progress (No submissions, never opened)
+                        continue; 
+                    }
+                    
+                    if ($index === 1) {
+                        // Student 2: Read some PDFs only, NO crosswords
+                        if (!$hasCrossword && rand(1, 100) <= 50) {
+                            Submission::create([
+                                'student_id' => $student->id,
+                                'material_id' => $material->id,
+                                'score' => 0,
+                                'is_completed' => true,
+                            ]);
+                        }
+                    }
+                    
+                    if ($index === 2) {
+                        // Student 3: Completed several crosswords (and their PDFs)
+                        if (rand(1, 100) <= 40) {
+                            Submission::create([
+                                'student_id' => $student->id,
+                                'material_id' => $material->id,
+                                'score' => $hasCrossword ? rand(70, 100) : 0,
+                                'is_completed' => true,
+                            ]);
+                        }
+                    }
+                    
+                    if ($index === 3) {
+                        // Student 4: 50-70% Progress on average
+                        if (rand(1, 100) <= 60) {
+                            $isCompleted = rand(1, 100) <= 90; // Mostly completed if opened
+                            Submission::create([
+                                'student_id' => $student->id,
+                                'material_id' => $material->id,
+                                'score' => ($isCompleted && $hasCrossword) ? rand(60, 100) : 0,
+                                'is_completed' => $isCompleted,
+                            ]);
+                        }
+                    }
+                    
+                    if ($index === 4) {
+                        // Student 5: 100% Fully completed all demo courses
                         Submission::create([
                             'student_id' => $student->id,
                             'material_id' => $material->id,
-                            'score' => $score,
-                            'is_completed' => $isCompleted,
+                            'score' => $hasCrossword ? rand(85, 100) : 0,
+                            'is_completed' => true,
                         ]);
                     }
                 }

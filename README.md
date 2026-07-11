@@ -118,9 +118,16 @@ php artisan migrate:fresh --seed
 ```
 
 **Demo Accounts (Password: `password`):**
-- Super Admin: `admin@example.com`
-- Teacher: `teacher@example.com`
-- Student: `student1@example.com` (up to student5)
+- **Super Admin**: `admin@example.com` (System-wide access)
+- **Teacher**: `teacher@example.com` (Has created 14 courses and 28 materials)
+
+**Student Personas (Password: `password`):**
+To facilitate both realistic dashboard statistics and manual QA for different user journeys, the seeder provisions 5 distinct student accounts:
+1. `student1@example.com`: **Brand New Learner**. 0% Progress. Enrolled in all courses but has never opened any materials or submitted anything. Perfect for testing a clean state.
+2. `student2@example.com`: **Reader Only**. Has opened and read some PDFs, but has never attempted any crosswords.
+3. `student3@example.com`: **Active Participant**. Has completed several crosswords successfully, but left others untouched.
+4. `student4@example.com`: **Average Student**. Has roughly 50-70% progress across all courses.
+5. `student5@example.com`: **Overachiever**. Has 100% fully completed every single material and crossword in the platform.
 
 ---
 
