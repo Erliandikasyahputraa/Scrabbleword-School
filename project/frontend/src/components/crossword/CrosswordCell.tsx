@@ -31,11 +31,11 @@ export function CrosswordCell({ row, col }: CrosswordCellProps) {
   let cellStyle = "bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100";
   
   if (isSelected) {
-    // Selected Cell (Cursor Focus): Strong blue focus ring
-    cellStyle = "bg-white dark:bg-slate-900 border-primary ring-2 ring-primary shadow-sm z-20 text-slate-900 dark:text-slate-100";
+    // Selected Cell (Cursor Focus): Theme primary focus ring
+    cellStyle = "bg-white dark:bg-slate-900 border-[var(--workspace-primary)] ring-2 ring-[var(--workspace-primary)] shadow-sm z-20 text-slate-900 dark:text-slate-100";
   } else if (inActiveWord) {
-    // Active Cell (in Active Word): Soft blue outline, soft blue glow, slight elevation. DO NOT DARKEN.
-    cellStyle = "bg-white dark:bg-slate-900 border-primary/50 shadow-[0_0_8px_rgba(59,130,246,0.2)] z-10 text-slate-900 dark:text-slate-100";
+    // Active Cell (in Active Word): Theme accent outline, glow, slight elevation. DO NOT DARKEN.
+    cellStyle = "bg-white dark:bg-slate-900 border-[var(--workspace-accent)] shadow-[0_0_8px_var(--workspace-shadow)] z-10 text-slate-900 dark:text-slate-100";
   } else if (isFilled) {
     // Filled Cell
     cellStyle = "bg-white dark:bg-slate-900 border-slate-400 dark:border-slate-500 font-bold text-slate-900 dark:text-slate-100";

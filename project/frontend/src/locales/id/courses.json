@@ -136,5 +136,20 @@
   "searchStudents": "Cari siswa berdasarkan nama atau email...",
   "noStudentsFound": "Tidak ada siswa ditemukan.",
   "unenroll": "Keluarkan",
-  "enroll": "Daftarkan"
+  "enroll": "Daftarkan",
+  "themes": {
+    "sunsetValley": "Lembah Senja",
+    "sunsetValleyDesc": "Warna oranye hangat seperti matahari terbenam.",
+    "schoolAdventure": "Petualangan Sekolah",
+    "schoolAdventureDesc": "Tema sekolah dengan aksen biru yang dinamis.",
+    "fantasyPortal": "Portal Fantasi",
+    "fantasyPortalDesc": "Dunia ajaib dengan warna ungu mistis.",
+    "dreamySky": "Langit Impian",
+    "dreamySkyDesc": "Langit cyan pastel yang menenangkan.",
+    "watercolorHills": "Bukit Cat Air",
+    "watercolorHillsDesc": "Pemandangan alam hijau yang menyejukkan.",
+    "balloonValley": "Lembah Balon",
+    "balloonValleyDesc": "Lembah dengan balon udara bernuansa merah muda mawar."
+  },
+  "themeGallery": "Galeri Tema"
 }

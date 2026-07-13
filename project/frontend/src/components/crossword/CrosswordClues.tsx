@@ -35,12 +35,13 @@ export function CrosswordClues() {
               onClick={() => handleClueClick(clue)}
               className={`text-sm px-3 py-2 rounded-lg cursor-pointer transition-all flex gap-3 leading-snug
                 ${isActive 
-                  ? 'bg-primary text-primary-foreground font-semibold shadow-md scale-[1.02] z-10' 
+                  ? 'text-white font-semibold shadow-md scale-[1.02] z-10' 
                   : 'text-slate-600 dark:text-slate-400 font-normal hover:bg-slate-100 dark:hover:bg-slate-800 border border-transparent hover:border-slate-200 dark:hover:border-slate-700'
                 }
               `}
+              style={isActive ? { backgroundColor: 'var(--workspace-primary)' } : undefined}
             >
-              <span className={`font-bold min-w-[20px] text-right shrink-0 ${isActive ? 'text-primary-foreground/90' : ''}`}>{clue.number}.</span>
+              <span className={`font-bold min-w-[20px] text-right shrink-0 ${isActive ? 'text-white/90' : ''}`}>{clue.number}.</span>
               <span>{clue.clue}</span>
             </li>
           );
@@ -57,7 +58,10 @@ export function CrosswordClues() {
       <div className="bg-card border border-border p-4 sm:p-6 rounded-2xl shadow-sm xl:sticky xl:top-0 z-10">
         <div className="flex justify-between items-center mb-2">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-primary uppercase tracking-wider bg-primary/10 px-2 py-1 rounded-md">
+            <span 
+              className="text-xs font-bold uppercase tracking-wider px-2 py-1 rounded-md"
+              style={{ color: 'var(--workspace-primary)', backgroundColor: 'var(--workspace-shadow)' }}
+            >
               {currentDirection === 'across' ? t('across') : t('down')}
             </span>
             {activeClueObj && (

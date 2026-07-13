@@ -136,5 +136,20 @@
   "searchStudents": "Search students by name or email...",
   "noStudentsFound": "No students found.",
   "unenroll": "Unenroll",
-  "enroll": "Enroll"
+  "enroll": "Enroll",
+  "themes": {
+    "sunsetValley": "Sunset Valley",
+    "sunsetValleyDesc": "Warm orange sunset colors.",
+    "schoolAdventure": "School Adventure",
+    "schoolAdventureDesc": "School theme with dynamic blue accents.",
+    "fantasyPortal": "Fantasy Portal",
+    "fantasyPortalDesc": "Magical world with mystic violet tones.",
+    "dreamySky": "Dreamy Sky",
+    "dreamySkyDesc": "Calming pastel cyan sky.",
+    "watercolorHills": "Watercolor Hills",
+    "watercolorHillsDesc": "Refreshing green nature landscape.",
+    "balloonValley": "Balloon Valley",
+    "balloonValleyDesc": "Valley with rose pink hot air balloons."
+  },
+  "themeGallery": "Theme Gallery"
 }

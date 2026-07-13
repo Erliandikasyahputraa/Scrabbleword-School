@@ -231,7 +231,17 @@ function StudentWorkflow({ material, courseId }: { material: any, courseId: stri
              <div className="flex items-center gap-3 w-full sm:w-auto">
                <h2 className="text-sm sm:text-base font-bold text-foreground truncate max-w-[200px] sm:max-w-xs">{t('crosswordPuzzle')}</h2>
                <div className="h-4 w-px bg-border hidden sm:block"></div>
-               <Button variant="outline" size="sm" onClick={() => setIsReviewModalOpen(true)} className="gap-2 h-8 text-xs shrink-0 bg-primary/5 hover:bg-primary/10 border-primary/20 text-primary hover:text-primary">
+               <Button 
+                 variant="outline" 
+                 size="sm" 
+                 onClick={() => setIsReviewModalOpen(true)} 
+                 className="gap-2 h-8 text-xs shrink-0"
+                 style={{
+                   backgroundColor: 'var(--workspace-shadow)',
+                   borderColor: 'var(--workspace-ring)',
+                   color: 'var(--workspace-primary)'
+                 }}
+               >
                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
                  {t('reviewMaterial')}
                </Button>

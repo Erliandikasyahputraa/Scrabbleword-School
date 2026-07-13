@@ -3,7 +3,6 @@ import { useState, useEffect } from "react"
 import { useAuth } from "../../providers/AuthProvider"
 import { ThemeToggle } from "../ui/ThemeToggle"
 import { LanguageSwitcher } from "../ui/LanguageSwitcher"
-import { AppThemeBackgroundLayer } from "../crossword/AppThemeBackgroundLayer"
 import { Logo } from "../ui/Logo"
 import { Menu, X, Home, BookOpen, Users, ShieldCheck } from "lucide-react"
 import { useTranslation } from "react-i18next"
@@ -84,7 +83,6 @@ export function AuthenticatedLayout() {
 
   return (
     <div className="flex min-h-screen bg-background font-sans text-foreground transition-colors">
-      <AppThemeBackgroundLayer />
       
       {/* Desktop Sidebar (lg and up) */}
       <aside className={`hidden lg:flex flex-col bg-card border-r border-border transition-all duration-300 shadow-sm shrink-0 sticky top-0 h-screen ${isCollapsed ? 'w-20' : 'w-64'}`}>

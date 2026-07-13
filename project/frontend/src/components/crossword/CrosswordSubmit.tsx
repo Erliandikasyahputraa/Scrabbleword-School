@@ -81,7 +81,11 @@ export function CrosswordSubmit({ materialId }: { materialId: number }) {
       <Button 
         onClick={handleSubmit}
         disabled={submitMutation.isPending || isSubmitted}
-        className="px-8 h-12 rounded-full font-bold shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all gap-2"
+        className="px-8 h-12 rounded-full font-bold shadow-lg transition-all gap-2 text-white"
+        style={{
+          backgroundColor: 'var(--workspace-primary)',
+          boxShadow: '0 4px 14px 0 var(--workspace-shadow)'
+        }}
       >
         <Send size={18} />
         {submitMutation.isPending ? t('submitting') : t('submitAnswers')}
