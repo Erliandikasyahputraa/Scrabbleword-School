@@ -13,6 +13,7 @@ import { CrosswordToolbar } from '../components/crossword/CrosswordToolbar';
 import { CrosswordBoard } from '../components/crossword/CrosswordBoard';
 import { CrosswordClues } from '../components/crossword/CrosswordClues';
 import { CrosswordSubmit } from '../components/crossword/CrosswordSubmit';
+import { useMaterial } from '../hooks/useMaterial';
 
 // ─── Teacher view: shows submission statistics for this material ───────────────
 function TeacherCrosswordView({ materialId }: { materialId: number }) {
@@ -175,10 +176,7 @@ export default function LearnPortal() {
   const { courseId, id } = useParams<{ courseId: string, id: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { data: material, isLoading: materialLoading, error } = useQuery({
-    queryKey: ['material', id],
-    queryFn: () => fetchApi(`/courses/${courseId}/materials/${id}`)
-  });
+  const { data: material, isLoading: materialLoading, error } = useMaterial(courseId, id);
 
   const { data: mySubmission, isLoading: submissionLoading, refetch: refetchSubmission } = useQuery({
     queryKey: ['my-submission', id],
