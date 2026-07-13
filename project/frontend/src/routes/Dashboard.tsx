@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Spinner } from '../components/ui/LoadingSystem';
 import { TeacherIllustration, AchievementIllustration } from '../components/ui/Illustrations';
 import { Button } from '../components/ui/Button';
+import { useTranslation } from 'react-i18next';
 
 type DashboardStats = {
   total_courses?: number;
@@ -29,6 +30,7 @@ type DashboardStats = {
 };
 
 export default function Dashboard() {
+  const { t } = useTranslation('dashboard');
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -46,47 +48,47 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="space-y-6 sm:space-y-8 animate-in fade-in duration-500 pb-12">
-      {/* 1. Hero Section */}
+    <div className="p-4 sm:p-6 lg:p-8 max-w-screen-xl mx-auto w-full space-y-6 sm:space-y-8 animate-in fade-in duration-500 pb-12">
+      {/* Welcome Hero Card */}
       <div className="bg-gradient-to-r from-primary to-blue-500 dark:from-primary/90 dark:to-primary/70 rounded-3xl p-6 sm:p-8 lg:p-10 text-primary-foreground shadow-lg relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="absolute top-[-20%] right-[-10%] w-64 h-64 bg-white/10 rounded-full blur-3xl z-0" />
         <div className="relative z-10 flex-1">
-          <p className="text-primary-foreground/80 font-medium mb-1 uppercase tracking-wider text-sm">Welcome Back,</p>
+          <p className="text-primary-foreground/80 font-medium mb-1 uppercase tracking-wider text-sm">{t('welcomeBack')}</p>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
             {user?.name}
           </h1>
           
           <p className="text-primary-foreground/90 text-base sm:text-lg max-w-xl leading-relaxed mb-8">
-            {user?.role === 'admin' && 'Keep the platform running smoothly. Monitor all active courses, review user registrations, and track overall platform health.'}
-            {user?.role === 'teacher' && 'Ready to inspire your students today? Create interactive learning materials and track your class performance.'}
-            {user?.role === 'student' && 'Continue your learning journey. Solve crosswords, read new materials, and master your vocabulary goals today.'}
+            {user?.role === 'admin' && t('adminDesc')}
+            {user?.role === 'teacher' && t('teacherDesc')}
+            {user?.role === 'student' && t('studentDesc')}
           </p>
 
           <div className="flex flex-wrap items-center gap-4">
             {user?.role === 'admin' && (
               <>
-                <Button variant="secondary" className="bg-white text-blue-700 hover:bg-blue-50 shadow-md border-0" onClick={() => navigate('/users')}>Manage Users</Button>
-                <Button variant="ghost" className="text-white hover:bg-white/20 border border-white/30" onClick={() => navigate('/approvals')}>Review Approvals</Button>
+                <Button variant="secondary" className="bg-white text-blue-700 hover:bg-blue-50 shadow-md border-0" onClick={() => navigate('/users')}>{t('manageUsers')}</Button>
+                <Button variant="ghost" className="text-white hover:bg-white/20 border border-white/30" onClick={() => navigate('/approvals')}>{t('reviewApprovals')}</Button>
               </>
             )}
             {user?.role === 'teacher' && (
               <>
-                <Button variant="secondary" className="bg-white text-blue-700 hover:bg-blue-50 shadow-md border-0" onClick={() => navigate('/courses')}>Manage Courses</Button>
-                <Button variant="ghost" className="text-white hover:bg-white/20 border border-white/30" onClick={() => navigate('/approvals')}>Review Students</Button>
+                <Button variant="secondary" className="bg-white text-blue-700 hover:bg-blue-50 shadow-md border-0" onClick={() => navigate('/courses')}>{t('manageCourses')}</Button>
+                <Button variant="ghost" className="text-white hover:bg-white/20 border border-white/30" onClick={() => navigate('/approvals')}>{t('reviewStudents')}</Button>
               </>
             )}
             {user?.role === 'student' && (
               <>
                 {stats?.continue_learning ? (
                    <Button variant="secondary" className="bg-white text-blue-700 hover:bg-blue-50 shadow-md border-0" onClick={() => navigate(`/courses/${stats.continue_learning.course_id}/materials/${stats.continue_learning.id}`)}>
-                     Resume Learning
+                     {t('resumeLearning')}
                    </Button>
                 ) : (
                    <Button variant="secondary" className="bg-white text-blue-700 hover:bg-blue-50 shadow-md border-0" onClick={() => navigate('/courses')}>
-                     Browse Courses
+                     {t('browseCourses')}
                    </Button>
                 )}
-                <Button variant="ghost" className="text-white hover:bg-white/20 border border-white/30" onClick={() => navigate('/history')}>View History</Button>
+                <Button variant="ghost" className="text-white hover:bg-white/20 border border-white/30" onClick={() => navigate('/history')}>{t('viewHistory')}</Button>
               </>
             )}
           </div>
@@ -102,31 +104,31 @@ export default function Dashboard() {
 
       {/* 2. Quick Actions */}
       <div>
-        <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-4">Quick Actions</h2>
+        <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-4">{t('quickActions')}</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5">
           {user?.role === 'admin' && (
             <>
-              <QuickActionCard icon={<Users />} label="Manage Users" to="/users" />
-              <QuickActionCard icon={<ShieldCheck />} label="Review Approvals" to="/approvals" />
-              <QuickActionCard icon={<BookOpen />} label="Manage Courses" to="/courses" />
+              <QuickActionCard icon={<Users />} label={t('manageUsers')} to="/users" />
+              <QuickActionCard icon={<ShieldCheck />} label={t('reviewApprovals')} to="/approvals" />
+              <QuickActionCard icon={<BookOpen />} label={t('manageCourses')} to="/courses" />
             </>
           )}
           {user?.role === 'teacher' && (
             <>
-              <QuickActionCard icon={<PlusCircle />} label="Create Course" to="/courses" highlight />
-              <QuickActionCard icon={<BookOpen />} label="View Courses" to="/courses" />
-              <QuickActionCard icon={<ShieldCheck />} label="Review Students" to="/approvals" />
+              <QuickActionCard icon={<PlusCircle />} label={t('createCourse')} to="/courses" highlight />
+              <QuickActionCard icon={<BookOpen />} label={t('viewCourses')} to="/courses" />
+              <QuickActionCard icon={<ShieldCheck />} label={t('reviewStudents')} to="/approvals" />
             </>
           )}
           {user?.role === 'student' && (
             <>
               {stats?.continue_learning ? (
-                <QuickActionCard icon={<PlayCircle />} label="Continue Learning" to={`/courses/${stats.continue_learning.course_id}/materials/${stats.continue_learning.id}`} highlight />
+                <QuickActionCard icon={<PlayCircle />} label={t('continueLearning')} to={`/courses/${stats.continue_learning.course_id}/materials/${stats.continue_learning.id}`} highlight />
               ) : (
-                <QuickActionCard icon={<Puzzle />} label="Browse Courses" to="/courses" highlight />
+                <QuickActionCard icon={<Puzzle />} label={t('browseCourses')} to="/courses" highlight />
               )}
-              <QuickActionCard icon={<BookOpen />} label="My Courses" to="/courses" />
-              <QuickActionCard icon={<Clock />} label="View History" to="/history" />
+              <QuickActionCard icon={<BookOpen />} label={t('myCourses')} to="/courses" />
+              <QuickActionCard icon={<Clock />} label={t('viewHistory')} to="/history" />
             </>
           )}
         </div>
@@ -136,30 +138,30 @@ export default function Dashboard() {
       {(user?.role === 'admin' || user?.role === 'teacher') && (
         <>
           <div className="flex items-center justify-between mb-4 mt-8">
-            <h2 className="text-xl sm:text-2xl font-bold text-foreground">Platform Overview</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground">{t('platformOverview')}</h2>
           </div>
           
           {user?.role === 'admin' && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-              <StatCard icon={<GraduationCap className="text-primary" />} label="Total Teachers" value={stats?.total_teachers?.toString() || '0'} context="Registered on platform" />
-              <StatCard icon={<Users className="text-indigo-500" />} label="Total Students" value={stats?.total_students?.toString() || '0'} context="Active learners" />
-              <StatCard icon={<BookOpen className="text-purple-500" />} label="Total Courses" value={stats?.total_courses?.toString() || '0'} context="Published courses" />
-              <StatCard icon={<FileText className="text-success" />} label="Total Materials" value={stats?.total_materials?.toString() || '0'} context="Lessons & Puzzles" />
+              <StatCard icon={<GraduationCap className="text-primary" />} label={t('totalTeachers')} value={stats?.total_teachers?.toString() || '0'} context={t('registeredOnPlatform')} />
+              <StatCard icon={<Users className="text-indigo-500" />} label={t('totalStudents')} value={stats?.total_students?.toString() || '0'} context={t('activeLearners')} />
+              <StatCard icon={<BookOpen className="text-purple-500" />} label={t('totalCourses')} value={stats?.total_courses?.toString() || '0'} context={t('publishedCourses')} />
+              <StatCard icon={<FileText className="text-success" />} label={t('totalMaterials')} value={stats?.total_materials?.toString() || '0'} context={t('lessonsPuzzles')} />
             </div>
           )}
           
           {user?.role === 'teacher' && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-              <StatCard icon={<BookOpen className="text-purple-500" />} label="Active Courses" value={stats?.total_courses?.toString() || '0'} context="Managed by you" />
-              <StatCard icon={<Users className="text-primary" />} label="Total Students" value={stats?.total_students?.toString() || '0'} context="Enrolled in your courses" />
-              <StatCard icon={<FileText className="text-success" />} label="Learning Materials" value={stats?.total_materials?.toString() || '0'} context="PDFs & Documents" />
-              <StatCard icon={<Puzzle className="text-warning" />} label="Crosswords" value={stats?.total_materials?.toString() || '0'} context="Interactive puzzles" />
+              <StatCard icon={<BookOpen className="text-purple-500" />} label={t('activeCourses')} value={stats?.total_courses?.toString() || '0'} context={t('managedByYou')} />
+              <StatCard icon={<Users className="text-primary" />} label={t('totalStudents')} value={stats?.total_students?.toString() || '0'} context={t('enrolledInYourCourses')} />
+              <StatCard icon={<FileText className="text-success" />} label={t('learningMaterials')} value={stats?.total_materials?.toString() || '0'} context={t('pdfsAndDocuments')} />
+              <StatCard icon={<Puzzle className="text-warning" />} label={t('crosswords')} value={stats?.total_materials?.toString() || '0'} context={t('interactivePuzzles')} />
             </div>
           )}
 
           {/* 4. Performance Statistics */}
           <div className="mt-8">
-            <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-4">Performance Insights</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-4">{t('performanceInsights')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
               <Card className="border-border overflow-hidden relative shadow-sm hover:shadow-md transition-shadow">
                 <CardContent className="p-5 sm:p-6 relative z-10 flex flex-col justify-center h-full">
@@ -167,12 +169,12 @@ export default function Dashboard() {
                     <Trophy size={20} className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground mb-1">Average Student Score</p>
+                    <p className="text-sm font-medium text-muted-foreground mb-1">{t('averageStudentScore')}</p>
                     <div className="flex items-baseline gap-2">
                       <h3 className="text-4xl sm:text-5xl font-bold text-foreground">{stats?.average_score}</h3>
                       <span className="text-base sm:text-lg font-semibold text-muted-foreground">/ 100</span>
                     </div>
-                    <p className="text-xs text-muted-foreground mt-2">Across all active materials and puzzles.</p>
+                    <p className="text-xs text-muted-foreground mt-2">{t('acrossAllActiveMaterials')}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -183,12 +185,12 @@ export default function Dashboard() {
                     <TrendingUp size={20} className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground mb-1">Completion Rate</p>
+                    <p className="text-sm font-medium text-muted-foreground mb-1">{t('completionRate')}</p>
                     <h3 className="text-4xl sm:text-5xl font-bold text-foreground">{stats?.completion_rate}%</h3>
                     <div className="w-full bg-muted h-2 mt-3 rounded-full overflow-hidden">
                       <div className="bg-success h-full rounded-full transition-all duration-1000" style={{ width: `${stats?.completion_rate || 0}%` }} />
                     </div>
-                    <p className="text-xs text-muted-foreground mt-2">Students who finished assigned work.</p>
+                    <p className="text-xs text-muted-foreground mt-2">{t('studentsWhoFinished')}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -201,13 +203,13 @@ export default function Dashboard() {
       {user?.role === 'student' && (
         <>
           <div className="mt-8">
-            <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-4">Your Progress</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-4">{t('yourProgress')}</h2>
             {stats?.is_fully_completed && stats?.total_materials! > 0 && (
               <div className="bg-success/10 border border-success/20 text-success p-4 sm:p-5 rounded-2xl flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 mb-5">
                 <Trophy size={48} className="text-success shrink-0 w-10 h-10 sm:w-12 sm:h-12" />
                 <div>
-                  <h2 className="text-lg sm:text-xl font-bold">Congratulations!</h2>
-                  <p className="text-success/80 text-sm mt-1">You have successfully completed all your enrolled materials. Keep up the excellent work!</p>
+                  <h2 className="text-lg sm:text-xl font-bold">{t('congratulations')}</h2>
+                  <p className="text-success/80 text-sm mt-1">{t('completedAllMaterials')}</p>
                 </div>
               </div>
             )}
@@ -218,18 +220,18 @@ export default function Dashboard() {
                   <Target size={20} className="sm:w-6 sm:h-6" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground mb-1">Overall Completion</p>
+                  <p className="text-sm font-medium text-muted-foreground mb-1">{t('overallCompletion')}</p>
                   <h3 className="text-4xl sm:text-5xl font-bold text-primary mb-3">{stats?.overall_progress}%</h3>
                   <div className="w-full bg-muted h-2 rounded-full overflow-hidden shadow-inner">
                     <div className="bg-primary h-full rounded-full transition-all duration-1000" style={{ width: `${stats?.overall_progress || 0}%` }} />
                   </div>
                   <div className="flex gap-6 mt-4 border-t border-border pt-4">
                     <div>
-                      <span className="text-xs text-muted-foreground block mb-1">Completed</span>
+                      <span className="text-xs text-muted-foreground block mb-1">{t('completed')}</span>
                       <span className="font-bold text-foreground text-lg">{stats?.completed_count}</span>
                     </div>
                     <div>
-                      <span className="text-xs text-muted-foreground block mb-1">Remaining</span>
+                      <span className="text-xs text-muted-foreground block mb-1">{t('remaining')}</span>
                       <span className="font-bold text-foreground text-lg">{stats?.estimated_remaining}</span>
                     </div>
                   </div>
@@ -241,7 +243,7 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 mt-8">
             <div>
               <h3 className="text-base sm:text-lg font-bold text-foreground mb-4 flex items-center gap-2">
-                <PlayCircle className="text-warning" size={20}/> In Progress
+                <PlayCircle className="text-warning" size={20}/> {t('inProgress')}
               </h3>
               {stats?.in_progress && stats.in_progress.length > 0 ? (
                 <div className="space-y-3">
@@ -250,13 +252,13 @@ export default function Dashboard() {
                   ))}
                 </div>
               ) : (
-                <p className="text-muted-foreground italic text-sm p-4 bg-muted/30 rounded-xl border border-border border-dashed text-center">No materials currently in progress.</p>
+                <p className="text-muted-foreground italic text-sm p-4 bg-muted/30 rounded-xl border border-border border-dashed text-center">{t('noMaterialsInProgress')}</p>
               )}
             </div>
 
             <div>
               <h3 className="text-base sm:text-lg font-bold text-foreground mb-4 flex items-center gap-2">
-                <FileText className="text-muted-foreground" size={20}/> Not Started
+                <FileText className="text-muted-foreground" size={20}/> {t('notStarted')}
               </h3>
               {stats?.not_started && stats.not_started.length > 0 ? (
                 <div className="space-y-3">
@@ -265,13 +267,13 @@ export default function Dashboard() {
                   ))}
                 </div>
               ) : (
-                <p className="text-muted-foreground italic text-sm p-4 bg-muted/30 rounded-xl border border-border border-dashed text-center">No new materials waiting.</p>
+                <p className="text-muted-foreground italic text-sm p-4 bg-muted/30 rounded-xl border border-border border-dashed text-center">{t('noNewMaterialsWaiting')}</p>
               )}
             </div>
             
             <div className="md:col-span-2 mt-4">
               <h3 className="text-base sm:text-lg font-bold text-foreground mb-4 flex items-center gap-2">
-                <CheckCircle className="text-success" size={20}/> Recently Completed
+                <CheckCircle className="text-success" size={20}/> {t('recentlyCompleted')}
               </h3>
               {stats?.completed && stats.completed.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -280,7 +282,7 @@ export default function Dashboard() {
                   ))}
                 </div>
               ) : (
-                <p className="text-muted-foreground italic text-sm p-4 bg-muted/30 rounded-xl border border-border border-dashed text-center">You haven't completed any materials yet.</p>
+                <p className="text-muted-foreground italic text-sm p-4 bg-muted/30 rounded-xl border border-border border-dashed text-center">{t('noMaterialsCompletedYet')}</p>
               )}
             </div>
           </div>
