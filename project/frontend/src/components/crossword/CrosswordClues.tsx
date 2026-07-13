@@ -1,8 +1,12 @@
+import { useState } from 'react';
 import { useCrossword } from '../../hooks/useCrossword';
 import type { CrosswordClue } from '../../types/crossword';
+import { Button } from '../ui/Button';
+import { X, List } from 'lucide-react';
 
 export function CrosswordClues() {
   const { data, activeWord, handleCellClick, currentDirection } = useCrossword();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const acrossClues = data.clues.filter(c => c.direction === 'across');
   const downClues = data.clues.filter(c => c.direction === 'down');
@@ -10,14 +14,8 @@ export function CrosswordClues() {
   const handleClueClick = (clue: CrosswordClue) => {
     const word = data.words.find(w => w.id === clue.id);
     if (word) {
-      // If clicking a clue but direction is wrong, the CrosswordProvider handles direction toggle
-      // But we just want to jump to the first cell of the word.
-      // Wait, handleCellClick selects the cell and might toggle direction.
-      // We can just call handleCellClick on the word's start cell.
-      // A better way is to add a `selectWord` function, but we can approximate:
       handleCellClick(word.row, word.col);
-      // Wait, if it's already selected and the direction doesn't match, we need to click it again?
-      // For now, clicking the first cell is good enough for an MVP.
+      setIsModalOpen(false); // Close modal on selection
     }
   };
 
@@ -52,24 +50,54 @@ export function CrosswordClues() {
   const activeClueObj = data.clues.find(c => c.id === activeWord?.id && c.direction === currentDirection);
 
   return (
-    <div className="flex flex-col gap-6 w-full">
-      {/* Mobile/Sticky Selected Clue */}
-      <div className="bg-primary/10 border border-primary/20 p-4 rounded-xl shadow-sm xl:sticky xl:top-0 z-10">
-        <h3 className="text-xs font-bold text-primary uppercase tracking-wider mb-1">Current Clue</h3>
+    <div className="flex flex-col gap-4 w-full">
+      {/* Current Clue Card */}
+      <div className="bg-card border border-border p-4 sm:p-6 rounded-2xl shadow-sm xl:sticky xl:top-0 z-10">
+        <div className="flex justify-between items-center mb-2">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-primary uppercase tracking-wider bg-primary/10 px-2 py-1 rounded-md">
+              {currentDirection}
+            </span>
+            {activeClueObj && (
+              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                Word {activeClueObj.number}
+              </span>
+            )}
+          </div>
+          <Button variant="ghost" size="sm" onClick={() => setIsModalOpen(true)} className="gap-2 text-muted-foreground hover:text-foreground">
+            <List size={16} /> <span className="hidden sm:inline">All Questions</span>
+          </Button>
+        </div>
+        
         {activeClueObj ? (
-          <p className="text-sm sm:text-base font-semibold text-foreground flex gap-2 leading-snug">
-            <span className="font-bold text-primary shrink-0">{activeClueObj.number}.</span>
-            <span>{activeClueObj.clue}</span>
+          <p className="text-base sm:text-lg font-semibold text-foreground leading-snug mt-2">
+            {activeClueObj.clue}
           </p>
         ) : (
-          <p className="text-sm text-muted-foreground italic">Select a cell to view clue</p>
+          <p className="text-base text-muted-foreground italic mt-2">Select a cell to view clue</p>
         )}
       </div>
 
-      <div className="flex flex-col sm:flex-row xl:flex-col gap-6 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-800 p-4 sm:p-5">
-        <ClueList title="Across" clues={acrossClues} />
-        <ClueList title="Down" clues={downClues} />
-      </div>
+      {/* Clues Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-0 sm:p-4 animate-in fade-in duration-200">
+          <div className="bg-card rounded-none sm:rounded-3xl p-6 sm:p-8 w-full h-full sm:w-[95vw] sm:h-auto sm:max-w-4xl shadow-2xl relative sm:max-h-[90vh] overflow-y-auto flex flex-col">
+            <button 
+              onClick={() => setIsModalOpen(false)}
+              className="absolute top-4 right-4 sm:top-6 sm:right-6 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <X size={24} />
+            </button>
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-6 pr-8">
+              All Questions
+            </h2>
+            <div className="flex flex-col sm:flex-row gap-6 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-800 p-4 sm:p-5">
+              <ClueList title="Across" clues={acrossClues} />
+              <ClueList title="Down" clues={downClues} />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,5 +1,4 @@
 import { useCrossword } from '../../hooks/useCrossword';
-import { useCrosswordTheme } from '../../providers/CrosswordThemeProvider';
 
 type CrosswordCellProps = {
   row: number;
@@ -16,42 +15,51 @@ export function CrosswordCell({ row, col }: CrosswordCellProps) {
     getCellNumber 
   } = useCrossword();
 
-  const { activeTheme } = useCrosswordTheme();
-
   const isPlayable = isCellPlayable(row, col);
   
   if (!isPlayable) {
-    return <div className={`w-full aspect-square ${activeTheme.blackCell}`}></div>;
+    return <div className="w-full aspect-square bg-transparent"></div>;
   }
 
   const number = getCellNumber(row, col);
   const isSelected = selectedCell?.row === row && selectedCell?.col === col;
   const inActiveWord = isCellInActiveWord(row, col);
   const answer = userAnswers[`${row}-${col}`] || '';
+  const isFilled = answer.length > 0;
 
-  // Phase 16: Completed Word Glow
-  // We can simulate completed by checking if answer is present (ideally we should validate against the actual word, but for now we apply base theming)
-  const isCompleted = answer.length > 0 && !isSelected && !inActiveWord;
+  // Determine cell classes based on strict visual states
+  let cellStyle = "bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100";
+  
+  if (isSelected) {
+    // Selected Cell (Cursor Focus): Strong blue focus ring
+    cellStyle = "bg-white dark:bg-slate-900 border-primary ring-2 ring-primary shadow-sm z-20 text-slate-900 dark:text-slate-100";
+  } else if (inActiveWord) {
+    // Active Cell (in Active Word): Soft blue outline, soft blue glow, slight elevation. DO NOT DARKEN.
+    cellStyle = "bg-white dark:bg-slate-900 border-primary/50 shadow-[0_0_8px_rgba(59,130,246,0.2)] z-10 text-slate-900 dark:text-slate-100";
+  } else if (isFilled) {
+    // Filled Cell
+    cellStyle = "bg-white dark:bg-slate-900 border-slate-400 dark:border-slate-500 font-bold text-slate-900 dark:text-slate-100";
+  }
 
   return (
     <div 
-      className={`relative w-full aspect-square min-w-[32px] sm:min-w-[44px] flex items-center justify-center cursor-pointer select-none
-        ${isSelected ? activeTheme.selectedCell : 
-          isCompleted ? activeTheme.completedCell :
-          inActiveWord ? activeTheme.hover : // using hover style for active word 
-          `${activeTheme.cell} ${activeTheme.hover}`
-        }
-      `}
+      className={`relative w-full aspect-square flex items-center justify-center cursor-pointer select-none transition-all duration-150 ${cellStyle}`}
       onClick={() => handleCellClick(row, col)}
-      tabIndex={isSelected ? 0 : -1} // Phase 17: Accessibility keyboard focus
+      tabIndex={isSelected ? 0 : -1} 
       aria-label={`Cell row ${row + 1}, column ${col + 1}`}
     >
       {number && (
-        <span className={`absolute top-0.5 left-1 text-[8px] sm:text-[10px] md:text-xs leading-none ${activeTheme.clueNumber}`}>
+        <span 
+          className="absolute top-[2%] left-[4%] text-slate-600 dark:text-slate-400 leading-none font-semibold select-none"
+          style={{ fontSize: 'clamp(9px, 2.5cqw, 12px)' }}
+        >
           {number}
         </span>
       )}
-      <span className={`text-sm sm:text-lg md:text-xl lg:text-2xl uppercase ${activeTheme.typography}`}>
+      <span 
+        className={`uppercase select-none ${isFilled ? 'font-bold' : 'font-normal'}`}
+        style={{ fontSize: 'clamp(14px, 5cqw, 28px)' }}
+      >
         {answer}
       </span>
     </div>

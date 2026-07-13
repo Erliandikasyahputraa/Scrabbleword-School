@@ -18,40 +18,46 @@ export function CrosswordBoard() {
   }, [isSubmitted]);
 
   return (
-    <div
-      ref={boardRef}
-      className={`relative flex justify-center items-center w-full max-w-full max-h-full mx-auto focus:outline-none focus:ring-4 focus:ring-primary/20 ${isSubmitted ? 'opacity-80 pointer-events-none' : ''}`}
-      style={{ aspectRatio: `${data.grid.cols} / ${data.grid.rows}` }}
-      tabIndex={0}
-      onKeyDown={handleKeyDown}
-      aria-label="Crossword Puzzle Board"
-    >
-      {/* Theme atmospheric background — sits behind the crossword grid */}
-      <div className={`absolute inset-0 w-full h-full rounded-lg overflow-hidden transition-colors duration-500 ${activeTheme.background}`}>
-        <ThemeBackground
-          themeId={activeTheme.id as ThemeId}
-          opacity={activeTheme.id === 'batik' ? 0.06 : 0.045}
-        />
-      </div>
-
-      {/* The crossword grid — always the visual hero */}
+    <div className="w-full flex justify-center items-center p-2 sm:p-4">
       <div
-        className={`relative w-full h-full ${activeTheme.board} transition-all duration-500`}
-        style={{
-          display: 'grid',
-          gridTemplateColumns: `repeat(${data.grid.cols}, minmax(0, 1fr))`,
-          gridTemplateRows: `repeat(${data.grid.rows}, minmax(0, 1fr))`
+        ref={boardRef}
+        className={`relative flex justify-center items-center w-full max-w-full focus:outline-none focus:ring-4 focus:ring-primary/30 rounded-xl overflow-hidden shadow-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 ${isSubmitted ? 'opacity-80 pointer-events-none' : ''} @container`}
+        style={{ 
+          aspectRatio: `${data.grid.cols} / ${data.grid.rows}`,
+          // Optional: limit max height dynamically so it doesn't outgrow the viewport
+          maxHeight: 'calc(100vh - 200px)' 
         }}
+        tabIndex={0}
+        onKeyDown={handleKeyDown}
+        aria-label="Crossword Puzzle Board"
       >
-        {Array.from({ length: data.grid.rows }).map((_, rowIndex) => (
-          Array.from({ length: data.grid.cols }).map((_, colIndex) => (
-            <CrosswordCell
-              key={`${rowIndex}-${colIndex}`}
-              row={rowIndex}
-              col={colIndex}
-            />
-          ))
-        ))}
+        {/* Theme atmospheric background — sits behind the crossword grid */}
+        <div className={`absolute inset-0 w-full h-full pointer-events-none transition-colors duration-500 ${activeTheme.background}`}>
+          <ThemeBackground
+            themeId={activeTheme.id as ThemeId}
+            opacity={activeTheme.id === 'batik' ? 0.06 : 0.045}
+          />
+        </div>
+
+        {/* The crossword grid — always the visual hero */}
+        <div
+          className={`relative w-full h-full`}
+          style={{
+            display: 'grid',
+            gridTemplateColumns: `repeat(${data.grid.cols}, minmax(0, 1fr))`,
+            gridTemplateRows: `repeat(${data.grid.rows}, minmax(0, 1fr))`
+          }}
+        >
+          {Array.from({ length: data.grid.rows }).map((_, rowIndex) => (
+            Array.from({ length: data.grid.cols }).map((_, colIndex) => (
+              <CrosswordCell
+                key={`${rowIndex}-${colIndex}`}
+                row={rowIndex}
+                col={colIndex}
+              />
+            ))
+          ))}
+        </div>
       </div>
     </div>
   );

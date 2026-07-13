@@ -7,7 +7,7 @@ import PdfViewer from '../components/pdf/PdfViewer';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import ErrorPage from './ErrorPage';
-import { ArrowLeft, Users, BarChart2, Clock, CheckSquare } from 'lucide-react';
+import { ArrowLeft, Users, BarChart2, Clock, CheckSquare, X } from 'lucide-react';
 import { CrosswordProvider } from '../components/crossword/CrosswordProvider';
 import { CrosswordToolbar } from '../components/crossword/CrosswordToolbar';
 import { CrosswordBoard } from '../components/crossword/CrosswordBoard';
@@ -195,6 +195,7 @@ export default function LearnPortal() {
   });
 
   const [isPdfCompletedLocal, setIsPdfCompletedLocal] = useState(false);
+  const [isMobilePdfOpen, setIsMobilePdfOpen] = useState(false);
   const isPdfCompleted = (mySubmission?.status === 'READY_FOR_CROSSWORD' || mySubmission?.status === 'COMPLETED') || isPdfCompletedLocal;
 
   // Trigger start reading exactly once on load
@@ -246,10 +247,11 @@ export default function LearnPortal() {
         <span className="font-semibold text-foreground truncate max-w-[150px] sm:max-w-[300px]">{material.title}</span>
       </div>
       
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 sm:gap-8 flex-1 animate-in fade-in duration-500">
+      {/* Changed layout from 50/50 split to a 5/7 split prioritizing the Crossword board */}
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 sm:gap-8 flex-1 animate-in fade-in duration-500">
         
         {/* Left Column: PDF Viewer */}
-        <Card className="flex flex-col border-border shadow-md">
+        <Card className={`flex flex-col border-border shadow-md xl:col-span-5 ${isPdfCompleted && !isTeacherOrAdmin ? 'hidden xl:flex' : 'flex'}`}>
           <CardHeader className="flex flex-row items-center justify-between py-4 border-b border-border/50 bg-muted/30">
             <CardTitle className="text-base sm:text-lg">Learning Material</CardTitle>
             <div className="flex gap-2">
@@ -271,12 +273,23 @@ export default function LearnPortal() {
         </Card>
 
         {/* Right Column: Crossword — role-gated */}
-        <div className="xl:sticky xl:top-6 self-start">
+        <div className="xl:sticky xl:top-6 self-start xl:col-span-7">
           <Card className="flex flex-col border-border shadow-md overflow-hidden">
-            <CardHeader className="py-4 border-b border-border/50 bg-muted/30">
+            <CardHeader className="py-4 border-b border-border/50 bg-muted/30 flex flex-row items-center justify-between">
               <CardTitle className="text-base sm:text-lg">
                 {isTeacherOrAdmin ? 'Student Submissions' : 'Crossword Puzzle'}
               </CardTitle>
+              {/* Mobile Only: Button to view PDF when inline PDF is hidden */}
+              {isPdfCompleted && !isTeacherOrAdmin && (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="xl:hidden"
+                  onClick={() => setIsMobilePdfOpen(true)}
+                >
+                  📄 View Material
+                </Button>
+              )}
             </CardHeader>
 
           {isTeacherOrAdmin ? (
@@ -301,6 +314,29 @@ export default function LearnPortal() {
           </Card>
         </div>
       </div>
+
+      {/* Mobile PDF Modal */}
+      {isMobilePdfOpen && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-0 sm:p-4 animate-in fade-in duration-200 xl:hidden">
+          <div className="bg-card rounded-none sm:rounded-3xl w-full h-full sm:h-[90vh] shadow-2xl relative flex flex-col">
+            <div className="flex justify-between items-center p-4 border-b border-border">
+              <h2 className="text-lg font-bold text-foreground">Learning Material</h2>
+              <button 
+                onClick={() => setIsMobilePdfOpen(false)}
+                className="text-muted-foreground hover:text-foreground p-2 rounded-full hover:bg-muted transition-colors"
+              >
+                <X size={24} />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-2 sm:p-4 bg-muted/10">
+              <PdfViewer 
+                 url={getPdfUrl(material.pdf_path)} 
+                 onComplete={handlePdfComplete} 
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
