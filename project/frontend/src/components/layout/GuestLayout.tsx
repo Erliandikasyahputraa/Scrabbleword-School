@@ -8,7 +8,7 @@ export function GuestLayout() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <span className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></span>
       </div>
     )
@@ -19,17 +19,13 @@ export function GuestLayout() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8 relative overflow-hidden transition-colors">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8 relative overflow-hidden transition-colors duration-500">
       <AppThemeBackgroundLayer />
-      <div className="absolute top-4 right-4 z-50 flex items-center gap-4">
+      <div className="absolute top-6 right-6 z-50 flex items-center gap-4">
         <ThemeToggle />
       </div>
-
-      {/* Decorative Background */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-500/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-500/20 rounded-full blur-3xl" />
       
-      <div className="z-10 w-full max-w-md flex justify-center">
+      <div className="z-10 w-full flex justify-center">
         <Outlet />
       </div>
     </div>

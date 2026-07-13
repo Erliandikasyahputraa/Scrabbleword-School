@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../providers/AuthProvider';
 import { Button } from '../components/ui/Button';
-import { Sparkles, Target, ArrowRight, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { ArrowRight, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { Logo } from '../components/ui/Logo';
 import { API_URL } from '../lib/api';
 
@@ -39,124 +39,81 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen w-[100vw] flex bg-white dark:bg-slate-950 animate-in fade-in duration-700 absolute inset-0 z-50">
-      
-      {/* Left Side: Brand Story & Gradient Background */}
-      <div className="hidden lg:flex flex-1 flex-col justify-between p-12 bg-gradient-to-br from-blue-600 via-primary to-indigo-800 text-white relative overflow-hidden">
-        <div className="absolute top-[-20%] left-[-10%] w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
-        
-        <div className="relative z-10">
-          <div className="mb-12 text-white">
-            <Logo size={40} className="text-white drop-shadow-md" />
-          </div>
-          
-          <h1 className="text-5xl font-bold tracking-tight leading-tight mb-6">
-            Master English <br /> 
-            with engaging puzzles.
-          </h1>
-          <p className="text-blue-100 text-lg max-w-md leading-relaxed">
-            A premium learning platform that combines interactive PDF reading with challenging crossword exercises to solidify your vocabulary.
-          </p>
-        </div>
-
-        <div className="relative z-10 space-y-6">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-sm border border-white/20">
-              <Sparkles size={20} className="text-blue-200" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-white text-lg">Smart Learning</h3>
-              <p className="text-blue-200 text-sm">Adaptive materials tailored for you.</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-sm border border-white/20">
-              <Target size={20} className="text-blue-200" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-white text-lg">Goal Oriented</h3>
-              <p className="text-blue-200 text-sm">Track your progress and build streaks.</p>
-            </div>
-          </div>
-        </div>
+    <div className="w-full w-full max-w-[420px] mx-auto animate-in fade-in duration-500 slide-in-from-bottom-4">
+      <div className="flex flex-col items-center mb-8">
+        <Logo size={40} className="mb-6 text-primary" />
+        <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">
+          Welcome back
+        </h1>
+        <p className="text-sm text-muted-foreground mt-2">
+          Enter your credentials to access your account
+        </p>
       </div>
 
-      {/* Right Side: Floating Login Card */}
-      <div className="flex-1 flex flex-col justify-center items-center p-8 sm:p-12 relative bg-slate-50 dark:bg-slate-950">
-        <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl p-8 sm:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none border border-slate-100 dark:border-slate-800 relative z-10">
+      <div className="bg-card/80 backdrop-blur-xl border border-border/50 shadow-2xl shadow-black/5 rounded-2xl p-6 sm:p-8">
+        {error && (
+          <div className="mb-6 p-3 bg-destructive/10 text-destructive rounded-lg text-sm font-medium border border-destructive/20 flex items-center justify-center animate-in fade-in zoom-in-95">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full h-11 px-4 rounded-xl border border-input bg-background focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-foreground placeholder:text-muted-foreground"
+              placeholder="name@example.com"
+              required
+            />
+          </div>
           
-          <div className="lg:hidden flex items-center justify-center mb-8">
-            <Logo size={36} className="text-primary" />
-          </div>
-
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Welcome back</h2>
-            <p className="text-slate-500 dark:text-slate-400 mt-2">Enter your credentials to access your account.</p>
-          </div>
-
-          {error && (
-            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl text-sm font-medium border border-red-100 dark:border-red-900/30 flex items-center justify-center">
-              {error}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium text-foreground">Password</label>
+              <a href="#" className="text-xs font-medium text-primary hover:text-primary/80 transition-colors">
+                Forgot password?
+              </a>
             </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium text-slate-700 dark:text-slate-300 ml-1">Email Address</label>
+            <div className="relative">
               <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full h-12 px-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-slate-900 dark:text-white"
-                placeholder="you@example.com"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full h-11 pl-4 pr-11 rounded-xl border border-input bg-background focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-foreground placeholder:text-muted-foreground"
+                placeholder="••••••••"
                 required
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center w-6 h-6"
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
             </div>
-            
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between ml-1">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Password</label>
-                <a href="#" className="text-sm font-medium text-primary hover:text-primary/80 transition-colors">Forgot password?</a>
-              </div>
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full h-12 pl-4 pr-12 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-slate-900 dark:text-white"
-                  placeholder="••••••••"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
-                >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
-              </div>
-            </div>
-            
-            <div className="pt-2">
-              <Button type="submit" disabled={isLoading} fullWidth className="h-12 text-base shadow-lg shadow-primary/25">
-                {isLoading ? (
-                  <><Loader2 size={18} className="animate-spin mr-2" /> Signing In...</>
-                ) : (
-                  <><span className="mr-2">Sign In</span> <ArrowRight size={18} /></>
-                )}
-              </Button>
-            </div>
-          </form>
-
-          <p className="mt-8 text-center text-sm text-slate-600 dark:text-slate-400">
-            Don't have an account?{' '}
-            <Link to="/register" className="font-semibold text-primary hover:text-primary/80 transition-colors">
-              Create an account
-            </Link>
-          </p>
-        </div>
+          </div>
+          
+          <div className="pt-2">
+            <Button type="submit" disabled={isLoading} fullWidth className="h-11 rounded-xl font-medium shadow-sm transition-all hover:shadow-md">
+              {isLoading ? (
+                <><Loader2 size={16} className="animate-spin mr-2" /> Signing in...</>
+              ) : (
+                <>Sign in <ArrowRight size={16} className="ml-2" /></>
+              )}
+            </Button>
+          </div>
+        </form>
       </div>
+
+      <p className="mt-8 text-center text-sm text-muted-foreground">
+        Don't have an account?{' '}
+        <Link to="/register" className="font-medium text-primary hover:text-primary/80 transition-colors">
+          Create account
+        </Link>
+      </p>
     </div>
   );
 }
