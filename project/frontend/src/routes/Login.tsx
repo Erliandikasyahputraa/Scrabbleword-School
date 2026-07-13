@@ -4,6 +4,7 @@ import { useAuth } from '../providers/AuthProvider';
 import { Button } from '../components/ui/Button';
 import { Sparkles, Target, ArrowRight, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { Logo } from '../components/ui/Logo';
+import { API_URL } from '../lib/api';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -19,7 +20,7 @@ export default function Login() {
     setError('');
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:8000/api/auth/login', {
+      const response = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),

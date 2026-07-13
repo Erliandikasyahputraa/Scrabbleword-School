@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { fetchApi } from '../lib/api';
+import { fetchApi, API_URL } from '../lib/api';
 import { useAuth } from '../providers/AuthProvider';
 import PdfViewer from '../components/pdf/PdfViewer';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
@@ -164,7 +164,7 @@ function StudentWorkflow({ material, courseId }: { material: any, courseId: stri
   const getPdfUrl = (path: string) => {
     if (!path) return '';
     if (path.startsWith('http')) return path;
-    return `http://localhost:8000/api/courses/${courseId}/materials/${id}/pdf`;
+    return `${API_URL}/courses/${courseId}/materials/${id}/pdf`;
   };
 
   // Render purely based on PortalState
