@@ -25,6 +25,12 @@ export default function Login() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
+      
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('Tidak dapat terhubung ke server. Silakan coba beberapa saat lagi.');
+      }
+
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.message || 'Login failed');
@@ -32,7 +38,11 @@ export default function Login() {
       login(data.access_token, data.user);
       navigate('/');
     } catch (err: any) {
-      setError(err.message || 'Login failed. Please check your credentials.');
+      if (err.name === 'TypeError' && err.message === 'Failed to fetch') {
+        setError('Koneksi terputus. Pastikan internet Anda aktif dan server berjalan.');
+      } else {
+        setError(err.message || 'Login gagal. Periksa kembali kredensial Anda.');
+      }
     } finally {
       setIsLoading(false);
     }
