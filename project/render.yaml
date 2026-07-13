@@ -1,0 +1,44 @@
+services:
+  - type: web
+    name: scrabble-school-backend
+    env: php
+    rootDir: backend
+    buildCommand: composer install --no-dev --optimize-autoloader
+    preDeployCommand: php artisan migrate --force && php artisan storage:link
+    startCommand: heroku-php-apache2 public/
+    healthCheckPath: /up
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_URL
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: DB_CONNECTION
+        value: mysql
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        value: "3306"
+      - key: DB_DATABASE
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: FILESYSTEM_DISK
+        value: public
+      - key: SESSION_DRIVER
+        value: database
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: sync
+    disk:
+      name: storage
+      mountPath: /opt/render/project/src/storage/app/public
+      sizeGB: 1
