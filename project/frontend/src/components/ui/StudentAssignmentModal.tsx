@@ -49,7 +49,7 @@ export function StudentAssignmentModal({ isOpen, onClose, courseId }: StudentAss
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
-      <div className="bg-card rounded-3xl p-6 sm:p-8 w-[95vw] sm:max-w-2xl shadow-2xl relative flex flex-col max-h-[90vh]">
+      <div className="bg-card rounded-3xl p-6 sm:p-8 w-full max-w-[calc(100vw-2rem)] sm:max-w-2xl shadow-2xl relative flex flex-col max-h-[90vh]">
         <button 
           onClick={onClose}
           className="absolute top-4 right-4 sm:top-6 sm:right-6 text-muted-foreground hover:text-foreground transition-colors"

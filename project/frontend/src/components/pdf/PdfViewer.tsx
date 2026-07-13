@@ -146,8 +146,8 @@ export default function PdfViewer({ url, onComplete }: PdfViewerProps) {
   }, []);
 
   return (
-    <div ref={containerRef} className={`flex flex-col items-center w-full mx-auto bg-card rounded-2xl transition-all duration-300 ${isFullscreen ? 'fixed inset-0 z-50 rounded-none bg-background' : 'max-w-5xl shadow-sm border border-border overflow-hidden'}`}>
-      {/* Controls */}
+    <div ref={containerRef} className={`flex flex-col h-full w-full relative transition-all duration-300 ${isFullscreen ? 'fixed inset-0 z-[100] bg-background/95 backdrop-blur-md' : 'overflow-hidden border border-border bg-card shadow-sm'}`}>
+      {/* Top Toolbar */}
       <div className={`flex flex-wrap items-center gap-4 bg-card w-full justify-between border-b border-border z-10 ${isFullscreen ? 'p-4' : 'p-3 px-4'}`}>
         <div className="flex items-center gap-2">
           <button
@@ -205,7 +205,7 @@ export default function PdfViewer({ url, onComplete }: PdfViewerProps) {
       </div>
 
       {/* PDF Canvas Container */}
-      <div className={`w-full flex justify-center bg-muted/30 ${isFullscreen ? 'flex-1 p-8 overflow-auto custom-scrollbar' : 'p-2 sm:p-6'}`}>
+      <div className={`w-full flex justify-center bg-muted/30 flex-1 overflow-y-auto custom-scrollbar ${isFullscreen ? 'p-8' : 'p-4 sm:p-6'}`}>
         {!pdfDoc && (
           <div className="flex items-center justify-center p-20">
             <span className="text-slate-500 flex items-center gap-2">

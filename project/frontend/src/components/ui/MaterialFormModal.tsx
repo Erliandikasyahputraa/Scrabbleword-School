@@ -122,25 +122,24 @@ export function MaterialFormModal({ isOpen, onClose, courseId, initialData }: Ma
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 overflow-y-auto animate-in fade-in duration-200">
-      <div className="min-h-screen p-0 sm:p-4 md:p-8 flex items-center justify-center pointer-events-none">
-        <div className="bg-card w-full max-w-7xl rounded-none sm:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl relative flex flex-col pointer-events-auto my-auto min-h-screen sm:min-h-0">
-          <button 
-            onClick={onClose}
-            disabled={isUploading}
-            className="absolute top-4 right-4 sm:top-6 sm:right-6 text-muted-foreground hover:text-foreground disabled:opacity-50 transition-colors z-10"
-          >
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-2 sm:p-4 lg:p-6 animate-in fade-in duration-200">
+      <div className="bg-card w-full max-w-[90vw] h-[95vh] rounded-2xl shadow-2xl relative flex flex-col pointer-events-auto border border-border overflow-hidden">
+        <button 
+          onClick={onClose}
+          disabled={isUploading}
+          className="absolute top-4 right-4 sm:top-5 sm:right-5 text-muted-foreground hover:bg-muted p-1.5 rounded-full hover:text-foreground disabled:opacity-50 transition-colors z-20"
+        >
             <X size={24} />
           </button>
           
-          <div className="border-b border-border pb-4 mb-6 shrink-0">
-            <h2 className="text-xl sm:text-2xl font-bold text-foreground pr-8">
-              {initialData ? 'Edit Material' : 'Add New Material'}
-            </h2>
-          </div>
+          <div className="flex-none border-b border-border p-5 sm:p-6 pb-4 bg-card z-10">
+          <h2 className="text-xl sm:text-2xl font-bold text-foreground pr-8">
+            {initialData ? 'Edit Material' : 'Add New Material'}
+          </h2>
+        </div>
 
-          <form onSubmit={handleSubmit} className="flex-1 flex flex-col min-h-0">
-            <div className="w-full flex-1 min-h-0 flex flex-col">
+        <form onSubmit={handleSubmit} className="flex-1 flex flex-col min-h-0 overflow-y-auto custom-scrollbar p-5 sm:p-6 bg-muted/5 relative">
+          <div className="w-full flex-1 min-h-0 flex flex-col">
               <CrosswordBuilder 
                  initialData={crosswordJson ? JSON.parse(crosswordJson) : null}
                  mainHeader={
@@ -199,7 +198,6 @@ export function MaterialFormModal({ isOpen, onClose, courseId, initialData }: Ma
               />
             </div>
           </form>
-        </div>
       </div>
     </div>
   );

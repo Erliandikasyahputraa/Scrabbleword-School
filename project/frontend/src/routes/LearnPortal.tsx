@@ -197,9 +197,7 @@ function StudentWorkflow({ material, courseId }: { material: any, courseId: stri
 
   if (state === 'READING') {
     return (
-      <div className="w-full max-w-4xl mx-auto mt-8 mb-16 animate-in fade-in duration-500">
-        {/* Clean Reading Workspace: No Card, No min-height, No Dashboard feel. 
-            Height calculation is delegated entirely to PdfViewer's internal Canvas scale. */}
+      <div className="flex-1 min-h-0 w-full animate-in fade-in duration-500 bg-muted/5 relative">
         <PdfViewer 
             url={getPdfUrl(material.pdf_path)} 
             onComplete={handlePdfComplete} 
@@ -223,31 +221,43 @@ function StudentWorkflow({ material, courseId }: { material: any, courseId: stri
 
   return (
     <>
-      <div className="mt-6 flex justify-center w-full animate-in fade-in duration-500">
-        <Card className="flex flex-col border-border shadow-md w-full max-w-5xl">
-          <CardHeader className="py-4 border-b border-border/50 bg-muted/30 flex flex-row items-center justify-between">
-            <CardTitle className="text-base sm:text-lg">Crossword Puzzle</CardTitle>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => setIsReviewModalOpen(true)}
-            >
-              📄 View Material
-            </Button>
-          </CardHeader>
-          <CrosswordProvider data={material.crossword_data}>
-            <CardContent className="p-4 sm:p-6 bg-muted/30 flex flex-col gap-6">
-              <CrosswordToolbar />
-              <div className="flex justify-center w-full">
-                <CrosswordBoard />
-              </div>
-              <div className="flex flex-col gap-6 w-full max-w-2xl mx-auto">
-                <CrosswordClues />
-                <CrosswordSubmit materialId={Number(id)} />
-              </div>
-            </CardContent>
-          </CrosswordProvider>
-        </Card>
+      <div className="flex-1 flex flex-col w-full h-full animate-in fade-in duration-500 min-h-0 bg-background relative overflow-hidden">
+        <CrosswordProvider data={material.crossword_data}>
+          {/* Workspace Header */}
+          <div className="shrink-0 py-2.5 px-4 sm:px-6 border-b border-border bg-card/80 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3 z-10 shadow-sm relative">
+             <div className="flex items-center gap-3 w-full sm:w-auto">
+               <h2 className="text-sm sm:text-base font-bold text-foreground truncate max-w-[200px] sm:max-w-xs">Crossword Puzzle</h2>
+               <div className="h-4 w-px bg-border hidden sm:block"></div>
+               <Button variant="outline" size="sm" onClick={() => setIsReviewModalOpen(true)} className="gap-2 h-8 text-xs shrink-0 bg-primary/5 hover:bg-primary/10 border-primary/20 text-primary hover:text-primary">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                 Review Material
+               </Button>
+             </div>
+             <CrosswordToolbar />
+          </div>
+
+          {/* Main Workspace Area */}
+          <div className="flex-1 flex flex-col lg:flex-row min-h-0 overflow-hidden w-full bg-muted/5 relative">
+            {/* Board Area */}
+            <div className="flex-1 flex flex-col relative overflow-hidden bg-transparent border-b lg:border-b-0 lg:border-r border-border/50 min-h-[45vh] lg:min-h-0">
+               <div className="flex-1 overflow-auto custom-scrollbar flex items-center justify-center relative w-full h-full p-2 sm:p-6 lg:p-10">
+                  <div className="w-full max-w-4xl h-full flex items-center justify-center relative">
+                    <CrosswordBoard />
+                  </div>
+               </div>
+            </div>
+
+            {/* Clues & Submit Area */}
+            <div className="w-full lg:w-[320px] xl:w-[380px] flex flex-col bg-card shrink-0 relative z-10 h-[55vh] lg:h-auto shadow-[-4px_0_24px_-8px_rgba(0,0,0,0.05)] border-l border-border/50">
+               <div className="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-5 lg:p-6 pb-24 relative">
+                 <CrosswordClues />
+               </div>
+               <div className="absolute bottom-0 left-0 right-0 p-4 bg-card/95 backdrop-blur-md border-t border-border shadow-[0_-8px_24px_-8px_rgba(0,0,0,0.1)]">
+                 <CrosswordSubmit materialId={Number(id)} />
+               </div>
+            </div>
+          </div>
+        </CrosswordProvider>
       </div>
 
       {/* Local UI State: Review Modal */}
@@ -296,24 +306,28 @@ export default function LearnPortal() {
   const isTeacherOrAdmin = user?.role === 'teacher' || user?.role === 'admin';
 
   return (
-    <div className="flex flex-col pb-12 xl:pb-24">
-      <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
-        <Button onClick={() => navigate(`/courses/${courseId}`)} variant="ghost" size="sm" className="gap-1 sm:gap-2 text-muted-foreground hover:text-foreground sm:mr-4 px-2 sm:px-3">
+    <div className="flex-1 flex flex-col h-full min-h-0 overflow-hidden w-full max-w-none">
+      <div className="shrink-0 p-3 sm:p-4 border-b border-border bg-card/50 flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground z-10 shadow-sm w-full relative">
+        <Button onClick={() => navigate(`/courses/${courseId}`)} variant="ghost" size="sm" className="gap-1 sm:gap-2 text-muted-foreground hover:text-foreground sm:mr-4 px-2 sm:px-3 h-8">
           <ArrowLeft size={16} /> <span className="hidden sm:inline">Back</span>
         </Button>
-        <span className="cursor-pointer hover:text-primary transition-colors" onClick={() => navigate('/')}>Dashboard</span>
-        <span>/</span>
-        <span className="cursor-pointer hover:text-primary transition-colors" onClick={() => navigate(`/courses/${courseId}`)}>Course</span>
-        <span>/</span>
+        <span className="cursor-pointer hover:text-primary transition-colors font-medium" onClick={() => navigate('/')}>Dashboard</span>
+        <span className="text-muted-foreground/50">/</span>
+        <span className="cursor-pointer hover:text-primary transition-colors font-medium" onClick={() => navigate(`/courses/${courseId}`)}>Course</span>
+        <span className="text-muted-foreground/50">/</span>
         <span className="font-semibold text-foreground truncate max-w-[150px] sm:max-w-[300px]">{material.title}</span>
       </div>
       
       {/* Layered Architecture: Workflow branching */}
-      {isTeacherOrAdmin ? (
-        <TeacherWorkspace materialId={Number(id)} />
-      ) : (
-        <StudentWorkflow material={material} courseId={courseId!} />
-      )}
+      <div className="flex-1 min-h-0 flex flex-col overflow-hidden w-full relative bg-muted/10">
+        {isTeacherOrAdmin ? (
+          <div className="p-4 sm:p-6 lg:p-8 max-w-screen-xl mx-auto w-full overflow-y-auto custom-scrollbar">
+            <TeacherWorkspace materialId={Number(id)} />
+          </div>
+        ) : (
+          <StudentWorkflow material={material} courseId={courseId!} />
+        )}
+      </div>
     </div>
   );
 }
