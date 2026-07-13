@@ -11,5 +11,13 @@
   "loading": "Memuat...",
   "continue": "Lanjutkan",
   "language": "Bahasa",
-  "theme": "Tema"
+  "theme": "Tema",
+  "dashboard": "Beranda",
+  "courses": "Kursus",
+  "users": "Pengguna",
+  "approvals": "Persetujuan",
+  "logout": "Keluar",
+  "adminPortal": "Portal Admin",
+  "teacherPortal": "Portal Guru",
+  "studentPortal": "Portal Siswa"
 }

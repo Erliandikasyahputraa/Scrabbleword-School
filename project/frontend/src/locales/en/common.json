@@ -11,5 +11,13 @@
   "loading": "Loading...",
   "continue": "Continue",
   "language": "Language",
-  "theme": "Theme"
+  "theme": "Theme",
+  "dashboard": "Dashboard",
+  "courses": "Courses",
+  "users": "Users",
+  "approvals": "Approvals",
+  "logout": "Logout",
+  "adminPortal": "Admin Portal",
+  "teacherPortal": "Teacher Portal",
+  "studentPortal": "Student Portal"
 }

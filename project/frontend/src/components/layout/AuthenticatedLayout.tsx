@@ -6,8 +6,10 @@ import { LanguageSwitcher } from "../ui/LanguageSwitcher"
 import { AppThemeBackgroundLayer } from "../crossword/AppThemeBackgroundLayer"
 import { Logo } from "../ui/Logo"
 import { Menu, X, Home, BookOpen, Users, ShieldCheck } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
 export function AuthenticatedLayout() {
+  const { t } = useTranslation('common')
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
@@ -59,22 +61,22 @@ export function AuthenticatedLayout() {
     <>
       <Link to="/" className={`flex items-center gap-3 p-3 rounded-lg font-medium transition-colors ${location.pathname === '/' ? 'bg-primary/10 text-primary' : 'hover:bg-muted text-muted-foreground hover:text-foreground'}`}>
         <span className="w-5 h-5 flex items-center justify-center"><Home size={20} /></span>
-        {(!isCollapsed || isMobileMenuOpen) && <span>Dashboard</span>}
+        {(!isCollapsed || isMobileMenuOpen) && <span>{t('dashboard')}</span>}
       </Link>
       <Link to="/courses" className={`flex items-center gap-3 p-3 rounded-lg font-medium transition-colors ${location.pathname.startsWith('/courses') ? 'bg-primary/10 text-primary' : 'hover:bg-muted text-muted-foreground hover:text-foreground'}`}>
         <span className="w-5 h-5 flex items-center justify-center"><BookOpen size={20} /></span>
-        {(!isCollapsed || isMobileMenuOpen) && <span>Courses</span>}
+        {(!isCollapsed || isMobileMenuOpen) && <span>{t('courses')}</span>}
       </Link>
       {user?.role === 'admin' && (
         <Link to="/users" className={`flex items-center gap-3 p-3 rounded-lg font-medium transition-colors ${location.pathname.startsWith('/users') ? 'bg-primary/10 text-primary' : 'hover:bg-muted text-muted-foreground hover:text-foreground'}`}>
           <span className="w-5 h-5 flex items-center justify-center"><Users size={20} /></span>
-          {(!isCollapsed || isMobileMenuOpen) && <span>Users</span>}
+          {(!isCollapsed || isMobileMenuOpen) && <span>{t('users')}</span>}
         </Link>
       )}
       {user?.role !== 'student' && (
         <Link to="/approvals" className={`flex items-center gap-3 p-3 rounded-lg font-medium transition-colors ${location.pathname.startsWith('/approvals') ? 'bg-primary/10 text-primary' : 'hover:bg-muted text-muted-foreground hover:text-foreground'}`}>
           <span className="w-5 h-5 flex items-center justify-center"><ShieldCheck size={20} /></span>
-          {(!isCollapsed || isMobileMenuOpen) && <span>Approvals</span>}
+          {(!isCollapsed || isMobileMenuOpen) && <span>{t('approvals')}</span>}
         </Link>
       )}
     </>
@@ -141,7 +143,7 @@ export function AuthenticatedLayout() {
               <Menu size={24} />
             </button>
             <span className="font-semibold text-lg text-foreground">
-              {user.role === 'admin' ? 'Admin Portal' : user.role === 'teacher' ? 'Teacher Portal' : 'Student Portal'}
+              {user.role === 'admin' ? t('adminPortal') : user.role === 'teacher' ? t('teacherPortal') : t('studentPortal')}
             </span>
           </div>
           
@@ -176,7 +178,7 @@ export function AuthenticatedLayout() {
                       className="w-full text-left px-4 py-2.5 text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors flex items-center gap-2"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                      Logout
+                      {t('logout')}
                     </button>
                   </div>
                 </>
