@@ -21,15 +21,25 @@ export function CrosswordBoard() {
     <div className="w-full h-full flex justify-center items-center @container/board">
       <div
         ref={boardRef}
-        className={`relative flex justify-center items-center focus:outline-none focus:ring-4 focus:ring-primary/30 rounded-xl overflow-hidden shadow-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 ${isSubmitted ? 'opacity-80 pointer-events-none' : ''}`}
+        className={`relative box-content flex justify-center items-center focus:outline-none focus:ring-4 focus:ring-primary/30 rounded-xl overflow-hidden shadow-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 ${isSubmitted ? 'opacity-80 pointer-events-none' : ''}`}
         style={{ 
-          // Pure CSS sizing algorithm:
-          // 1. Calculate max cell width and height that would fit the container
-          // 2. Take the minimum of the two to maintain aspect ratio perfectly
-          // 3. Clamp between 32px and 64px for visual ergonomics
-          '--max-cell-w': `calc(100cqw / ${data.grid.cols})`,
-          '--max-cell-h': `calc(100cqh / ${data.grid.rows})`,
+          // 1. Define internal padding based on container size using cqw (mobile ~16px, tablet ~32px, desktop ~48-64px)
+          '--board-padding': 'clamp(16px, 4cqw, 64px)',
+          padding: 'var(--board-padding)',
+          
+          // 2. Available width for the actual grid (container width - 2 * padding)
+          '--avail-w': 'calc(100cqw - (var(--board-padding) * 2))',
+          '--avail-h': 'calc(100cqh - (var(--board-padding) * 2))',
+          
+          // 3. Calculate max cell width and height that would fit the available space
+          '--max-cell-w': `calc(var(--avail-w) / ${data.grid.cols})`,
+          '--max-cell-h': `calc(var(--avail-h) / ${data.grid.rows})`,
+          
+          // 4. Take the minimum of the two to maintain aspect ratio perfectly
+          // 5. Clamp between 32px and 64px for visual ergonomics
           '--cell-size': `clamp(32px, min(var(--max-cell-w), var(--max-cell-h)), 64px)`,
+          
+          // 6. Set grid dimensions natively (box-content makes this apply only to the grid, not the padding)
           width: `calc(var(--cell-size) * ${data.grid.cols})`,
           height: `calc(var(--cell-size) * ${data.grid.rows})`
         } as React.CSSProperties}
