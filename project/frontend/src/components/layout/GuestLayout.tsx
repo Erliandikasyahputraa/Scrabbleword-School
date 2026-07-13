@@ -1,6 +1,7 @@
 import { Outlet, Navigate } from "react-router-dom"
 import { useAuth } from "../../providers/AuthProvider"
 import { ThemeToggle } from "../ui/ThemeToggle"
+import { LanguageSwitcher } from "../ui/LanguageSwitcher"
 
 export function GuestLayout() {
   const { user, isLoading } = useAuth()
@@ -28,8 +29,9 @@ export function GuestLayout() {
       {/* Soft ambient glow */}
       <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none blur-3xl opacity-50 dark:opacity-20" />
 
-      {/* Theme Toggle at Absolute Top Right */}
-      <div className="absolute top-6 right-6 lg:top-8 lg:right-8 z-50">
+      {/* Top Right Controls */}
+      <div className="absolute top-6 right-6 lg:top-8 lg:right-8 z-50 flex items-center gap-2">
+        <LanguageSwitcher />
         <ThemeToggle />
       </div>
       
