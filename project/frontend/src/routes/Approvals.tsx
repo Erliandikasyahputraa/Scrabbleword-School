@@ -6,6 +6,7 @@ import { Button } from '../components/ui/Button';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../components/ui/Table';
 import { Badge } from '../components/ui/Badge';
 import { toast } from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 type User = {
   id: number;
@@ -17,6 +18,7 @@ type User = {
 };
 
 export default function Approvals() {
+  const { t } = useTranslation('dashboard');
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
@@ -32,17 +34,24 @@ export default function Approvals() {
         body: JSON.stringify({ status })
       }),
     onSuccess: (_, variables) => {
-      toast.success(`User ${variables.status} successfully`);
+      // If the status string needs translating we can pass variables.status
+      // For ID we will use 'disetujui' / 'ditolak' logic later or simply pass the status if it's acceptable in English.
+      // Wait, in Indonesian it would be "Pengguna berhasil di" + "setujui/tolak".
+      // Let's assume the backend status is 'approved' or 'rejected'.
+      const statusText = variables.status === 'approved' 
+        ? (t('userStatusUpdateSuccess', { status: 'approved' }).includes('diapproved') ? 'setujui' : variables.status) 
+        : (t('userStatusUpdateSuccess', { status: 'rejected' }).includes('direjected') ? 'tolak' : variables.status);
+      toast.success(t('userStatusUpdateSuccess', { status: statusText }));
       queryClient.invalidateQueries({ queryKey: ['pending-users'] });
     },
-    onError: (err: any) => toast.error(err.message || 'Failed to update user status')
+    onError: (err: any) => toast.error(err.message || t('failedToUpdateUserStatus'))
   });
 
   if (user?.role === 'student') {
     return (
       <div className="flex justify-center p-12">
         <div className="text-center text-destructive font-bold">
-          Unauthorized access
+          {t('unauthorizedAccess')}
         </div>
       </div>
     );
@@ -53,12 +62,12 @@ export default function Approvals() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
         <div>
           <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
-            User Approvals
+            {t('userApprovals')}
           </h2>
           <p className="text-sm sm:text-base text-muted-foreground mt-1">
             {user?.role === 'admin' 
-              ? 'Review and approve pending student and teacher registrations.' 
-              : 'Review and approve pending student registrations.'}
+              ? t('adminApprovalDesc') 
+              : t('teacherApprovalDesc')}
           </p>
         </div>
       </div>
@@ -72,9 +81,9 @@ export default function Approvals() {
           <div className="w-20 h-20 bg-success/10 rounded-full flex items-center justify-center mb-4 text-success">
             <CheckCircle size={40} />
           </div>
-          <h3 className="text-xl font-bold text-foreground mb-2">All Caught Up!</h3>
+          <h3 className="text-xl font-bold text-foreground mb-2">{t('allCaughtUp')}</h3>
           <p className="text-muted-foreground max-w-md">
-            There are no pending users waiting for approval right now.
+            {t('noPendingUsers')}
           </p>
         </div>
       ) : (
@@ -83,10 +92,10 @@ export default function Approvals() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Role</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>{t('name')}</TableHead>
+                  <TableHead>{t('email')}</TableHead>
+                  <TableHead>{t('role')}</TableHead>
+                  <TableHead className="text-right">{t('actions')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -109,7 +118,7 @@ export default function Approvals() {
                           disabled={updateStatusMutation.isPending}
                           onClick={() => updateStatusMutation.mutate({ id: u.id, status: 'approved' })}
                         >
-                          <Check size={16} className="sm:mr-1" /> <span className="hidden sm:inline">Approve</span>
+                          <Check size={16} className="sm:mr-1" /> <span className="hidden sm:inline">{t('approve')}</span>
                         </Button>
                         <Button 
                           variant="secondary"
@@ -117,7 +126,7 @@ export default function Approvals() {
                           disabled={updateStatusMutation.isPending}
                           onClick={() => updateStatusMutation.mutate({ id: u.id, status: 'rejected' })}
                         >
-                          <X size={16} className="sm:mr-1" /> <span className="hidden sm:inline">Reject</span>
+                          <X size={16} className="sm:mr-1" /> <span className="hidden sm:inline">{t('reject')}</span>
                         </Button>
                       </div>
                     </TableCell>

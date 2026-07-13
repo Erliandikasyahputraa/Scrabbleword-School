@@ -2,8 +2,10 @@ import { useCrossword } from '../../hooks/useCrossword';
 import { Button } from '../ui/Button';
 import { Lightbulb, Clock } from 'lucide-react';
 import { CrosswordThemeSelector } from './CrosswordThemeSelector';
+import { useTranslation } from 'react-i18next';
 
 export function CrosswordToolbar() {
+  const { t } = useTranslation('courses');
   const { hintsRemaining, useHint, isSubmitted, timeSpent } = useCrossword();
 
   const formatTime = (totalSeconds: number) => {
@@ -29,7 +31,7 @@ export function CrosswordToolbar() {
           className="border-slate-700 hover:bg-slate-800 text-white disabled:opacity-50 gap-2"
         >
           <Lightbulb size={16} className={hintsRemaining > 0 ? "text-yellow-400" : "text-slate-500"} />
-          Hint ({hintsRemaining} left)
+          {t('hintLeft', { count: hintsRemaining })}
         </Button>
       </div>
     </div>

@@ -19,5 +19,22 @@
   "logout": "Logout",
   "adminPortal": "Admin Portal",
   "teacherPortal": "Teacher Portal",
-  "studentPortal": "Student Portal"
+  "studentPortal": "Student Portal",
+  "confirm": "Confirm",
+  "clickToUpload": "Click to upload",
+  "orDragAndDrop": "or drag and drop",
+  "pdfDocsOnly": "PDF documents only (max 10MB)",
+  "changeLanguage": "Change Language",
+  "pageNotFound": "Page Not Found",
+  "pageNotFoundDesc": "The page you are looking for does not exist or has been moved.",
+  "unauthorizedAccess": "Unauthorized Access",
+  "unauthorizedAccessDesc": "You need to be logged in to access this page.",
+  "accessDenied": "Access Denied",
+  "accessDeniedDesc": "You do not have permission to view this content.",
+  "notFound": "Not Found",
+  "notFoundDesc": "The resource you are looking for could not be found.",
+  "serverError": "Server Error",
+  "serverErrorDesc": "Something went wrong on our end. Please try again later.",
+  "returnToDashboard": "Return to Dashboard",
+  "toggleTheme": "Toggle theme"
 }

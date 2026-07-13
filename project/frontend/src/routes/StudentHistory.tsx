@@ -6,6 +6,7 @@ import { Badge } from '../components/ui/Badge';
 import { Select } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import toast from "react-hot-toast"
+import { useTranslation } from "react-i18next"
 
 interface Submission {
   id: number
@@ -37,6 +38,7 @@ interface PaginatedResponse {
 }
 
 export default function StudentHistory() {
+  const { t } = useTranslation('dashboard')
   const { user } = useAuth()
   const [data, setData] = useState<PaginatedResponse | null>(null)
   const [loading, setLoading] = useState(true)
@@ -54,7 +56,7 @@ export default function StudentHistory() {
       const res = await fetchApi(`/submissions/history?sort=${sort}&page=${page}`)
       setData(res)
     } catch (err: any) {
-      toast.error(err.message || "Failed to load history")
+      toast.error(err.message || t('failedToLoadHistory'))
     } finally {
       setLoading(false)
     }
@@ -76,8 +78,8 @@ export default function StudentHistory() {
     return (
       <div className="flex justify-center p-8">
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-2 text-foreground">Access Denied</h2>
-          <p className="text-muted-foreground">This page is only available to students.</p>
+          <h2 className="text-2xl font-bold mb-2 text-foreground">{t('accessDenied')}</h2>
+          <p className="text-muted-foreground">{t('studentOnlyPage')}</p>
         </div>
       </div>
     )
@@ -87,11 +89,11 @@ export default function StudentHistory() {
     <div className="p-4 sm:p-6 lg:p-8 max-w-screen-xl mx-auto w-full space-y-6 animate-in fade-in duration-500 pb-12">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-2">
         <div>
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground">Learning History</h1>
-          <p className="text-muted-foreground mt-1 text-sm sm:text-base">Review your completed courses and activities.</p>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground">{t('learningHistory')}</h1>
+          <p className="text-muted-foreground mt-1 text-sm sm:text-base">{t('learningHistoryDesc')}</p>
         </div>
         <div className="flex items-center gap-3 w-full sm:w-auto">
-          <span className="text-sm font-medium text-muted-foreground shrink-0">Sort by:</span>
+          <span className="text-sm font-medium text-muted-foreground shrink-0">{t('sortBy')}</span>
           <Select
             value={sort}
             onChange={(e) => {
@@ -100,11 +102,11 @@ export default function StudentHistory() {
             }}
             className="h-10 w-full sm:w-auto min-w-[140px]"
           >
-            <option value="newest">Newest First</option>
-            <option value="oldest">Oldest First</option>
-            <option value="highest_score">Highest Score</option>
-            <option value="lowest_score">Lowest Score</option>
-            <option value="course">Course Name</option>
+            <option value="newest">{t('newestFirst')}</option>
+            <option value="oldest">{t('oldestFirst')}</option>
+            <option value="highest_score">{t('highestScore')}</option>
+            <option value="lowest_score">{t('lowestScore')}</option>
+            <option value="course">{t('courseName')}</option>
           </Select>
         </div>
       </div>
@@ -114,32 +116,32 @@ export default function StudentHistory() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Course & Material</TableHead>
-                <TableHead>Started</TableHead>
-                <TableHead>Reading Finished</TableHead>
-                <TableHead>Submitted</TableHead>
-                <TableHead className="text-center">Correct/Wrong</TableHead>
-                <TableHead className="text-center">Score</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Time Spent</TableHead>
+                <TableHead>{t('courseAndMaterial')}</TableHead>
+                <TableHead>{t('started')}</TableHead>
+                <TableHead>{t('readingFinished')}</TableHead>
+                <TableHead>{t('submitted')}</TableHead>
+                <TableHead className="text-center">{t('correctWrong')}</TableHead>
+                <TableHead className="text-center">{t('score')}</TableHead>
+                <TableHead>{t('status')}</TableHead>
+                <TableHead className="text-right">{t('timeSpent')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {loading ? (
-                <TableRow><TableCell colSpan={8} className="text-center text-muted-foreground py-8">Loading data...</TableCell></TableRow>
+                <TableRow><TableCell colSpan={8} className="text-center text-muted-foreground py-8">{t('loadingData')}</TableCell></TableRow>
               ) : data?.data.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={8} className="text-center py-12">
-                    <p className="text-lg font-medium text-foreground">No history found</p>
-                    <p className="text-sm text-muted-foreground">You haven't interacted with any materials yet.</p>
+                    <p className="text-lg font-medium text-foreground">{t('noHistoryFound')}</p>
+                    <p className="text-sm text-muted-foreground">{t('noHistoryDesc')}</p>
                   </TableCell>
                 </TableRow>
               ) : (
                 data?.data.map((sub) => (
                   <TableRow key={sub.id}>
                     <TableCell>
-                      <div className="font-semibold text-foreground whitespace-nowrap">{sub.material?.course?.name || "Unknown Course"}</div>
-                      <div className="text-xs text-muted-foreground mt-0.5 whitespace-nowrap">{sub.material?.title || "Unknown Material"}</div>
+                      <div className="font-semibold text-foreground whitespace-nowrap">{sub.material?.course?.name || t('unknownCourse')}</div>
+                      <div className="text-xs text-muted-foreground mt-0.5 whitespace-nowrap">{sub.material?.title || t('unknownMaterial')}</div>
                     </TableCell>
                     <TableCell className="whitespace-nowrap">{formatDate(sub.started_at)}</TableCell>
                     <TableCell className="whitespace-nowrap">{formatDate(sub.reading_finished_at)}</TableCell>
@@ -181,7 +183,7 @@ export default function StudentHistory() {
         {data && data.last_page > 1 && (
           <div className="flex flex-col sm:flex-row items-center justify-between p-4 border-t border-border gap-4">
             <span className="text-sm text-muted-foreground">
-              Showing <span className="font-semibold text-foreground">{(data.current_page - 1) * 10 + 1}</span> to <span className="font-semibold text-foreground">{Math.min(data.current_page * 10, data.total)}</span> of <span className="font-semibold text-foreground">{data.total}</span> Entries
+              {t('showing')} <span className="font-semibold text-foreground">{(data.current_page - 1) * 10 + 1}</span> {t('to')} <span className="font-semibold text-foreground">{Math.min(data.current_page * 10, data.total)}</span> {t('of')} <span className="font-semibold text-foreground">{data.total}</span> {t('entries')}
             </span>
             <div className="flex gap-2 w-full sm:w-auto">
               <Button
@@ -190,7 +192,7 @@ export default function StudentHistory() {
                 disabled={data.current_page === 1}
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
               >
-                Previous
+                {t('previous')}
               </Button>
               <Button
                 variant="secondary"
@@ -198,7 +200,7 @@ export default function StudentHistory() {
                 disabled={data.current_page === data.last_page}
                 onClick={() => setPage((p) => Math.min(data.last_page, p + 1))}
               >
-                Next
+                {t('next')}
               </Button>
             </div>
           </div>

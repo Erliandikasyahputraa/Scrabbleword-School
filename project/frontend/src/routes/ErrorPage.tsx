@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { AlertCircle, ShieldAlert, FileQuestion, ServerCrash } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface ErrorPageProps {
   code: number;
@@ -8,10 +9,12 @@ interface ErrorPageProps {
 }
 
 export default function ErrorPage({ code, message }: ErrorPageProps) {
+  const { t } = useTranslation('common');
+
   let config = {
     icon: <FileQuestion className="w-24 h-24 text-slate-400 mx-auto mb-6" />,
-    title: 'Page Not Found',
-    desc: 'The page you are looking for does not exist or has been moved.',
+    title: t('pageNotFound'),
+    desc: t('pageNotFoundDesc'),
     color: 'text-slate-900 dark:text-white',
   };
 
@@ -19,32 +22,32 @@ export default function ErrorPage({ code, message }: ErrorPageProps) {
     case 401:
       config = {
         icon: <ShieldAlert className="w-24 h-24 text-orange-500 mx-auto mb-6" />,
-        title: 'Unauthorized Access',
-        desc: 'You need to be logged in to access this page.',
+        title: t('unauthorizedAccess'),
+        desc: t('unauthorizedAccessDesc'),
         color: 'text-orange-600 dark:text-orange-400',
       };
       break;
     case 403:
       config = {
         icon: <AlertCircle className="w-24 h-24 text-red-500 mx-auto mb-6" />,
-        title: 'Access Denied',
-        desc: 'You do not have permission to view this content.',
+        title: t('accessDenied'),
+        desc: t('accessDeniedDesc'),
         color: 'text-red-600 dark:text-red-400',
       };
       break;
     case 404:
       config = {
         icon: <FileQuestion className="w-24 h-24 text-blue-500 mx-auto mb-6" />,
-        title: 'Not Found',
-        desc: 'The resource you are looking for could not be found.',
+        title: t('notFound'),
+        desc: t('notFoundDesc'),
         color: 'text-blue-600 dark:text-blue-400',
       };
       break;
     case 500:
       config = {
         icon: <ServerCrash className="w-24 h-24 text-red-600 mx-auto mb-6" />,
-        title: 'Server Error',
-        desc: 'Something went wrong on our end. Please try again later.',
+        title: t('serverError'),
+        desc: t('serverErrorDesc'),
         color: 'text-red-700 dark:text-red-500',
       };
       break;
@@ -60,7 +63,7 @@ export default function ErrorPage({ code, message }: ErrorPageProps) {
         <p className="text-slate-600 dark:text-slate-400 mb-8">{message || config.desc}</p>
         <Link to="/">
           <Button size="lg" className="px-8 shadow-lg font-semibold rounded-full">
-            Return to Dashboard
+            {t('returnToDashboard')}
           </Button>
         </Link>
       </div>

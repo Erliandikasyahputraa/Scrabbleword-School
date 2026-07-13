@@ -3,7 +3,7 @@ import { X } from 'lucide-react';
 import { Button } from './Button';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchApi } from '../../lib/api';
-
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-hot-toast';
 
 type CourseFormModalProps = {
@@ -17,6 +17,7 @@ type CourseFormModalProps = {
 };
 
 export function CourseFormModal({ isOpen, onClose, initialData }: CourseFormModalProps) {
+  const { t } = useTranslation('courses');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const queryClient = useQueryClient();
@@ -47,7 +48,7 @@ export function CourseFormModal({ isOpen, onClose, initialData }: CourseFormModa
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['course', initialData?.id ? String(initialData.id) : undefined] });
       queryClient.invalidateQueries({ queryKey: ['courses'] });
-      toast.success(initialData ? 'Course updated successfully' : 'Course created successfully');
+      toast.success(initialData ? t('courseUpdated') : t('courseCreated'));
       onClose();
     },
     onError: (error: any) => {
@@ -73,32 +74,32 @@ export function CourseFormModal({ isOpen, onClose, initialData }: CourseFormModa
           <X size={24} />
         </button>
         <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-6 pr-8">
-          {initialData ? 'Edit Course' : 'Create New Course'}
+          {initialData ? t('editCourse') : t('createNewCourse')}
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1">Course Name</label>
+            <label className="block text-sm font-medium text-foreground mb-1">{t('courseName')}</label>
             <input
               type="text"
               required
               value={name}
               onChange={e => setName(e.target.value)}
               className="w-full h-12 px-4 rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-foreground"
-              placeholder="e.g. Advanced English Grammar"
+              placeholder={t('courseNamePlaceholder')}
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1">Description</label>
+            <label className="block text-sm font-medium text-foreground mb-1">{t('description')}</label>
             <textarea
               value={description}
               onChange={e => setDescription(e.target.value)}
               className="w-full p-4 rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-foreground resize-none"
               rows={4}
-              placeholder="What will students learn in this course?"
+              placeholder={t('descriptionPlaceholder')}
             />
           </div>
           <Button type="submit" fullWidth disabled={mutation.isPending} className="h-12 mt-4">
-            {mutation.isPending ? 'Saving...' : 'Save Course'}
+            {mutation.isPending ? t('savingCourse') : t('saveCourse')}
           </Button>
         </form>
       </div>

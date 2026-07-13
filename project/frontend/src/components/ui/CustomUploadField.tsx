@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { UploadCloud, File as FileIcon, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface CustomUploadFieldProps {
   file: File | null;
@@ -11,6 +12,7 @@ interface CustomUploadFieldProps {
 }
 
 export function CustomUploadField({ file, onChange, disabled, required, accept = "application/pdf", label = "PDF Document" }: CustomUploadFieldProps) {
+  const { t } = useTranslation('common');
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -101,9 +103,9 @@ export function CustomUploadField({ file, onChange, disabled, required, accept =
               <UploadCloud size={24} />
             </div>
             <p className="text-sm font-medium text-foreground">
-              <span className="text-primary hover:underline">Click to upload</span> or drag and drop
+              <span className="text-primary hover:underline">{t('clickToUpload')}</span> {t('orDragAndDrop')}
             </p>
-            <p className="text-xs text-muted-foreground mt-1">PDF documents only (max 10MB)</p>
+            <p className="text-xs text-muted-foreground mt-1">{t('pdfDocsOnly')}</p>
           </div>
         )}
       </div>

@@ -19,5 +19,22 @@
   "logout": "Keluar",
   "adminPortal": "Portal Admin",
   "teacherPortal": "Portal Guru",
-  "studentPortal": "Portal Siswa"
+  "studentPortal": "Portal Siswa",
+  "confirm": "Konfirmasi",
+  "clickToUpload": "Klik untuk mengunggah",
+  "orDragAndDrop": "atau seret dan lepas",
+  "pdfDocsOnly": "Hanya dokumen PDF (maks 10MB)",
+  "changeLanguage": "Ganti Bahasa",
+  "pageNotFound": "Halaman Tidak Ditemukan",
+  "pageNotFoundDesc": "Halaman yang Anda cari tidak ada atau telah dipindahkan.",
+  "unauthorizedAccess": "Akses Tidak Sah",
+  "unauthorizedAccessDesc": "Anda harus masuk untuk mengakses halaman ini.",
+  "accessDenied": "Akses Ditolak",
+  "accessDeniedDesc": "Anda tidak memiliki izin untuk melihat konten ini.",
+  "notFound": "Tidak Ditemukan",
+  "notFoundDesc": "Sumber daya yang Anda cari tidak dapat ditemukan.",
+  "serverError": "Kesalahan Server",
+  "serverErrorDesc": "Terjadi kesalahan di pihak kami. Silakan coba lagi nanti.",
+  "returnToDashboard": "Kembali ke Dasbor",
+  "toggleTheme": "Ganti Tema"
 }

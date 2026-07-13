@@ -6,6 +6,7 @@ import { API_URL } from '../../lib/api';
 import { CrosswordBuilder } from '../crossword/builder/CrosswordBuilder';
 import { CustomUploadField } from './CustomUploadField';
 import { toast } from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 type MaterialFormModalProps = {
   isOpen: boolean;
@@ -19,6 +20,7 @@ type MaterialFormModalProps = {
 };
 
 export function MaterialFormModal({ isOpen, onClose, courseId, initialData }: MaterialFormModalProps) {
+  const { t } = useTranslation('courses');
   const [title, setTitle] = useState('');
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [crosswordJson, setCrosswordJson] = useState('');
@@ -46,12 +48,12 @@ export function MaterialFormModal({ isOpen, onClose, courseId, initialData }: Ma
     e.preventDefault();
     if (!title) return;
     if (!initialData && !pdfFile) {
-        toast.error("PDF File is required for new material.");
+        toast.error(t('pdfRequired'));
         return;
     }
 
     if (pdfFile && pdfFile.size > 10 * 1024 * 1024) {
-        toast.error("Maximum PDF size is 10 MB.");
+        toast.error(t('pdfMaxSize'));
         return;
     }
 
@@ -94,11 +96,11 @@ export function MaterialFormModal({ isOpen, onClose, courseId, initialData }: Ma
     xhr.onload = () => {
       setIsUploading(false);
       if (xhr.status >= 200 && xhr.status < 300) {
-        toast.success(isEdit ? 'Material updated successfully' : 'Material added successfully');
+        toast.success(isEdit ? t('materialUpdated') : t('materialAdded'));
         queryClient.invalidateQueries({ queryKey: ['course', String(courseId)] });
         onClose();
       } else {
-        let msg = 'Failed to save material.';
+        let msg = t('failedToSaveMaterial');
         try {
           const errorData = JSON.parse(xhr.responseText);
           msg = errorData.message || msg;
@@ -113,7 +115,7 @@ export function MaterialFormModal({ isOpen, onClose, courseId, initialData }: Ma
 
     xhr.onerror = () => {
       setIsUploading(false);
-      toast.error('Network error during upload');
+      toast.error(t('networkError'));
     };
 
     xhr.send(formData);
@@ -134,7 +136,7 @@ export function MaterialFormModal({ isOpen, onClose, courseId, initialData }: Ma
           
           <div className="flex-none border-b border-border p-5 sm:p-6 pb-4 bg-card z-10">
           <h2 className="text-xl sm:text-2xl font-bold text-foreground pr-8">
-            {initialData ? 'Edit Material' : 'Add New Material'}
+            {initialData ? t('editMaterial') : t('addNewMaterial')}
           </h2>
         </div>
 
@@ -145,7 +147,7 @@ export function MaterialFormModal({ isOpen, onClose, courseId, initialData }: Ma
                  mainHeader={
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-card border border-border p-5 sm:p-6 rounded-2xl shadow-sm mb-6 w-full">
                      <div className="space-y-2">
-                       <label className="block text-sm font-medium text-foreground">Material Title <span className="text-red-500">*</span></label>
+                       <label className="block text-sm font-medium text-foreground">{t('materialTitle')} <span className="text-red-500">*</span></label>
                        <input
                          type="text"
                          required
@@ -153,7 +155,7 @@ export function MaterialFormModal({ isOpen, onClose, courseId, initialData }: Ma
                          value={title}
                          onChange={e => setTitle(e.target.value)}
                          className="w-full h-12 px-4 rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-foreground disabled:opacity-50 transition-shadow"
-                         placeholder="e.g. Chapter 1: Basic Vocabulary"
+                         placeholder={t('materialTitlePlaceholder')}
                        />
                      </div>
                      <div className="space-y-2">
@@ -162,7 +164,7 @@ export function MaterialFormModal({ isOpen, onClose, courseId, initialData }: Ma
                          onChange={setPdfFile}
                          disabled={isUploading}
                          required={!initialData}
-                         label={initialData ? "PDF Document (Leave empty to keep current)" : "PDF Document"}
+                         label={initialData ? t('pdfDocumentEdit') : t('pdfDocument')}
                        />
                      </div>
                    </div>
@@ -181,7 +183,7 @@ export function MaterialFormModal({ isOpen, onClose, courseId, initialData }: Ma
                          <div className="flex justify-between items-center mb-2">
                            <span className="text-xs font-medium text-foreground flex items-center gap-2">
                               <div className="animate-spin h-3 w-3 border-2 border-primary border-t-transparent rounded-full" />
-                              Uploading...
+                              {t('uploading')}
                            </span>
                            <span className="text-xs font-bold text-primary">{uploadProgress}%</span>
                          </div>
@@ -191,7 +193,7 @@ export function MaterialFormModal({ isOpen, onClose, courseId, initialData }: Ma
                        </div>
                      )}
                      <Button type="submit" fullWidth disabled={isUploading} className="h-12 shadow-sm font-bold text-base shrink-0">
-                       {isUploading ? 'Saving...' : 'Save Material'}
+                       {isUploading ? t('savingMaterial') : t('saveMaterial')}
                      </Button>
                    </div>
                  }

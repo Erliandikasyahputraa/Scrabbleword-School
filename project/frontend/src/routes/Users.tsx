@@ -9,6 +9,7 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '.
 import { Badge } from '../components/ui/Badge';
 import { Select, Input } from '../components/ui/Input';
 import { toast } from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 type User = {
   id: number;
@@ -20,6 +21,7 @@ type User = {
 };
 
 export default function Users() {
+  const { t } = useTranslation('dashboard');
   const { user } = useAuth();
   const queryClient = useQueryClient();
   
@@ -68,10 +70,10 @@ export default function Users() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
-      toast.success(isEditMode ? 'User updated successfully' : 'User created successfully');
+      toast.success(isEditMode ? t('userUpdated') : t('userCreated'));
       closeModal();
     },
-    onError: (error: any) => toast.error(error.message || 'Failed to save user')
+    onError: (error: any) => toast.error(error.message || t('failedToSaveUser'))
   });
 
   const deleteMutation = useMutation({
@@ -80,10 +82,10 @@ export default function Users() {
         method: 'DELETE'
       }),
     onSuccess: () => {
-      toast.success('User deleted successfully');
+      toast.success(t('userDeleted'));
       queryClient.invalidateQueries({ queryKey: ['users'] });
     },
-    onError: (error: any) => toast.error(error.message || 'Failed to delete user')
+    onError: (error: any) => toast.error(error.message || t('failedToDeleteUser'))
   });
 
   const openModal = (u?: User) => {
@@ -123,8 +125,8 @@ export default function Users() {
   const handleDelete = (id: number) => {
     setConfirmDialog({
       isOpen: true,
-      title: 'Delete User',
-      description: 'Are you sure you want to delete this user? This action cannot be undone.',
+      title: t('deleteUser'),
+      description: t('deleteUserDesc'),
       onConfirm: () => deleteMutation.mutate(id)
     });
   };
@@ -133,7 +135,7 @@ export default function Users() {
     return (
       <div className="flex justify-center p-12">
         <div className="text-center text-destructive font-bold">
-          Unauthorized access
+          {t('unauthorizedAccess')}
         </div>
       </div>
     );
@@ -144,10 +146,10 @@ export default function Users() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
         <div>
           <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
-            User Management
+            {t('userManagement')}
           </h2>
           <p className="text-sm sm:text-base text-muted-foreground mt-1">
-            Manage all platform users, roles, and statuses.
+            {t('userManagementDesc')}
           </p>
         </div>
         <Button 
@@ -156,7 +158,7 @@ export default function Users() {
           onClick={() => openModal()}
         >
           <PlusCircle size={20} />
-          Create User
+          {t('createUserBtn')}
         </Button>
       </div>
 
@@ -169,9 +171,9 @@ export default function Users() {
           <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mb-4 text-muted-foreground">
             <UsersIcon size={40} />
           </div>
-          <h3 className="text-xl font-bold text-foreground mb-2">No Users Found</h3>
+          <h3 className="text-xl font-bold text-foreground mb-2">{t('noUsersFound')}</h3>
           <p className="text-muted-foreground max-w-md">
-            No users have registered or been created in the platform yet.
+            {t('noUsersDesc')}
           </p>
         </div>
       ) : (
@@ -180,12 +182,12 @@ export default function Users() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Role</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Created At</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>{t('name')}</TableHead>
+                  <TableHead>{t('email')}</TableHead>
+                  <TableHead>{t('role')}</TableHead>
+                  <TableHead>{t('status')}</TableHead>
+                  <TableHead>{t('createdAt')}</TableHead>
+                  <TableHead className="text-right">{t('actions')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -199,7 +201,7 @@ export default function Users() {
                         u.role === 'teacher' ? 'default' :
                         'secondary'
                       } className="capitalize">
-                        {u.role}
+                        {u.role === 'admin' ? t('adminOption') : u.role === 'teacher' ? t('teacherOption') : t('studentOption')}
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -208,7 +210,7 @@ export default function Users() {
                         u.status === 'rejected' ? 'danger' :
                         'warning'
                       } className="capitalize">
-                        {u.status}
+                        {u.status === 'approved' ? t('approvedOption') : u.status === 'rejected' ? t('rejectedOption') : t('pendingOption')}
                       </Badge>
                     </TableCell>
                     <TableCell className="whitespace-nowrap text-muted-foreground">
@@ -254,11 +256,11 @@ export default function Users() {
               <X size={24} />
             </button>
             <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-6 pr-8">
-              {isEditMode ? 'Edit User' : 'Create New User'}
+              {isEditMode ? t('editUser') : t('createNewUser')}
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-foreground mb-1">Name</label>
+                <label className="block text-sm font-medium text-foreground mb-1">{t('name')}</label>
                 <Input
                   type="text"
                   required
@@ -268,7 +270,7 @@ export default function Users() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-foreground mb-1">Email</label>
+                <label className="block text-sm font-medium text-foreground mb-1">{t('email')}</label>
                 <Input
                   type="email"
                   required
@@ -279,7 +281,7 @@ export default function Users() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-foreground mb-1">
-                  Password {isEditMode && '(Leave empty to keep current)'}
+                  {isEditMode ? t('passwordDesc', { desc: t('leaveEmptyToKeep') }) : t('passwordDesc', { desc: '' })}
                 </label>
                 <Input
                   type="password"
@@ -291,32 +293,32 @@ export default function Users() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-1">Role</label>
+                  <label className="block text-sm font-medium text-foreground mb-1">{t('role')}</label>
                   <Select
                     value={formData.role}
                     onChange={e => setFormData({...formData, role: e.target.value as 'admin' | 'teacher' | 'student'})}
                     className="w-full"
                   >
-                    <option value="student">Student</option>
-                    <option value="teacher">Teacher</option>
-                    <option value="admin">Admin</option>
+                    <option value="student">{t('studentOption')}</option>
+                    <option value="teacher">{t('teacherOption')}</option>
+                    <option value="admin">{t('adminOption')}</option>
                   </Select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-1">Status</label>
+                  <label className="block text-sm font-medium text-foreground mb-1">{t('status')}</label>
                   <Select
                     value={formData.status}
                     onChange={e => setFormData({...formData, status: e.target.value as 'pending' | 'approved' | 'rejected'})}
                     className="w-full"
                   >
-                    <option value="pending">Pending</option>
-                    <option value="approved">Approved</option>
-                    <option value="rejected">Rejected</option>
+                    <option value="pending">{t('pendingOption')}</option>
+                    <option value="approved">{t('approvedOption')}</option>
+                    <option value="rejected">{t('rejectedOption')}</option>
                   </Select>
                 </div>
               </div>
               <Button type="submit" fullWidth disabled={saveMutation.isPending} className="h-12 mt-6">
-                {saveMutation.isPending ? 'Saving...' : 'Save User'}
+                {saveMutation.isPending ? t('saving') : t('saveUser')}
               </Button>
             </form>
           </div>

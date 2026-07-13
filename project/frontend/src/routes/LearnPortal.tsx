@@ -14,9 +14,11 @@ import { CrosswordBoard } from '../components/crossword/CrosswordBoard';
 import { CrosswordClues } from '../components/crossword/CrosswordClues';
 import { CrosswordSubmit } from '../components/crossword/CrosswordSubmit';
 import { useMaterial } from '../hooks/useMaterial';
+import { useTranslation } from 'react-i18next';
 
 // ─── Teacher view: shows submission statistics for this material ───────────────
 function TeacherWorkspace({ materialId }: { materialId: number }) {
+  const { t } = useTranslation('courses');
   const { data: submissions, isLoading } = useQuery({
     queryKey: ['material-submissions', materialId],
     queryFn: () => fetchApi(`/materials/${materialId}/submission-stats`),
@@ -35,7 +37,7 @@ function TeacherWorkspace({ materialId }: { materialId: number }) {
   return (
     <Card className="flex flex-col border-border shadow-md overflow-hidden min-h-0 min-w-0 w-full mt-6">
       <CardHeader className="py-4 border-b border-border/50 bg-muted/30">
-        <CardTitle className="text-base sm:text-lg">Student Submissions</CardTitle>
+        <CardTitle className="text-base sm:text-lg">{t('studentSubmissions')}</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 overflow-auto p-6 bg-muted/30">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
@@ -45,7 +47,7 @@ function TeacherWorkspace({ materialId }: { materialId: number }) {
             </div>
             <div>
               <p className="text-2xl font-bold text-foreground">{stats.total}</p>
-              <p className="text-sm text-muted-foreground">Total Students</p>
+              <p className="text-sm text-muted-foreground">{t('totalStudents')}</p>
             </div>
           </div>
           <div className="bg-card rounded-2xl p-5 border border-border flex items-center gap-4">
@@ -54,7 +56,7 @@ function TeacherWorkspace({ materialId }: { materialId: number }) {
             </div>
             <div>
               <p className="text-2xl font-bold text-foreground">{stats.completed}</p>
-              <p className="text-sm text-muted-foreground">Completed</p>
+              <p className="text-sm text-muted-foreground">{t('completed')}</p>
             </div>
           </div>
           <div className="bg-card rounded-2xl p-5 border border-border flex items-center gap-4">
@@ -63,7 +65,7 @@ function TeacherWorkspace({ materialId }: { materialId: number }) {
             </div>
             <div>
               <p className="text-2xl font-bold text-foreground">{stats.pending}</p>
-              <p className="text-sm text-muted-foreground">Pending</p>
+              <p className="text-sm text-muted-foreground">{t('pending')}</p>
             </div>
           </div>
           <div className="bg-card rounded-2xl p-5 border border-border flex items-center gap-4">
@@ -72,7 +74,7 @@ function TeacherWorkspace({ materialId }: { materialId: number }) {
             </div>
             <div>
               <p className="text-2xl font-bold text-foreground">{stats.average_score ?? 0}</p>
-              <p className="text-sm text-muted-foreground">Avg Score</p>
+              <p className="text-sm text-muted-foreground">{t('avgScore')}</p>
             </div>
           </div>
         </div>
@@ -81,7 +83,7 @@ function TeacherWorkspace({ materialId }: { materialId: number }) {
         {stats.total > 0 && (
           <div className="bg-card rounded-2xl p-5 border border-border">
             <div className="flex justify-between items-center mb-2">
-              <p className="text-sm font-medium text-muted-foreground">Completion Rate</p>
+              <p className="text-sm font-medium text-muted-foreground">{t('completionRate')}</p>
               <p className="text-sm font-bold text-foreground">
                 {Math.round((stats.completed / stats.total) * 100)}%
               </p>
@@ -103,6 +105,7 @@ function TeacherWorkspace({ materialId }: { materialId: number }) {
 type PortalState = 'INITIALIZING' | 'ERROR' | 'READING' | 'UNLOCKING' | 'QUIZ';
 
 function StudentWorkflow({ material, courseId }: { material: any, courseId: string }) {
+  const { t } = useTranslation('courses');
   const id = material.id;
 
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false); // Local transient state for overlay
@@ -172,7 +175,7 @@ function StudentWorkflow({ material, courseId }: { material: any, courseId: stri
     return (
       <div className="flex-1 flex flex-col items-center justify-center p-8 mt-6 bg-muted/30 min-h-[300px] rounded-xl border border-border">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
-        <p className="text-muted-foreground">Checking submission status...</p>
+        <p className="text-muted-foreground">{t('checkingSubmissionStatus')}</p>
       </div>
     );
   }
@@ -180,8 +183,8 @@ function StudentWorkflow({ material, courseId }: { material: any, courseId: stri
   if (state === 'ERROR') {
     return (
       <div className="flex-1 flex flex-col items-center justify-center p-8 mt-6 bg-destructive/10 text-destructive min-h-[300px] rounded-xl border border-destructive/20">
-        <p>Failed to load submission state.</p>
-        <Button onClick={() => refetch()} variant="outline" className="mt-4">Retry</Button>
+        <p>{t('failedToLoadSubmissionState')}</p>
+        <Button onClick={() => refetch()} variant="outline" className="mt-4">{t('retry')}</Button>
       </div>
     );
   }
@@ -190,7 +193,7 @@ function StudentWorkflow({ material, courseId }: { material: any, courseId: stri
     return (
       <div className="flex-1 flex flex-col items-center justify-center p-8 mt-6 bg-muted/30 min-h-[300px] rounded-xl border border-border">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
-        <p className="text-muted-foreground">Unlocking Crossword...</p>
+        <p className="text-muted-foreground">{t('unlockingCrossword')}</p>
       </div>
     );
   }
@@ -212,7 +215,7 @@ function StudentWorkflow({ material, courseId }: { material: any, courseId: stri
       <Card className="mt-6">
         <CardContent className="flex flex-col items-center justify-center p-8 text-center bg-muted/30 min-h-[300px]">
           <p className="text-muted-foreground max-w-md mx-auto leading-relaxed">
-            No crossword puzzle available for this material.
+            {t('noCrosswordAvailable')}
           </p>
         </CardContent>
       </Card>
@@ -226,11 +229,11 @@ function StudentWorkflow({ material, courseId }: { material: any, courseId: stri
           {/* Workspace Header */}
           <div className="shrink-0 py-2.5 px-4 sm:px-6 border-b border-border bg-card/80 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3 z-10 shadow-sm relative">
              <div className="flex items-center gap-3 w-full sm:w-auto">
-               <h2 className="text-sm sm:text-base font-bold text-foreground truncate max-w-[200px] sm:max-w-xs">Crossword Puzzle</h2>
+               <h2 className="text-sm sm:text-base font-bold text-foreground truncate max-w-[200px] sm:max-w-xs">{t('crosswordPuzzle')}</h2>
                <div className="h-4 w-px bg-border hidden sm:block"></div>
                <Button variant="outline" size="sm" onClick={() => setIsReviewModalOpen(true)} className="gap-2 h-8 text-xs shrink-0 bg-primary/5 hover:bg-primary/10 border-primary/20 text-primary hover:text-primary">
                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-                 Review Material
+                 {t('reviewMaterial')}
                </Button>
              </div>
              <CrosswordToolbar />
@@ -263,7 +266,7 @@ function StudentWorkflow({ material, courseId }: { material: any, courseId: stri
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-0 sm:p-4 animate-in fade-in duration-200">
           <div className="bg-card rounded-none sm:rounded-3xl w-full h-full sm:h-[90vh] sm:max-w-4xl shadow-2xl relative flex flex-col">
             <div className="flex justify-between items-center p-4 border-b border-border">
-              <h2 className="text-lg font-bold text-foreground">Learning Material</h2>
+              <h2 className="text-lg font-bold text-foreground">{t('learningMaterial')}</h2>
               <button 
                 onClick={() => setIsReviewModalOpen(false)}
                 className="text-muted-foreground hover:text-foreground p-2 rounded-full hover:bg-muted transition-colors"
@@ -283,6 +286,7 @@ function StudentWorkflow({ material, courseId }: { material: any, courseId: stri
 
 // ─── Page ──────────────────────────────────────────────────────────────────────
 export default function LearnPortal() {
+  const { t } = useTranslation('courses');
   const { courseId, id } = useParams<{ courseId: string, id: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -307,11 +311,11 @@ export default function LearnPortal() {
     <div className="flex-1 flex flex-col h-full min-h-0 overflow-hidden w-full max-w-none">
       <div className="shrink-0 p-3 sm:p-4 border-b border-border bg-card/50 flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground z-10 shadow-sm w-full relative">
         <Button onClick={() => navigate(`/courses/${courseId}`)} variant="ghost" size="sm" className="gap-1 sm:gap-2 text-muted-foreground hover:text-foreground sm:mr-4 px-2 sm:px-3 h-8">
-          <ArrowLeft size={16} /> <span className="hidden sm:inline">Back</span>
+          <ArrowLeft size={16} /> <span className="hidden sm:inline">{t('back')}</span>
         </Button>
-        <span className="cursor-pointer hover:text-primary transition-colors font-medium" onClick={() => navigate('/')}>Dashboard</span>
+        <span className="cursor-pointer hover:text-primary transition-colors font-medium" onClick={() => navigate('/')}>{t('dashboardLabel')}</span>
         <span className="text-muted-foreground/50">/</span>
-        <span className="cursor-pointer hover:text-primary transition-colors font-medium" onClick={() => navigate(`/courses/${courseId}`)}>Course</span>
+        <span className="cursor-pointer hover:text-primary transition-colors font-medium" onClick={() => navigate(`/courses/${courseId}`)}>{t('courseLabel')}</span>
         <span className="text-muted-foreground/50">/</span>
         <span className="font-semibold text-foreground truncate max-w-[150px] sm:max-w-[300px]">{material.title}</span>
       </div>

@@ -1,0 +1,1 @@
+<?php require 'vendor/autoload.php'; $app = require_once 'bootstrap/app.php'; $app->make(\Illuminate\Contracts\Console\Kernel::class)->bootstrap(); $svc = app(\App\Services\SubmissionService::class); $sub = $svc->finishReading(4, 2); echo json_encode($sub ? $sub->toArray() : null, JSON_PRETTY_PRINT);

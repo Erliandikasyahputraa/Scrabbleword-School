@@ -4,6 +4,7 @@ import { fetchApi } from '../../lib/api';
 import { X, UserPlus, UserMinus, Search } from 'lucide-react';
 import { Button } from './Button';
 import { Input } from './Input';
+import { useTranslation } from 'react-i18next';
 
 interface StudentAssignmentModalProps {
   isOpen: boolean;
@@ -19,6 +20,7 @@ type Student = {
 };
 
 export function StudentAssignmentModal({ isOpen, onClose, courseId }: StudentAssignmentModalProps) {
+  const { t } = useTranslation('courses');
   const queryClient = useQueryClient();
   const [search, setSearch] = useState('');
 
@@ -56,14 +58,14 @@ export function StudentAssignmentModal({ isOpen, onClose, courseId }: StudentAss
         >
           <X size={24} />
         </button>
-        <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-2 pr-8">Assign Students</h2>
-        <p className="text-sm text-muted-foreground mb-6">Manage which students have access to this course.</p>
+        <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-2 pr-8">{t('assignStudents')}</h2>
+        <p className="text-sm text-muted-foreground mb-6">{t('assignStudentsDesc')}</p>
 
         <div className="relative mb-6">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
           <Input
             type="text"
-            placeholder="Search students by name or email..."
+            placeholder={t('searchStudents')}
             value={search}
             onChange={e => setSearch(e.target.value)}
             className="pl-10 w-full"
@@ -77,7 +79,7 @@ export function StudentAssignmentModal({ isOpen, onClose, courseId }: StudentAss
             </div>
           ) : filteredStudents.length === 0 ? (
             <div className="p-8 text-center text-muted-foreground">
-              No students found.
+              {t('noStudentsFound')}
             </div>
           ) : (
             <div className="divide-y divide-border">
@@ -95,9 +97,9 @@ export function StudentAssignmentModal({ isOpen, onClose, courseId }: StudentAss
                     disabled={toggleEnrollmentMutation.isPending}
                   >
                     {student.is_enrolled ? (
-                      <><UserMinus size={16} /> <span className="hidden sm:inline">Unenroll</span></>
+                      <><UserMinus size={16} /> <span className="hidden sm:inline">{t('unenroll')}</span></>
                     ) : (
-                      <><UserPlus size={16} /> <span className="hidden sm:inline">Enroll</span></>
+                      <><UserPlus size={16} /> <span className="hidden sm:inline">{t('enroll')}</span></>
                     )}
                   </Button>
                 </div>

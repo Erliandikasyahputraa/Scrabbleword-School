@@ -1,5 +1,6 @@
 import { Button } from './Button';
 import { AlertTriangle, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface ConfirmDialogProps {
   isOpen: boolean;
@@ -18,10 +19,14 @@ export function ConfirmDialog({
   onConfirm,
   title,
   description,
-  confirmText = 'Confirm',
-  cancelText = 'Cancel',
+  confirmText,
+  cancelText,
   isDestructive = true,
 }: ConfirmDialogProps) {
+  const { t } = useTranslation('common');
+  const finalConfirmText = confirmText || t('confirm');
+  const finalCancelText = cancelText || t('cancel');
+
   if (!isOpen) return null;
 
   return (
@@ -50,7 +55,7 @@ export function ConfirmDialog({
         
         <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-4 border-t border-border">
           <Button variant="outline" onClick={onClose} className="w-full sm:w-auto">
-            {cancelText}
+            {finalCancelText}
           </Button>
           <Button 
             variant="primary"
@@ -60,7 +65,7 @@ export function ConfirmDialog({
               onClose();
             }}
           >
-            {confirmText}
+            {finalConfirmText}
           </Button>
         </div>
       </div>

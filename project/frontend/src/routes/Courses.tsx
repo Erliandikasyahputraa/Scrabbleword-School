@@ -11,6 +11,7 @@ import { SearchIllustration, DocumentIllustration } from '../components/ui/Illus
 import { SkeletonCard } from '../components/ui/LoadingSystem';
 import { Input, Select } from '../components/ui/Input';
 import { toast } from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 type Course = {
   id: number;
@@ -32,6 +33,7 @@ type PaginatedCourses = {
 };
 
 export default function Courses() {
+  const { t } = useTranslation('courses');
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -79,10 +81,10 @@ export default function Courses() {
       setIsModalOpen(false);
       setNewCourseName('');
       setNewCourseDesc('');
-      toast.success('Course created successfully!');
+      toast.success(t('courseCreated'));
       navigate(`/courses/${res.id}`);
     },
-    onError: (err: any) => toast.error(err.message || 'Failed to create course')
+    onError: (err: any) => toast.error(err.message || t('failedToCreate'))
   });
 
   const handleCreateCourse = (e: React.FormEvent) => {
@@ -100,10 +102,10 @@ export default function Courses() {
         <div className="absolute top-[-20%] right-[-10%] w-64 h-64 bg-white/10 rounded-full blur-3xl z-0" />
         <div className="relative z-10">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight mb-2">
-            {user?.role === 'admin' ? 'All Courses' : user?.role === 'teacher' ? 'Your Courses' : 'Available Courses'}
+            {user?.role === 'admin' ? t('allCourses') : user?.role === 'teacher' ? t('yourCourses') : t('availableCourses')}
           </h2>
           <p className="text-primary-foreground/90 text-sm sm:text-base max-w-xl">
-            {user?.role === 'admin' ? 'Manage all platform courses and curriculums.' : user?.role === 'teacher' ? 'Manage the courses you teach and build materials.' : 'Explore your enrolled courses and continue learning.'}
+            {user?.role === 'admin' ? t('adminDesc') : user?.role === 'teacher' ? t('teacherDesc') : t('studentDesc')}
           </p>
         </div>
         
@@ -114,7 +116,7 @@ export default function Courses() {
               onClick={() => setIsModalOpen(true)}
             >
               <PlusCircle size={20} />
-              Create Course
+              {t('createCourse')}
             </Button>
           </div>
         )}
@@ -129,7 +131,7 @@ export default function Courses() {
           <Input 
             type="text"
             className="pl-10 h-11 w-full"
-            placeholder="Search courses..."
+            placeholder={t('searchCourses')}
             value={search}
             onChange={e => setSearch(e.target.value)}
           />
@@ -141,10 +143,10 @@ export default function Courses() {
               value={statusFilter}
               onChange={e => setStatusFilter(e.target.value)}
             >
-              <option value="">All Statuses</option>
-              <option value="not_started">Not Started</option>
-              <option value="in_progress">In Progress</option>
-              <option value="completed">Completed</option>
+              <option value="">{t('allStatuses')}</option>
+              <option value="not_started">{t('notStarted')}</option>
+              <option value="in_progress">{t('inProgress')}</option>
+              <option value="completed">{t('completed')}</option>
             </Select>
           )}
           <Select 
@@ -152,8 +154,8 @@ export default function Courses() {
             value={sort}
             onChange={e => setSort(e.target.value)}
           >
-            <option value="newest">Newest First</option>
-            <option value="oldest">Oldest First</option>
+            <option value="newest">{t('newestFirst')}</option>
+            <option value="oldest">{t('oldestFirst')}</option>
           </Select>
         </div>
       </div>
@@ -167,24 +169,24 @@ export default function Courses() {
       ) : courses.length === 0 ? (
         <EmptyState 
           icon={search || statusFilter ? <SearchIllustration size={100} /> : <DocumentIllustration size={100} />}
-          title={search || statusFilter ? "No Results Found" : "No Courses Available"}
+          title={search || statusFilter ? t('noResultsFound') : t('noCoursesAvailable')}
           description={
-            search || statusFilter ? "We couldn't find any courses matching your filters. Try adjusting your search." :
+            search || statusFilter ? t('noResultsDesc') :
             (user?.role === 'teacher' || user?.role === 'admin' 
-            ? "You haven't created any courses yet. Get started by creating your first course!" 
-            : "You are not enrolled in any courses yet. Please wait for your instructor to assign you to a course.")
+            ? t('noCoursesTeacherDesc') 
+            : t('noCoursesStudentDesc'))
           }
           action={
             (user?.role === 'teacher' || user?.role === 'admin') && !search && !statusFilter && (
               <Button variant="primary" className="gap-2" onClick={() => setIsModalOpen(true)}>
                 <PlusCircle size={20} />
-                Create Course
+                {t('createCourse')}
               </Button>
             )
           }
           secondaryHelp={
              (user?.role === 'teacher' || user?.role === 'admin') && !search && !statusFilter 
-             ? "Courses are the main containers for your reading materials and crosswords." 
+             ? t('teacherHelp') 
              : undefined
           }
         />
@@ -196,7 +198,7 @@ export default function Courses() {
                 key={course.id}
                 id={course.id}
                 title={course.name}
-                description={course.description || "No description provided."}
+                description={course.description || t('noDescription')}
                 materialCount={course.materials_count || 0}
                 progress={course.progress}
                 completionRate={course.completion_rate}
@@ -215,10 +217,10 @@ export default function Courses() {
                  disabled={page === 1}
                  onClick={() => setPage(p => Math.max(1, p - 1))}
                >
-                 Previous
+                 {t('previous')}
                </Button>
                <span className="text-sm font-medium text-muted-foreground px-4">
-                 Page {page} of {data.last_page}
+                 {t('page', { current: page, total: data.last_page })}
                </span>
                <Button 
                  variant="secondary" 
@@ -226,7 +228,7 @@ export default function Courses() {
                  disabled={page === data.last_page}
                  onClick={() => setPage(p => Math.min(data.last_page, p + 1))}
                >
-                 Next
+                 {t('next')}
                </Button>
             </div>
           )}
@@ -243,30 +245,30 @@ export default function Courses() {
             >
               <X size={24} />
             </button>
-            <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-6">Create New Course</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-6">{t('createNewCourse')}</h2>
             <form onSubmit={handleCreateCourse} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-foreground mb-1">Course Name</label>
+                <label className="block text-sm font-medium text-foreground mb-1">{t('courseName')}</label>
                 <Input
                   type="text"
                   required
                   value={newCourseName}
                   onChange={e => setNewCourseName(e.target.value)}
-                  placeholder="e.g. Advanced English Grammar"
+                  placeholder={t('courseNamePlaceholder')}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-foreground mb-1">Description</label>
+                <label className="block text-sm font-medium text-foreground mb-1">{t('description')}</label>
                 <textarea
                   value={newCourseDesc}
                   onChange={e => setNewCourseDesc(e.target.value)}
                   className="flex w-full rounded-xl border border-input bg-background px-3 py-2 text-sm text-foreground ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 transition-all resize-none min-h-[100px]"
                   rows={4}
-                  placeholder="What will students learn in this course?"
+                  placeholder={t('descriptionPlaceholder')}
                 />
               </div>
               <Button type="submit" fullWidth disabled={createCourseMutation.isPending} className="h-12 mt-4">
-                {createCourseMutation.isPending ? 'Creating...' : 'Create Course'}
+                {createCourseMutation.isPending ? t('creating') : t('createCourse')}
               </Button>
             </form>
           </div>

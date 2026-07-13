@@ -3,8 +3,10 @@ import { useCrossword } from '../../hooks/useCrossword';
 import type { CrosswordClue } from '../../types/crossword';
 import { Button } from '../ui/Button';
 import { X, List } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export function CrosswordClues() {
+  const { t } = useTranslation('courses');
   const { data, activeWord, handleCellClick, currentDirection } = useCrossword();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -56,16 +58,16 @@ export function CrosswordClues() {
         <div className="flex justify-between items-center mb-2">
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold text-primary uppercase tracking-wider bg-primary/10 px-2 py-1 rounded-md">
-              {currentDirection}
+              {currentDirection === 'across' ? t('across') : t('down')}
             </span>
             {activeClueObj && (
               <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                Word {activeClueObj.number}
+                {t('wordLabel')} {activeClueObj.number}
               </span>
             )}
           </div>
           <Button variant="ghost" size="sm" onClick={() => setIsModalOpen(true)} className="gap-2 text-muted-foreground hover:text-foreground">
-            <List size={16} /> <span className="hidden sm:inline">All Questions</span>
+            <List size={16} /> <span className="hidden sm:inline">{t('allQuestions')}</span>
           </Button>
         </div>
         
@@ -74,7 +76,7 @@ export function CrosswordClues() {
             {activeClueObj.clue}
           </p>
         ) : (
-          <p className="text-base text-muted-foreground italic mt-2">Select a cell to view clue</p>
+          <p className="text-base text-muted-foreground italic mt-2">{t('selectCellToViewClue')}</p>
         )}
       </div>
 
@@ -89,11 +91,11 @@ export function CrosswordClues() {
               <X size={24} />
             </button>
             <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-6 pr-8">
-              All Questions
+              {t('allQuestions')}
             </h2>
             <div className="flex flex-col sm:flex-row gap-6 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-800 p-4 sm:p-5">
-              <ClueList title="Across" clues={acrossClues} />
-              <ClueList title="Down" clues={downClues} />
+              <ClueList title={t('across')} clues={acrossClues} />
+              <ClueList title={t('down')} clues={downClues} />
             </div>
           </div>
         </div>

@@ -17,6 +17,7 @@ import { CourseFormModal } from '../components/ui/CourseFormModal';
 import { StudentAssignmentModal } from '../components/ui/StudentAssignmentModal';
 import { ConfirmDialog } from '../components/ui/ConfirmDialog';
 import { toast } from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 type Material = {
   id: number;
@@ -44,6 +45,7 @@ type CourseDetail = {
 };
 
 export default function CourseDetail() {
+  const { t } = useTranslation('courses');
   const { id } = useParams();
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -74,19 +76,19 @@ export default function CourseDetail() {
   const deleteMaterialMutation = useMutation({
     mutationFn: (materialId: number) => fetchApi(`/courses/${id}/materials/${materialId}`, { method: 'DELETE' }),
     onSuccess: () => {
-      toast.success('Material deleted successfully');
+      toast.success(t('materialDeleted'));
       queryClient.invalidateQueries({ queryKey: ['course', id] });
     },
-    onError: (err: any) => toast.error(err.message || 'Failed to delete material')
+    onError: (err: any) => toast.error(err.message || t('failedToDeleteMaterial'))
   });
 
   const deleteCourseMutation = useMutation({
     mutationFn: () => fetchApi(`/courses/${id}`, { method: 'DELETE' }),
     onSuccess: () => {
-      toast.success('Course deleted successfully');
+      toast.success(t('courseDeleted'));
       navigate('/courses');
     },
-    onError: (err: any) => toast.error(err.message || 'Failed to delete course')
+    onError: (err: any) => toast.error(err.message || t('failedToDeleteCourse'))
   });
 
   const handleEditMaterial = (material: Material) => {
@@ -97,8 +99,8 @@ export default function CourseDetail() {
   const handleDeleteMaterial = (materialId: number) => {
     setConfirmDialog({
       isOpen: true,
-      title: 'Delete Material',
-      description: 'Are you sure you want to delete this material? This action cannot be undone.',
+      title: t('deleteMaterial'),
+      description: t('deleteMaterialDesc'),
       onConfirm: () => deleteMaterialMutation.mutate(materialId)
     });
   };
@@ -106,8 +108,8 @@ export default function CourseDetail() {
   const handleDeleteCourse = () => {
     setConfirmDialog({
       isOpen: true,
-      title: 'Delete Course',
-      description: 'Are you sure you want to delete this ENTIRE course? All materials and student progress will be lost forever.',
+      title: t('deleteCourse'),
+      description: t('deleteCourseDesc'),
       onConfirm: () => deleteCourseMutation.mutate()
     });
   };
@@ -136,13 +138,13 @@ export default function CourseDetail() {
           className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors"
         >
           <ArrowLeft size={18} />
-          Back to Courses
+          {t('backToCourses')}
         </Link>
         {isOwnerOrAdmin && (
           <div className="flex flex-col sm:flex-row flex-wrap gap-2 w-full sm:w-auto">
-            <Button variant="outline" size="sm" onClick={() => setIsAssignmentModalOpen(true)} className="w-full sm:w-auto">Assign Students</Button>
-            <Button variant="outline" size="sm" onClick={() => setIsCourseModalOpen(true)} className="w-full sm:w-auto">Edit Course</Button>
-            <Button variant="outline" size="sm" className="w-full sm:w-auto text-destructive border-destructive hover:bg-destructive/10" onClick={handleDeleteCourse}>Delete Course</Button>
+            <Button variant="outline" size="sm" onClick={() => setIsAssignmentModalOpen(true)} className="w-full sm:w-auto">{t('assignStudents')}</Button>
+            <Button variant="outline" size="sm" onClick={() => setIsCourseModalOpen(true)} className="w-full sm:w-auto">{t('editCourse')}</Button>
+            <Button variant="outline" size="sm" className="w-full sm:w-auto text-destructive border-destructive hover:bg-destructive/10" onClick={handleDeleteCourse}>{t('deleteCourse')}</Button>
           </div>
         )}
       </div>
@@ -153,11 +155,11 @@ export default function CourseDetail() {
         
         <div className="flex-1 space-y-4 w-full relative z-10">
           <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm font-medium text-primary-foreground/80 mb-2">
-            <span className="flex items-center gap-1"><Clock size={16} /> Self-Paced</span>
+            <span className="flex items-center gap-1"><Clock size={16} /> {t('selfPaced')}</span>
             <span className="hidden sm:inline">•</span>
-            <span className="flex items-center gap-1"><BarChart size={16} /> All Levels</span>
+            <span className="flex items-center gap-1"><BarChart size={16} /> {t('allLevels')}</span>
             <span className="hidden sm:inline">•</span>
-            <span className="flex items-center gap-1"><Award size={16} /> Auto-Scored</span>
+            <span className="flex items-center gap-1"><Award size={16} /> {t('autoScored')}</span>
           </div>
           
           <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">
@@ -165,7 +167,7 @@ export default function CourseDetail() {
           </h1>
           
           <p className="text-primary-foreground/90 text-base sm:text-lg leading-relaxed max-w-2xl">
-            {course.description || "No description available for this course."}
+            {course.description || t('noDescriptionCourse')}
           </p>
 
           <div className="pt-4 flex items-center gap-4">
@@ -174,9 +176,9 @@ export default function CourseDetail() {
             </div>
             <div>
               <p className="text-sm font-semibold">
-                {course.teacher_name || 'Instructor'}
+                {course.teacher_name || t('instructor')}
               </p>
-              <p className="text-xs text-primary-foreground/80">Course Instructor</p>
+              <p className="text-xs text-primary-foreground/80">{t('courseInstructor')}</p>
             </div>
           </div>
         </div>
@@ -186,23 +188,23 @@ export default function CourseDetail() {
             <div className="col-span-2 lg:col-span-4 mb-1">
               <h3 className="font-semibold flex items-center gap-2 text-sm sm:text-base">
                 <BarChart size={18} />
-                Course Analytics
+                {t('courseAnalytics')}
               </h3>
             </div>
             <div className="bg-white/20 p-3 rounded-xl shadow-sm border border-white/10 flex flex-col justify-center">
-              <span className="text-xs font-medium mb-1 opacity-90">Enrolled</span>
+              <span className="text-xs font-medium mb-1 opacity-90">{t('enrolled')}</span>
               <span className="text-xl sm:text-2xl font-bold">{course.analytics.students_enrolled}</span>
             </div>
             <div className="bg-white/20 p-3 rounded-xl shadow-sm border border-white/10 flex flex-col justify-center">
-              <span className="text-xs font-medium mb-1 opacity-90">Completed</span>
+              <span className="text-xs font-medium mb-1 opacity-90">{t('completed')}</span>
               <span className="text-xl sm:text-2xl font-bold">{course.analytics.students_completed}</span>
             </div>
             <div className="bg-white/20 p-3 rounded-xl shadow-sm border border-white/10 flex flex-col justify-center">
-              <span className="text-xs font-medium mb-1 opacity-90">Avg Score</span>
+              <span className="text-xs font-medium mb-1 opacity-90">{t('avgScore')}</span>
               <span className="text-xl sm:text-2xl font-bold">{course.analytics.average_score}</span>
             </div>
             <div className="bg-white/20 p-3 rounded-xl shadow-sm border border-white/10 flex flex-col justify-center">
-              <span className="text-xs font-medium mb-1 opacity-90">Rate</span>
+              <span className="text-xs font-medium mb-1 opacity-90">{t('rate')}</span>
               <span className="text-xl sm:text-2xl font-bold">{course.analytics.completion_rate}%</span>
             </div>
           </div>
@@ -227,19 +229,19 @@ export default function CourseDetail() {
                 <span className="absolute inset-0 flex items-center justify-center text-lg font-bold">{course.progress || 0}%</span>
               </div>
             </div>
-            <p className="text-sm font-medium opacity-90">Course Progress</p>
-            <Button fullWidth className="bg-white text-primary hover:bg-white/90">Resume Course</Button>
+            <p className="text-sm font-medium opacity-90">{t('courseProgress')}</p>
+            <Button fullWidth className="bg-white text-primary hover:bg-white/90">{t('resumeCourse')}</Button>
           </div>
         )}
       </div>
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 sm:mb-6 mt-8 sm:mt-12">
         <h2 className="text-xl sm:text-2xl font-bold text-foreground">
-          Course Syllabus
+          {t('courseSyllabus')}
         </h2>
         {isOwnerOrAdmin && (
           <Button variant="secondary" size="sm" onClick={() => { setEditingMaterial(null); setIsMaterialModalOpen(true); }} className="w-full sm:w-auto">
-            Add Material
+            {t('addMaterial')}
           </Button>
         )}
       </div>
@@ -249,22 +251,22 @@ export default function CourseDetail() {
         {course.materials.length === 0 ? (
           <EmptyState
             icon={<DocumentIllustration size={100} />}
-            title="No Materials Yet"
+            title={t('noMaterialsYet')}
             description={
               isOwnerOrAdmin 
-                ? "Get started by adding a PDF guide or an interactive crossword puzzle for your students." 
-                : "The instructor hasn't added any learning materials to this course yet. Check back later!"
+                ? t('noMaterialsTeacherDesc') 
+                : t('noMaterialsStudentDesc')
             }
             action={
               isOwnerOrAdmin && (
                 <Button variant="primary" onClick={() => { setEditingMaterial(null); setIsMaterialModalOpen(true); }}>
-                  Add First Material
+                  {t('addFirstMaterial')}
                 </Button>
               )
             }
             secondaryHelp={
               isOwnerOrAdmin 
-                ? "Students will be notified when you publish new materials."
+                ? t('teacherMaterialHelp')
                 : undefined
             }
           />
@@ -287,11 +289,11 @@ export default function CourseDetail() {
                 </div>
                 <div>
                   <h3 className="text-base sm:text-lg font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2 break-words">
-                    Chapter {index + 1} &bull; {material.title}
+                    {t('chapterTitle', { index: index + 1, title: material.title })}
                   </h3>
                   <p className="text-xs sm:text-sm text-muted-foreground mt-1 max-w-xl">
-                    {material.pdf_path ? "Read the PDF guide" : "Review the material"} 
-                    {material.crossword_data ? " and solve the interactive crossword puzzle to test your knowledge." : "."}
+                    {material.pdf_path ? t('readPdfGuide') : t('reviewMaterial')} 
+                    {material.crossword_data ? t('andSolveCrossword') : t('dot')}
                   </p>
                 </div>
               </div>
@@ -299,14 +301,14 @@ export default function CourseDetail() {
               <div className="flex flex-col sm:flex-row gap-2 mt-2 sm:mt-0 w-full sm:w-auto shrink-0">
                 {isOwnerOrAdmin && (
                   <div className="flex gap-2 w-full sm:w-auto">
-                    <Button variant="secondary" size="sm" onClick={() => handleEditMaterial(material)} className="flex-1 sm:flex-none">Edit</Button>
-                    <Button variant="ghost" size="sm" className="flex-1 sm:flex-none text-destructive hover:bg-destructive/10 hover:text-destructive" onClick={() => handleDeleteMaterial(material.id)}>Delete</Button>
+                    <Button variant="secondary" size="sm" onClick={() => handleEditMaterial(material)} className="flex-1 sm:flex-none">{t('edit')}</Button>
+                    <Button variant="ghost" size="sm" className="flex-1 sm:flex-none text-destructive hover:bg-destructive/10 hover:text-destructive" onClick={() => handleDeleteMaterial(material.id)}>{t('delete')}</Button>
                   </div>
                 )}
                 <Link to={`/courses/${id}/materials/${material.id}`} className="block w-full sm:w-auto">
                   <Button variant="primary" className="w-full sm:w-auto gap-2">
                     <PlayCircle size={18} />
-                    Start Module
+                    {t('startModule')}
                   </Button>
                 </Link>
               </div>
@@ -356,6 +358,7 @@ export default function CourseDetail() {
 }
 
 function CourseMonitoringDashboard({ courseId, materials }: { courseId: number, materials: Material[] }) {
+  const { t } = useTranslation('courses');
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState('newest');
   const [materialFilter, setMaterialFilter] = useState('all');
@@ -381,34 +384,34 @@ function CourseMonitoringDashboard({ courseId, materials }: { courseId: number, 
     <div className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden">
       <div className="p-4 sm:p-6 border-b border-border flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-foreground">Student Monitoring Dashboard</h2>
-          <p className="text-sm text-muted-foreground mt-1">Track student progress and submissions in real-time.</p>
+          <h2 className="text-xl font-bold text-foreground">{t('studentMonitoringDashboard')}</h2>
+          <p className="text-sm text-muted-foreground mt-1">{t('trackStudentProgress')}</p>
         </div>
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
           <div className="flex flex-col">
-            <span className="text-xs text-muted-foreground font-medium mb-1">Sort</span>
+            <span className="text-xs text-muted-foreground font-medium mb-1">{t('sort')}</span>
             <Select 
               className="h-10 text-sm py-1 w-full sm:w-auto"
               value={sort}
               onChange={e => { setSort(e.target.value); setPage(1); }}
             >
-              <option value="newest">Newest First</option>
-              <option value="oldest">Oldest First</option>
-              <option value="score_high">Highest Score</option>
-              <option value="score_low">Lowest Score</option>
+              <option value="newest">{t('newestFirst')}</option>
+              <option value="oldest">{t('oldestFirst')}</option>
+              <option value="score_high">{t('highestScore')}</option>
+              <option value="score_low">{t('lowestScore')}</option>
             </Select>
           </div>
           <div className="flex flex-col">
-            <span className="text-xs text-muted-foreground font-medium mb-1">Material</span>
+            <span className="text-xs text-muted-foreground font-medium mb-1">{t('material')}</span>
             <Select 
               className="h-10 text-sm py-1 w-full sm:w-auto"
               value={materialFilter}
               onChange={e => { setMaterialFilter(e.target.value); setPage(1); }}
             >
-              <option value="all">All Materials</option>
+              <option value="all">{t('allMaterials')}</option>
               {materials.map((mat, idx) => (
                 <option key={mat.id} value={mat.id}>
-                  Chapter {idx + 1}: {mat.title}
+                  {t('chapterOptionTitle', { index: idx + 1, title: mat.title })}
                 </option>
               ))}
             </Select>
@@ -421,19 +424,19 @@ function CourseMonitoringDashboard({ courseId, materials }: { courseId: number, 
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Student</TableHead>
-              <TableHead>Material</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Submission Date</TableHead>
-              <TableHead className="text-center">Score</TableHead>
-              <TableHead className="text-right">Time Spent</TableHead>
+              <TableHead>{t('student')}</TableHead>
+              <TableHead>{t('material')}</TableHead>
+              <TableHead>{t('status')}</TableHead>
+              <TableHead>{t('submissionDate')}</TableHead>
+              <TableHead className="text-center">{t('score')}</TableHead>
+              <TableHead className="text-right">{t('timeSpent')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading ? (
-              <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">Loading data...</TableCell></TableRow>
+              <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">{t('loadingData')}</TableCell></TableRow>
             ) : data?.data?.length === 0 ? (
-              <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">No student progress recorded yet.</TableCell></TableRow>
+              <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">{t('noStudentProgress')}</TableCell></TableRow>
             ) : (
               data?.data?.map((sub: any) => (
                 <TableRow key={sub.id}>
@@ -468,9 +471,9 @@ function CourseMonitoringDashboard({ courseId, materials }: { courseId: number, 
       {/* Mobile Card List View */}
       <div className="block md:hidden divide-y divide-border">
         {isLoading ? (
-          <div className="text-center text-muted-foreground py-8">Loading data...</div>
+          <div className="text-center text-muted-foreground py-8">{t('loadingData')}</div>
         ) : data?.data?.length === 0 ? (
-          <div className="text-center text-muted-foreground py-8">No student progress recorded yet.</div>
+          <div className="text-center text-muted-foreground py-8">{t('noStudentProgress')}</div>
         ) : (
           data?.data?.map((sub: any) => (
             <div key={sub.id} className="p-4 space-y-3 hover:bg-muted/30 transition-colors">
@@ -490,15 +493,15 @@ function CourseMonitoringDashboard({ courseId, materials }: { courseId: number, 
               <div className="text-sm font-medium text-foreground truncate">{sub.material?.title}</div>
               <div className="bg-muted rounded-lg p-3 grid grid-cols-2 gap-2 text-xs">
                 <div>
-                  <span className="text-muted-foreground block mb-1">Score</span>
+                  <span className="text-muted-foreground block mb-1">{t('score')}</span>
                   <span className="font-bold text-foreground text-sm">{sub.score}</span>
                 </div>
                 <div>
-                  <span className="text-muted-foreground block mb-1">Time Spent</span>
+                  <span className="text-muted-foreground block mb-1">{t('timeSpent')}</span>
                   <span className="font-semibold text-foreground">{formatTime(sub.time_spent_seconds)}</span>
                 </div>
                 <div className="col-span-2 mt-1">
-                  <span className="text-muted-foreground">Date: </span>
+                  <span className="text-muted-foreground">{t('dateLabel')}</span>
                   <span className="font-medium text-foreground">{formatDate(sub.submitted_at)}</span>
                 </div>
               </div>
@@ -509,9 +512,9 @@ function CourseMonitoringDashboard({ courseId, materials }: { courseId: number, 
 
       {data && data.last_page > 1 && (
         <div className="flex flex-col sm:flex-row justify-center items-center p-4 gap-4 border-t border-border">
-          <Button variant="secondary" size="sm" className="w-full sm:w-auto" disabled={page === 1} onClick={() => setPage(p => Math.max(1, p - 1))}>Previous</Button>
-          <span className="text-sm font-medium text-muted-foreground">Page {page} of {data.last_page}</span>
-          <Button variant="secondary" size="sm" className="w-full sm:w-auto" disabled={page === data.last_page} onClick={() => setPage(p => Math.min(data.last_page, p + 1))}>Next</Button>
+          <Button variant="secondary" size="sm" className="w-full sm:w-auto" disabled={page === 1} onClick={() => setPage(p => Math.max(1, p - 1))}>{t('previous')}</Button>
+          <span className="text-sm font-medium text-muted-foreground">{t('page', { current: page, total: data.last_page })}</span>
+          <Button variant="secondary" size="sm" className="w-full sm:w-auto" disabled={page === data.last_page} onClick={() => setPage(p => Math.min(data.last_page, p + 1))}>{t('next')}</Button>
         </div>
       )}
     </div>
