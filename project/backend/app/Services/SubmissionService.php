@@ -43,7 +43,18 @@ class SubmissionService
             ->where('material_id', $materialId)
             ->first();
 
-        if ($submission && $submission->reading_finished_at === null) {
+        if (!$submission) {
+            return Submission::create([
+                'student_id' => $studentId,
+                'material_id' => $materialId,
+                'started_at' => Carbon::now(),
+                'reading_finished_at' => Carbon::now(),
+                'is_completed' => false,
+                'score' => 0
+            ]);
+        }
+
+        if ($submission->reading_finished_at === null) {
             $submission->update(['reading_finished_at' => Carbon::now()]);
         }
 
