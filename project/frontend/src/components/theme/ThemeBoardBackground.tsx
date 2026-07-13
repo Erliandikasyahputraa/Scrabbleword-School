@@ -13,7 +13,7 @@ export function ThemeBoardBackground() {
       <div 
         className="absolute inset-0 w-full h-full"
         style={{
-          backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.82)), url(${activeTheme.image})`,
+          backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0.68)), url(${activeTheme.image})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
