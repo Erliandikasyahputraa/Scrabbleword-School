@@ -18,14 +18,12 @@ export function CrosswordBoard() {
   }, [isSubmitted]);
 
   return (
-    <div className="w-full flex justify-center items-center p-2 sm:p-4">
+    <div className="w-full h-full flex justify-center items-center">
       <div
         ref={boardRef}
         className={`relative flex justify-center items-center w-full max-w-full focus:outline-none focus:ring-4 focus:ring-primary/30 rounded-xl overflow-hidden shadow-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 ${isSubmitted ? 'opacity-80 pointer-events-none' : ''} @container`}
         style={{ 
-          aspectRatio: `${data.grid.cols} / ${data.grid.rows}`,
-          // Optional: limit max height dynamically so it doesn't outgrow the viewport
-          maxHeight: 'calc(100vh - 200px)' 
+          aspectRatio: `${data.grid.cols} / ${data.grid.rows}`
         }}
         tabIndex={0}
         onKeyDown={handleKeyDown}

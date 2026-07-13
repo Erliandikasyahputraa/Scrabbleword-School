@@ -245,11 +245,11 @@ export default function LearnPortal() {
         <span className="font-semibold text-foreground truncate max-w-[150px] sm:max-w-[300px]">{material.title}</span>
       </div>
       
-      {/* Changed layout from 50/50 split to a 5/7 split prioritizing the Crossword board */}
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 sm:gap-8 flex-1 animate-in fade-in duration-500">
+      {/* Layout Ownership: Flex layout, PDF gets fixed width, Board gets remaining space */}
+      <div className="flex flex-col xl:flex-row gap-6 sm:gap-8 flex-1 min-h-0 min-w-0 animate-in fade-in duration-500">
         
-        {/* Left Column: PDF Viewer */}
-        <Card className={`flex flex-col border-border shadow-md xl:col-span-5 ${isPdfCompleted && !isTeacherOrAdmin ? 'hidden xl:flex' : 'flex'}`}>
+        {/* Left Column: PDF Viewer (Fixed Width on Desktop) */}
+        <Card className={`flex flex-col border-border shadow-md min-h-0 min-w-0 shrink-0 xl:w-[450px] ${isPdfCompleted && !isTeacherOrAdmin ? 'hidden xl:flex' : 'flex'}`}>
           <CardHeader className="flex flex-row items-center justify-between py-4 border-b border-border/50 bg-muted/30">
             <CardTitle className="text-base sm:text-lg">Learning Material</CardTitle>
             <div className="flex gap-2">
@@ -270,9 +270,9 @@ export default function LearnPortal() {
           </CardContent>
         </Card>
 
-        {/* Right Column: Crossword — role-gated */}
-        <div className="xl:sticky xl:top-6 self-start xl:col-span-7">
-          <Card className="flex flex-col border-border shadow-md overflow-hidden">
+        {/* Right Column: Crossword — role-gated (Flex-1 takes remaining space) */}
+        <div className="xl:sticky xl:top-6 self-start flex-1 min-w-0 min-h-0 w-full">
+          <Card className="flex flex-col border-border shadow-md overflow-hidden min-h-0 min-w-0 w-full">
             <CardHeader className="py-4 border-b border-border/50 bg-muted/30 flex flex-row items-center justify-between">
               <CardTitle className="text-base sm:text-lg">
                 {isTeacherOrAdmin ? 'Student Submissions' : 'Crossword Puzzle'}
