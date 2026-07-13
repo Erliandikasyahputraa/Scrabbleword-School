@@ -48,7 +48,7 @@ export default function Login() {
   };
 
   return (
-    <div className="w-full max-w-[760px] flex flex-col items-center">
+    <div className="w-full max-w-[600px] flex flex-col items-center">
       <div className="flex flex-col items-center mb-8 text-center">
         <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
           Welcome back
@@ -58,7 +58,7 @@ export default function Login() {
         </p>
       </div>
 
-      <div className="w-full bg-white/70 dark:bg-slate-900/50 backdrop-blur-xl border border-slate-200/60 dark:border-slate-800/60 shadow-[0_8px_40px_rgb(0,0,0,0.06)] dark:shadow-[0_8px_40px_rgb(0,0,0,0.3)] rounded-[24px] sm:rounded-[32px] p-6 sm:p-10 lg:p-12 relative overflow-hidden transition-all hover:shadow-[0_16px_60px_rgb(0,0,0,0.08)] dark:hover:shadow-[0_16px_60px_rgb(0,0,0,0.4)]">
+      <div className="w-full bg-white/70 dark:bg-slate-900/50 backdrop-blur-xl border border-slate-200/60 dark:border-slate-800/60 shadow-[0_8px_40px_rgb(0,0,0,0.06)] dark:shadow-[0_8px_40px_rgb(0,0,0,0.3)] rounded-[24px] sm:rounded-[32px] p-6 sm:p-8 lg:p-10 relative overflow-hidden transition-all hover:shadow-[0_16px_60px_rgb(0,0,0,0.08)] dark:hover:shadow-[0_16px_60px_rgb(0,0,0,0.4)]">
         
         {/* Decorative subtle light beam */}
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
@@ -69,7 +69,7 @@ export default function Login() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="max-w-[420px] mx-auto space-y-5">
+        <form onSubmit={handleSubmit} className="w-full space-y-5">
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Email Address</label>
             <input
