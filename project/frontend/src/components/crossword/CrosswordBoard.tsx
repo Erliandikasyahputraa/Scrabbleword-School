@@ -23,8 +23,8 @@ export function CrosswordBoard() {
         ref={boardRef}
         className={`relative box-content flex justify-center items-center focus:outline-none focus:ring-4 focus:ring-primary/30 rounded-xl overflow-hidden shadow-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 ${isSubmitted ? 'opacity-80 pointer-events-none' : ''}`}
         style={{ 
-          // 1. Define internal padding based on container size using cqw (mobile ~16px, tablet ~32px, desktop ~48-64px)
-          '--board-padding': 'clamp(16px, 4cqw, 64px)',
+          // 1. Define internal padding based on container size using cqw (mobile ~20px, tablet ~40px, desktop ~64-80px)
+          '--board-padding': 'clamp(20px, 6cqw, 80px)',
           padding: 'var(--board-padding)',
           
           // 2. Available width for the actual grid (container width - 2 * padding)
@@ -36,8 +36,8 @@ export function CrosswordBoard() {
           '--max-cell-h': `calc(var(--avail-h) / ${data.grid.rows})`,
           
           // 4. Take the minimum of the two to maintain aspect ratio perfectly
-          // 5. Clamp between 32px and 64px for visual ergonomics
-          '--cell-size': `clamp(32px, min(var(--max-cell-w), var(--max-cell-h)), 64px)`,
+          // 5. Clamp between 32px and 54px for visual ergonomics (reduced from 64px for ~15% lighter feel)
+          '--cell-size': `clamp(32px, min(var(--max-cell-w), var(--max-cell-h)), 54px)`,
           
           // 6. Set grid dimensions natively (box-content makes this apply only to the grid, not the padding)
           width: `calc(var(--cell-size) * ${data.grid.cols})`,
