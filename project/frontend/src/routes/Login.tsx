@@ -49,20 +49,20 @@ export default function Login() {
   };
 
   return (
-    <div className="w-full w-full max-w-[420px] mx-auto animate-in fade-in duration-500 slide-in-from-bottom-4">
-      <div className="flex flex-col items-center mb-8">
-        <Logo size={40} className="mb-6 text-primary" />
-        <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">
+    <div className="w-full max-w-[520px] animate-in fade-in duration-500 slide-in-from-bottom-4">
+      <div className="flex flex-col items-center mb-10">
+        <Logo size={44} className="mb-6 text-primary lg:hidden" />
+        <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-foreground">
           Welcome back
         </h1>
-        <p className="text-sm text-muted-foreground mt-2">
+        <p className="text-base text-muted-foreground mt-3">
           Enter your credentials to access your account
         </p>
       </div>
 
-      <div className="bg-card/80 backdrop-blur-xl border border-border/50 shadow-2xl shadow-black/5 rounded-2xl p-6 sm:p-8">
+      <div className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-800/60 shadow-[0_8px_40px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_40px_rgb(0,0,0,0.2)] rounded-[2rem] p-8 sm:p-12 relative overflow-hidden">
         {error && (
-          <div className="mb-6 p-3 bg-destructive/10 text-destructive rounded-lg text-sm font-medium border border-destructive/20 flex items-center justify-center animate-in fade-in zoom-in-95">
+          <div className="mb-6 p-4 bg-destructive/10 text-destructive rounded-xl text-sm font-medium border border-destructive/20 flex items-center justify-center animate-in fade-in zoom-in-95">
             {error}
           </div>
         )}
