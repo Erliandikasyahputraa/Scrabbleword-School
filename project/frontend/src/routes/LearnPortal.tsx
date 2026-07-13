@@ -240,10 +240,8 @@ function StudentWorkflow({ material, courseId }: { material: any, courseId: stri
           <div className="flex-1 flex flex-col lg:flex-row min-h-0 overflow-hidden w-full bg-muted/5 relative">
             {/* Board Area */}
             <div className="flex-1 flex flex-col relative overflow-hidden bg-transparent border-b lg:border-b-0 lg:border-r border-border/50 min-h-[45vh] lg:min-h-0">
-               <div className="flex-1 overflow-auto custom-scrollbar flex items-center justify-center relative w-full h-full p-2 sm:p-6 lg:p-10">
-                  <div className="w-full max-w-4xl h-full flex items-center justify-center relative">
-                    <CrosswordBoard />
-                  </div>
+               <div className="flex-1 overflow-auto custom-scrollbar grid place-items-center relative w-full h-full p-4 md:p-8 lg:p-12 xl:p-16">
+                  <CrosswordBoard />
                </div>
             </div>
 

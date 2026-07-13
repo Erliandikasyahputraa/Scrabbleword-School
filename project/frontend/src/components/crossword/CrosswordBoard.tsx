@@ -18,13 +18,21 @@ export function CrosswordBoard() {
   }, [isSubmitted]);
 
   return (
-    <div className="w-full h-full flex justify-center items-center">
+    <div className="w-full h-full flex justify-center items-center @container/board">
       <div
         ref={boardRef}
-        className={`relative flex justify-center items-center w-full max-w-full focus:outline-none focus:ring-4 focus:ring-primary/30 rounded-xl overflow-hidden shadow-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 ${isSubmitted ? 'opacity-80 pointer-events-none' : ''} @container`}
+        className={`relative flex justify-center items-center focus:outline-none focus:ring-4 focus:ring-primary/30 rounded-xl overflow-hidden shadow-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 ${isSubmitted ? 'opacity-80 pointer-events-none' : ''}`}
         style={{ 
-          aspectRatio: `${data.grid.cols} / ${data.grid.rows}`
-        }}
+          // Pure CSS sizing algorithm:
+          // 1. Calculate max cell width and height that would fit the container
+          // 2. Take the minimum of the two to maintain aspect ratio perfectly
+          // 3. Clamp between 32px and 64px for visual ergonomics
+          '--max-cell-w': `calc(100cqw / ${data.grid.cols})`,
+          '--max-cell-h': `calc(100cqh / ${data.grid.rows})`,
+          '--cell-size': `clamp(32px, min(var(--max-cell-w), var(--max-cell-h)), 64px)`,
+          width: `calc(var(--cell-size) * ${data.grid.cols})`,
+          height: `calc(var(--cell-size) * ${data.grid.rows})`
+        } as React.CSSProperties}
         tabIndex={0}
         onKeyDown={handleKeyDown}
         aria-label="Crossword Puzzle Board"
@@ -42,8 +50,8 @@ export function CrosswordBoard() {
           className={`relative w-full h-full`}
           style={{
             display: 'grid',
-            gridTemplateColumns: `repeat(${data.grid.cols}, minmax(0, 1fr))`,
-            gridTemplateRows: `repeat(${data.grid.rows}, minmax(0, 1fr))`
+            gridTemplateColumns: `repeat(${data.grid.cols}, 1fr)`,
+            gridTemplateRows: `repeat(${data.grid.rows}, 1fr)`
           }}
         >
           {Array.from({ length: data.grid.rows }).map((_, rowIndex) => (
