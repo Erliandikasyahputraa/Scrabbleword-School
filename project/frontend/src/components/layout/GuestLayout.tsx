@@ -1,7 +1,6 @@
-import { Outlet, Navigate } from "react-router-dom"
+import { Outlet, Navigate, Link } from "react-router-dom"
 import { useAuth } from "../../providers/AuthProvider"
 import { ThemeToggle } from "../ui/ThemeToggle"
-import { AppThemeBackgroundLayer } from "../crossword/AppThemeBackgroundLayer"
 import { Logo } from "../ui/Logo"
 
 export function GuestLayout() {
@@ -9,7 +8,7 @@ export function GuestLayout() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
         <span className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></span>
       </div>
     )
@@ -20,41 +19,31 @@ export function GuestLayout() {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen bg-background relative overflow-hidden transition-colors duration-500">
-      <AppThemeBackgroundLayer />
+    <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950 relative overflow-hidden transition-colors duration-500 font-sans selection:bg-primary/20">
       
-      {/* Theme Toggle */}
-      <div className="absolute top-6 right-6 lg:top-8 lg:right-8 z-50 flex items-center gap-4">
-        <ThemeToggle />
+      {/* Ultra subtle background pattern (3-5% opacity) */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.04]" 
+           style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '24px 24px' }}>
       </div>
       
-      {/* Left Column: Minimalist Hero Section (~38% on Desktop) */}
-      <div className="hidden lg:flex lg:w-[38%] xl:w-[35%] flex-col justify-between p-12 xl:p-16 bg-slate-900 dark:bg-slate-950 text-white relative z-10 border-r border-border/10 shadow-2xl">
-        {/* Subtle abstract background elements */}
-        <div className="absolute inset-0 bg-gradient-to-b from-blue-600/20 to-purple-900/20 opacity-50 pointer-events-none" />
-        <div className="absolute top-[-20%] left-[-10%] w-96 h-96 bg-primary/20 rounded-full blur-[100px] pointer-events-none" />
-        
-        <div className="relative z-10 animate-in fade-in slide-in-from-left-8 duration-700">
-          <Logo size={48} className="text-white drop-shadow-md" />
-        </div>
+      {/* Soft ambient glow */}
+      <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none blur-3xl opacity-50 dark:opacity-20" />
 
-        <div className="relative z-10 mb-12 animate-in fade-in slide-in-from-left-8 duration-700 delay-150">
-          <h1 className="text-4xl xl:text-5xl font-semibold tracking-tight leading-[1.15] mb-6 text-slate-50">
-            Elevate your <br className="hidden xl:block" />
-            English mastery.
-          </h1>
-          <p className="text-slate-400 text-lg max-w-sm leading-relaxed">
-            The interactive platform where premium reading meets engaging puzzles.
-          </p>
-        </div>
-      </div>
+      {/* Header */}
+      <header className="w-full flex items-center justify-between p-6 sm:p-8 relative z-20">
+        <Link to="/" className="hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-primary/20 rounded-lg">
+          <Logo size={36} className="text-slate-900 dark:text-white" />
+        </Link>
+        <ThemeToggle />
+      </header>
       
-      {/* Right Column: Form Section (~62% on Desktop) */}
-      <div className="flex-1 flex items-center justify-center p-6 sm:p-12 lg:p-20 z-10 overflow-y-auto">
-        <div className="w-full flex justify-center">
+      {/* Main Centered Content */}
+      <main className="flex-1 w-full flex flex-col items-center justify-center p-4 sm:p-8 lg:p-12 z-10 relative">
+        <div className="w-full flex flex-col items-center animate-in fade-in slide-in-from-bottom-8 duration-700">
           <Outlet />
         </div>
-      </div>
+      </main>
+
     </div>
   )
 }
