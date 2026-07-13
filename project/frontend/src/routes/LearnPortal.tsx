@@ -105,8 +105,8 @@ type PortalState = 'INITIALIZING' | 'ERROR' | 'READING' | 'UNLOCKING' | 'QUIZ';
 function StudentWorkflow({ material, courseId }: { material: any, courseId: string }) {
   const id = material.id;
 
-  const [isUnlocking, setIsUnlocking] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false); // Local transient state for overlay
+  const [state, setState] = useState<PortalState>('INITIALIZING'); // True State Machine
 
   const { data: submission, isLoading, error: submissionError, refetch } = useQuery({
     queryKey: ['my-submission', id],
@@ -128,31 +128,38 @@ function StudentWorkflow({ material, courseId }: { material: any, courseId: stri
     }
   }, [material, id, submission, isLoading]);
 
+  // Server Truth Sync
+  useEffect(() => {
+    if (isLoading) return;
+    if (submissionError) {
+      setState('ERROR');
+      return;
+    }
+
+    const isServerReady = submission?.status === 'READY_FOR_CROSSWORD' || submission?.status === 'COMPLETED' || submission?.is_completed;
+    
+    if (state === 'UNLOCKING' && isServerReady) {
+      setState('QUIZ');
+    } else if (state === 'INITIALIZING') {
+      setState(isServerReady ? 'QUIZ' : 'READING');
+    } else if (state === 'READING' && isServerReady) {
+      setState('QUIZ'); // Catch-all for if server updates unexpectedly
+    }
+  }, [isLoading, submission, submissionError, state]);
+
   const handlePdfComplete = async () => {
-    setIsUnlocking(true);
+    setState('UNLOCKING');
     try {
       await fetchApi(`/materials/${id}/read`, { method: 'POST' });
-      await refetch();
+      const result = await refetch();
+      const isServerReady = result.data?.status === 'READY_FOR_CROSSWORD' || result.data?.status === 'COMPLETED' || result.data?.is_completed;
+      if (!isServerReady) {
+         setState('READING'); // Fallback only if the backend explicitly rejects the unlock
+      }
     } catch (e) {
-      // Silent catch (could show a toast here later)
-    } finally {
-      setIsUnlocking(false);
+      setState('READING'); // Rollback on explicit error
     }
   };
-
-  // State Machine Source of Truth
-  let state: PortalState = 'INITIALIZING';
-  if (isLoading) {
-    state = 'INITIALIZING';
-  } else if (submissionError) {
-    state = 'ERROR';
-  } else if (isUnlocking) {
-    state = 'UNLOCKING';
-  } else if (submission?.status === 'READY_FOR_CROSSWORD' || submission?.status === 'COMPLETED' || submission?.is_completed) {
-    state = 'QUIZ';
-  } else {
-    state = 'READING';
-  }
 
   const getPdfUrl = (path: string) => {
     if (!path) return '';
@@ -190,18 +197,13 @@ function StudentWorkflow({ material, courseId }: { material: any, courseId: stri
 
   if (state === 'READING') {
     return (
-      <div className="mt-6 flex justify-center w-full animate-in fade-in duration-500">
-        <Card className="flex flex-col border-border shadow-md w-full max-w-4xl min-h-[80vh]">
-          <CardHeader className="py-4 border-b border-border/50 bg-muted/30">
-            <CardTitle className="text-base sm:text-lg">Learning Material</CardTitle>
-          </CardHeader>
-          <CardContent className="p-2 sm:p-4 bg-muted/10">
-            <PdfViewer 
-               url={getPdfUrl(material.pdf_path)} 
-               onComplete={handlePdfComplete} 
-            />
-          </CardContent>
-        </Card>
+      <div className="w-full max-w-4xl mx-auto mt-8 mb-16 animate-in fade-in duration-500">
+        {/* Clean Reading Workspace: No Card, No min-height, No Dashboard feel. 
+            Height calculation is delegated entirely to PdfViewer's internal Canvas scale. */}
+        <PdfViewer 
+            url={getPdfUrl(material.pdf_path)} 
+            onComplete={handlePdfComplete} 
+        />
       </div>
     );
   }
