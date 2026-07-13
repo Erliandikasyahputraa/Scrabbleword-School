@@ -5,8 +5,10 @@ import { Button } from '../components/ui/Button';
 import { ArrowRight, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { API_URL } from '../lib/api';
 import { Logo } from '../components/ui/Logo';
+import { useTranslation } from 'react-i18next';
 
 export default function Login() {
+  const { t } = useTranslation('auth');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -28,20 +30,20 @@ export default function Login() {
       
       const contentType = response.headers.get('content-type');
       if (!contentType || !contentType.includes('application/json')) {
-        throw new Error('Tidak dapat terhubung ke server. Silakan coba beberapa saat lagi.');
+        throw new Error(t('login.errorConnection'));
       }
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
+        throw new Error(data.message || t('login.errorFailed'));
       }
       login(data.access_token, data.user);
       navigate('/');
     } catch (err: any) {
       if (err.name === 'TypeError' && err.message === 'Failed to fetch') {
-        setError('Koneksi terputus. Pastikan internet Anda aktif dan server berjalan.');
+        setError(t('login.errorConnection'));
       } else {
-        setError(err.message || 'Login gagal. Periksa kembali kredensial Anda.');
+        setError(err.message || t('login.errorFailed'));
       }
     } finally {
       setIsLoading(false);
@@ -59,10 +61,10 @@ export default function Login() {
       {/* Header */}
       <div className="flex flex-col items-center mb-8 text-center">
         <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
-          Welcome back
+          {t('login.welcomeBack')}
         </h1>
         <p className="text-base text-slate-500 dark:text-slate-400 mt-2">
-          Enter your credentials to access your account
+          {t('login.subtitle')}
         </p>
       </div>
 
@@ -80,22 +82,22 @@ export default function Login() {
 
         <form onSubmit={handleSubmit} className="w-full space-y-5">
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Email</label>
+            <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">{t('login.emailLabel')}</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full h-11 px-4 rounded-xl border border-slate-200 dark:border-slate-700/80 bg-white/50 dark:bg-slate-950/50 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
-              placeholder="student1@example.com"
+              placeholder={t('login.emailPlaceholder')}
               required
             />
           </div>
           
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Password</label>
+              <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">{t('login.passwordLabel')}</label>
               <a href="#" className="text-xs font-medium text-primary hover:text-primary/80 transition-colors focus:outline-none focus:underline">
-                Forgot password?
+                {t('login.forgotPassword')}
               </a>
             </div>
             <div className="relative group">
@@ -104,7 +106,7 @@ export default function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full h-11 pl-4 pr-11 rounded-xl border border-slate-200 dark:border-slate-700/80 bg-white/50 dark:bg-slate-950/50 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
-                placeholder="••••••••"
+                placeholder={t('login.passwordPlaceholder')}
                 required
               />
               <button
@@ -122,9 +124,9 @@ export default function Login() {
               <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
               <span className="relative z-10 flex items-center justify-center">
                 {isLoading ? (
-                  <><Loader2 size={18} className="animate-spin mr-2" /> Signing in...</>
+                  <><Loader2 size={18} className="animate-spin mr-2" /> {t('login.signingIn')}</>
                 ) : (
-                  <>Sign in <ArrowRight size={18} className="ml-2 opacity-80 group-hover:translate-x-1 transition-transform" /></>
+                  <>{t('login.signIn')} <ArrowRight size={18} className="ml-2 opacity-80 group-hover:translate-x-1 transition-transform" /></>
                 )}
               </span>
             </Button>
@@ -133,9 +135,9 @@ export default function Login() {
       </div>
 
       <p className="mt-8 text-center text-sm text-slate-500 dark:text-slate-400">
-        Don't have an account?{' '}
+        {t('login.noAccount')} {' '}
         <Link to="/register" className="font-semibold text-primary hover:text-primary/80 transition-colors focus:outline-none focus:underline">
-          Create account
+          {t('login.createAccount')}
         </Link>
       </p>
     </div>
