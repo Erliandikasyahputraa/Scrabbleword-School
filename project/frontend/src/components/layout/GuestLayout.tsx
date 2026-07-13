@@ -1,7 +1,6 @@
-import { Outlet, Navigate, Link } from "react-router-dom"
+import { Outlet, Navigate } from "react-router-dom"
 import { useAuth } from "../../providers/AuthProvider"
 import { ThemeToggle } from "../ui/ThemeToggle"
-import { Logo } from "../ui/Logo"
 
 export function GuestLayout() {
   const { user, isLoading } = useAuth()
@@ -29,13 +28,10 @@ export function GuestLayout() {
       {/* Soft ambient glow */}
       <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none blur-3xl opacity-50 dark:opacity-20" />
 
-      {/* Header */}
-      <header className="w-full flex items-center justify-between p-6 sm:p-8 relative z-20">
-        <Link to="/" className="hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-primary/20 rounded-lg">
-          <Logo size={36} className="text-slate-900 dark:text-white" />
-        </Link>
+      {/* Theme Toggle at Absolute Top Right */}
+      <div className="absolute top-6 right-6 lg:top-8 lg:right-8 z-50">
         <ThemeToggle />
-      </header>
+      </div>
       
       {/* Main Centered Content */}
       <main className="flex-1 w-full flex flex-col items-center justify-center p-4 sm:p-8 lg:p-12 z-10 relative">

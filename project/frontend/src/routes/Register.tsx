@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { ArrowRight, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { API_URL } from '../lib/api';
+import { Logo } from '../components/ui/Logo';
 
 export default function Register() {
   const [name, setName] = useState('');
@@ -60,29 +61,37 @@ export default function Register() {
   };
 
   return (
-    <div className="w-full max-w-[720px] flex flex-col items-center">
+    <div className="w-full max-w-[480px] flex flex-col items-center">
+      
+      {/* Logo */}
+      <Link to="/" className="mb-6 hover:opacity-80 transition-opacity focus:outline-none rounded-lg">
+        <Logo size={40} className="text-slate-900 dark:text-white" />
+      </Link>
+
+      {/* Header */}
       <div className="flex flex-col items-center mb-8 text-center">
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
           Create an account
         </h1>
-        <p className="text-base sm:text-lg text-slate-500 dark:text-slate-400 mt-3 max-w-md mx-auto">
-          Sign up to start your interactive learning journey
+        <p className="text-base text-slate-500 dark:text-slate-400 mt-2">
+          Sign up to get started with your journey.
         </p>
       </div>
 
-      <div className="w-full bg-white/70 dark:bg-slate-900/50 backdrop-blur-xl border border-slate-200/60 dark:border-slate-800/60 shadow-[0_8px_40px_rgb(0,0,0,0.06)] dark:shadow-[0_8px_40px_rgb(0,0,0,0.3)] rounded-[24px] sm:rounded-[32px] p-6 sm:p-8 lg:p-10 relative overflow-hidden transition-all hover:shadow-[0_16px_60px_rgb(0,0,0,0.08)] dark:hover:shadow-[0_16px_60px_rgb(0,0,0,0.4)]">
+      {/* Card */}
+      <div className="w-full bg-white/70 dark:bg-slate-900/50 backdrop-blur-xl border border-slate-200/60 dark:border-slate-800/60 shadow-[0_8px_40px_rgb(0,0,0,0.06)] dark:shadow-[0_8px_40px_rgb(0,0,0,0.3)] rounded-[24px] p-6 sm:p-8 relative overflow-hidden transition-all hover:shadow-[0_16px_60px_rgb(0,0,0,0.08)] dark:hover:shadow-[0_16px_60px_rgb(0,0,0,0.4)]">
         
         {/* Decorative subtle light beam */}
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
         {error && (
-          <div className="mb-8 p-4 bg-red-50/80 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl text-sm font-medium border border-red-100/50 dark:border-red-900/30 flex items-center justify-center text-center animate-in fade-in zoom-in-95 backdrop-blur-sm">
+          <div className="mb-6 p-4 bg-red-50/80 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl text-sm font-medium border border-red-100/50 dark:border-red-900/30 flex items-center justify-center text-center animate-in fade-in zoom-in-95 backdrop-blur-sm">
             {error}
           </div>
         )}
         
         {success && (
-          <div className="mb-8 p-4 bg-emerald-50/80 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-xl text-sm font-medium border border-emerald-100/50 dark:border-emerald-900/30 flex items-center justify-center text-center animate-in fade-in zoom-in-95 backdrop-blur-sm">
+          <div className="mb-6 p-4 bg-emerald-50/80 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-xl text-sm font-medium border border-emerald-100/50 dark:border-emerald-900/30 flex items-center justify-center text-center animate-in fade-in zoom-in-95 backdrop-blur-sm">
             {success}
           </div>
         )}
@@ -94,7 +103,7 @@ export default function Register() {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full h-12 px-4 rounded-xl border border-slate-200 dark:border-slate-700/80 bg-white/50 dark:bg-slate-950/50 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
+              className="w-full h-11 px-4 rounded-xl border border-slate-200 dark:border-slate-700/80 bg-white/50 dark:bg-slate-950/50 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
               placeholder="John Doe"
               required
             />
@@ -106,13 +115,13 @@ export default function Register() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full h-12 px-4 rounded-xl border border-slate-200 dark:border-slate-700/80 bg-white/50 dark:bg-slate-950/50 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
-              placeholder="you@example.com"
+              className="w-full h-11 px-4 rounded-xl border border-slate-200 dark:border-slate-700/80 bg-white/50 dark:bg-slate-950/50 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
+              placeholder="student1@example.com"
               required
             />
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Password</label>
               <div className="relative group">
@@ -120,7 +129,7 @@ export default function Register() {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full h-12 pl-4 pr-10 rounded-xl border border-slate-200 dark:border-slate-700/80 bg-white/50 dark:bg-slate-950/50 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
+                  className="w-full h-11 pl-4 pr-10 rounded-xl border border-slate-200 dark:border-slate-700/80 bg-white/50 dark:bg-slate-950/50 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
                   placeholder="••••••••"
                   required
                 />
@@ -134,13 +143,13 @@ export default function Register() {
               </div>
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Confirm Password</label>
+              <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Confirm</label>
               <div className="relative group">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   value={passwordConfirmation}
                   onChange={(e) => setPasswordConfirmation(e.target.value)}
-                  className="w-full h-12 pl-4 pr-10 rounded-xl border border-slate-200 dark:border-slate-700/80 bg-white/50 dark:bg-slate-950/50 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
+                  className="w-full h-11 pl-4 pr-10 rounded-xl border border-slate-200 dark:border-slate-700/80 bg-white/50 dark:bg-slate-950/50 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-slate-900 dark:text-white placeholder:text-slate-400"
                   placeholder="••••••••"
                   required
                 />
@@ -155,13 +164,13 @@ export default function Register() {
             </div>
           </div>
 
-          <div className="space-y-3 pt-2">
+          <div className="space-y-3 pt-1">
             <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">I am a</label>
             <div className="grid grid-cols-2 gap-4">
               <button
                 type="button"
                 onClick={() => setRole('student')}
-                className={`h-12 rounded-xl border font-semibold transition-all ${
+                className={`h-11 rounded-xl border font-semibold transition-all ${
                   role === 'student' 
                     ? 'border-primary bg-primary/10 text-primary dark:bg-primary/20 dark:text-blue-400 ring-1 ring-primary/20' 
                     : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-primary/20'
@@ -172,7 +181,7 @@ export default function Register() {
               <button
                 type="button"
                 onClick={() => setRole('teacher')}
-                className={`h-12 rounded-xl border font-semibold transition-all ${
+                className={`h-11 rounded-xl border font-semibold transition-all ${
                   role === 'teacher' 
                     ? 'border-primary bg-primary/10 text-primary dark:bg-primary/20 dark:text-blue-400 ring-1 ring-primary/20' 
                     : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-primary/20'
@@ -183,14 +192,14 @@ export default function Register() {
             </div>
           </div>
           
-          <div className="pt-4">
-            <Button type="submit" disabled={isLoading} fullWidth className="h-12 rounded-xl text-base font-medium shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:-translate-y-0.5 transition-all active:translate-y-0 relative overflow-hidden group">
+          <div className="pt-3">
+            <Button type="submit" disabled={isLoading} fullWidth className="h-11 rounded-xl text-base font-medium shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:-translate-y-0.5 transition-all active:translate-y-0 relative overflow-hidden group">
               <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
               <span className="relative z-10 flex items-center justify-center">
                 {isLoading ? (
                   <><Loader2 size={18} className="animate-spin mr-2" /> Creating account...</>
                 ) : (
-                  <>Create Account <ArrowRight size={18} className="ml-2 opacity-80 group-hover:translate-x-1 transition-transform" /></>
+                  <>Register <ArrowRight size={18} className="ml-2 opacity-80 group-hover:translate-x-1 transition-transform" /></>
                 )}
               </span>
             </Button>
@@ -200,7 +209,7 @@ export default function Register() {
 
       <p className="mt-8 text-center text-sm text-slate-500 dark:text-slate-400">
         Already have an account?{' '}
-        <Link to="/login" className="font-semibold text-slate-900 dark:text-white hover:text-primary dark:hover:text-primary transition-colors focus:outline-none focus:underline">
+        <Link to="/login" className="font-semibold text-primary hover:text-primary/80 transition-colors focus:outline-none focus:underline">
           Sign In
         </Link>
       </p>
