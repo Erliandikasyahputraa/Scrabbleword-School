@@ -3,6 +3,7 @@ export type CrosswordDirection = 'across' | 'down';
 export type CrosswordWord = {
   id: string;
   word: string;
+  original_word?: string;
   row: number;
   col: number;
   direction: CrosswordDirection;

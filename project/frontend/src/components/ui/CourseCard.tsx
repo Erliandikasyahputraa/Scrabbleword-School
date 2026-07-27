@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import { BookOpen } from "lucide-react"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "./Card"
+import { useTranslation } from "react-i18next"
 
 interface CourseCardProps {
   id: number
@@ -15,6 +16,7 @@ interface CourseCardProps {
 }
 
 export function CourseCard({ id, title, description, materialCount, progress, completionRate, studentCount, teacherName, teacherAvatarInitial }: CourseCardProps) {
+  const { t } = useTranslation('courses')
   return (
     <Card hoverable className="group border-border bg-card transition-all duration-200 flex flex-col h-full hover:-translate-y-1 hover:shadow-lg shadow-sm">
       <CardHeader className="p-4 sm:p-6 pb-2 sm:pb-4 flex-none">
@@ -45,7 +47,7 @@ export function CourseCard({ id, title, description, materialCount, progress, co
         {progress !== undefined && (
           <div className="mt-1">
             <div className="flex justify-between items-center mb-1">
-              <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Progress</span>
+              <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{t('courseProgress')}</span>
               <span className="text-xs font-bold text-primary">{progress}%</span>
             </div>
             <div className="w-full bg-muted rounded-full h-1.5 overflow-hidden">
@@ -59,7 +61,7 @@ export function CourseCard({ id, title, description, materialCount, progress, co
         {completionRate !== undefined && (
           <div className="mt-1">
             <div className="flex justify-between items-center mb-1">
-              <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Completion</span>
+              <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{t('completionRate')}</span>
               <span className="text-xs font-bold text-success">{completionRate}%</span>
             </div>
             <div className="w-full bg-muted rounded-full h-1.5 overflow-hidden">

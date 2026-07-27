@@ -67,24 +67,24 @@ export default function Dashboard() {
           <div className="flex flex-wrap items-center gap-4">
             {user?.role === 'admin' && (
               <>
-                <Button variant="secondary" className="bg-white text-blue-700 hover:bg-blue-50 shadow-md border-0" onClick={() => navigate('/users')}>{t('manageUsers')}</Button>
+                <Button variant="secondary" className="!bg-white !text-blue-700 hover:!bg-slate-50 shadow-md border-0" onClick={() => navigate('/users')}>{t('manageUsers')}</Button>
                 <Button variant="ghost" className="text-white hover:bg-white/20 border border-white/30" onClick={() => navigate('/approvals')}>{t('reviewApprovals')}</Button>
               </>
             )}
             {user?.role === 'teacher' && (
               <>
-                <Button variant="secondary" className="bg-white text-blue-700 hover:bg-blue-50 shadow-md border-0" onClick={() => navigate('/courses')}>{t('manageCourses')}</Button>
+                <Button variant="secondary" className="!bg-white !text-blue-700 hover:!bg-slate-50 shadow-md border-0" onClick={() => navigate('/courses')}>{t('manageCourses')}</Button>
                 <Button variant="ghost" className="text-white hover:bg-white/20 border border-white/30" onClick={() => navigate('/approvals')}>{t('reviewStudents')}</Button>
               </>
             )}
             {user?.role === 'student' && (
               <>
                 {stats?.continue_learning ? (
-                   <Button variant="secondary" className="bg-white text-blue-700 hover:bg-blue-50 shadow-md border-0" onClick={() => navigate(`/courses/${stats.continue_learning.course_id}/materials/${stats.continue_learning.id}`)}>
+                   <Button variant="secondary" className="!bg-white !text-blue-700 hover:!bg-slate-50 shadow-md border-0" onClick={() => navigate(`/courses/${stats.continue_learning.course_id}/materials/${stats.continue_learning.id}`)}>
                      {t('resumeLearning')}
                    </Button>
                 ) : (
-                   <Button variant="secondary" className="bg-white text-blue-700 hover:bg-blue-50 shadow-md border-0" onClick={() => navigate('/courses')}>
+                   <Button variant="secondary" className="!bg-white !text-blue-700 hover:!bg-slate-50 shadow-md border-0" onClick={() => navigate('/courses')}>
                      {t('browseCourses')}
                    </Button>
                 )}

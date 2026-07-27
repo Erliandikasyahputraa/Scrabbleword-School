@@ -230,7 +230,7 @@ export default function CourseDetail() {
               </div>
             </div>
             <p className="text-sm font-medium opacity-90">{t('courseProgress')}</p>
-            <Button fullWidth className="bg-white text-primary hover:bg-white/90">{t('resumeCourse')}</Button>
+            <Button fullWidth className="!bg-white !text-primary hover:!bg-white/90">{t('resumeCourse')}</Button>
           </div>
         )}
       </div>
@@ -451,7 +451,7 @@ function CourseMonitoringDashboard({ courseId, materials }: { courseId: number, 
                       sub.status === 'READY_FOR_CROSSWORD' ? 'default' :
                       'warning'
                     }>
-                      {sub.status.replace(/_/g, ' ')}
+                      {t(`status_${sub.status}`)}
                     </Badge>
                   </TableCell>
                   <TableCell className="whitespace-nowrap">{formatDate(sub.submitted_at)}</TableCell>
@@ -487,7 +487,7 @@ function CourseMonitoringDashboard({ courseId, materials }: { courseId: number, 
                   sub.status === 'READY_FOR_CROSSWORD' ? 'default' :
                   'warning'
                 } className="shrink-0">
-                  {sub.status.replace(/_/g, ' ')}
+                  {t(`status_${sub.status}`)}
                 </Badge>
               </div>
               <div className="text-sm font-medium text-foreground truncate">{sub.material?.title}</div>

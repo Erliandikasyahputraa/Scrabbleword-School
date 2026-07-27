@@ -28,7 +28,7 @@ export function CrosswordBuilder({ initialData, onChange, mainHeader, sidebarFoo
       const loadedWords = initialData.words.map(w => {
         const clue = initialData.clues.find(c => c.id === w.id);
         return {
-          word: w.word,
+          word: w.original_word || w.word,
           clue: clue ? clue.clue : ''
         };
       });
@@ -86,6 +86,16 @@ export function CrosswordBuilder({ initialData, onChange, mainHeader, sidebarFoo
     }, 400);
   };
 
+  // Computed Stats
+  const totalWords = words.length;
+  const avgWordLength = totalWords > 0 
+    ? Math.round(words.reduce((acc, w) => acc + w.word.replace(/\s+/g, '').length, 0) / totalWords) 
+    : 0;
+  const longestWord = totalWords > 0 
+    ? Math.max(...words.map(w => w.word.replace(/\s+/g, '').length)) 
+    : 0;
+  const estimatedDifficulty = totalWords === 0 ? "None" : totalWords <= 5 ? "Easy" : totalWords <= 10 ? "Medium" : "Hard";
+
   return (
     <div className="flex flex-col lg:grid lg:grid-cols-12 gap-6 xl:gap-8 w-full">
       {/* Left Column: Editor Workspace (70%) */}
@@ -96,7 +106,31 @@ export function CrosswordBuilder({ initialData, onChange, mainHeader, sidebarFoo
           </div>
         )}
 
-        {/* Preview Panel is now the only thing in the left column */}
+        {/* Live Statistics */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 shrink-0">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 flex flex-col justify-center items-center text-center">
+            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-1">Total Words</p>
+            <p className="font-bold text-slate-900 dark:text-white text-lg">{totalWords}</p>
+          </div>
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 flex flex-col justify-center items-center text-center">
+            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-1">Total Clues</p>
+            <p className="font-bold text-slate-900 dark:text-white text-lg">{totalWords}</p>
+          </div>
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 flex flex-col justify-center items-center text-center">
+            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-1">Avg Length</p>
+            <p className="font-bold text-slate-900 dark:text-white text-lg">{avgWordLength}</p>
+          </div>
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 flex flex-col justify-center items-center text-center">
+            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-1">Longest</p>
+            <p className="font-bold text-slate-900 dark:text-white text-lg">{longestWord}</p>
+          </div>
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 flex flex-col justify-center items-center text-center md:col-span-1 col-span-2">
+            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-1">Difficulty</p>
+            <p className={`font-bold text-lg ${estimatedDifficulty === 'Hard' ? 'text-orange-500' : estimatedDifficulty === 'Medium' ? 'text-blue-500' : estimatedDifficulty === 'Easy' ? 'text-green-500' : 'text-slate-900 dark:text-white'}`}>
+              {estimatedDifficulty}
+            </p>
+          </div>
+        </div>
 
         {/* Preview Panel */}
         <div className="w-full flex flex-col bg-muted/10 rounded-2xl border border-border p-4 sm:p-6 shadow-sm overflow-hidden min-h-[400px] md:min-h-[500px]">

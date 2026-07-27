@@ -1,0 +1,1 @@
+<?php require 'vendor/autoload.php'; $app = require_once 'bootstrap/app.php'; $app->make(\Illuminate\Contracts\Console\Kernel::class)->bootstrap(); $req = \Illuminate\Http\Request::create('/api/materials/2/read', 'POST'); $req->setUserResolver(function() { return \App\Models\User::find(4); }); $res = app()->handle($req); echo $res->getContent();

@@ -6,6 +6,7 @@ export interface CrosswordInputWord {
 export interface PlacedWord {
   id: string;
   word: string;
+  original_word?: string;
   clue: string;
   row: number;
   col: number;
@@ -27,9 +28,12 @@ function shuffleArray<T>(array: T[]): T[] {
 export function generateCrossword(inputWords: CrosswordInputWord[]): PlacedWord[] {
   if (inputWords.length === 0) return [];
 
-  // Filter out empty words, trim, uppercase
   const words = inputWords
-    .map(w => ({ word: w.word.trim().toUpperCase(), clue: w.clue.trim() }))
+    .map(w => ({ 
+      word: w.word.replace(/\s+/g, '').toUpperCase(), 
+      original_word: w.word.trim(),
+      clue: w.clue.trim() 
+    }))
     .filter(w => w.word.length > 0)
     .sort((a, b) => b.word.length - a.word.length); // Start by sorting longest first
 
@@ -51,7 +55,7 @@ export function generateCrossword(inputWords: CrosswordInputWord[]): PlacedWord[
 }
 
 function attemptGeneration(
-  originalWords: { word: string; clue: string }[],
+  originalWords: { word: string; original_word: string; clue: string }[],
   attempt: number
 ): PlacedWord[] {
   let words = [...originalWords];
@@ -70,6 +74,7 @@ function attemptGeneration(
   placed.push({
     id: `temp-0`,
     word: first.word,
+    original_word: first.original_word,
     clue: first.clue,
     row: 0,
     col: 0,
@@ -118,22 +123,23 @@ function attemptGeneration(
     // Pick the best one. If there are ties for the best score, pick randomly among them to vary layouts.
     const highestScore = bestIntersections[0].score;
     const topChoices = bestIntersections.filter(i => i.score === highestScore);
-    const chosen = topChoices[Math.floor(Math.random() * topChoices.length)];
+    const best = topChoices[Math.floor(Math.random() * topChoices.length)];
 
     // Place it
     placed.push({
       id: `temp-${wIdx}`,
       word: current.word,
+      original_word: current.original_word,
       clue: current.clue,
-      row: chosen.row,
-      col: chosen.col,
-      direction: chosen.direction,
+      row: best.row,
+      col: best.col,
+      direction: best.direction,
       length: current.word.length
     });
 
     for (let i = 0; i < current.word.length; i++) {
-      const r = chosen.direction === 'down' ? chosen.row + i : chosen.row;
-      const c = chosen.direction === 'across' ? chosen.col + i : chosen.col;
+      const r = best.direction === 'down' ? best.row + i : best.row;
+      const c = best.direction === 'across' ? best.col + i : best.col;
       grid.set(`${r},${c}`, current.word[i]);
     }
   }
@@ -261,6 +267,7 @@ export function generateCrosswordData(
     words.push({
       id: pw.id,
       word: pw.word,
+      original_word: pw.original_word,
       row: pw.row,
       col: pw.col,
       direction: pw.direction,

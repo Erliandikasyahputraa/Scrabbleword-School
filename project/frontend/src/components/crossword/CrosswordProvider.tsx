@@ -28,8 +28,21 @@ type CrosswordContextType = {
 
 export const CrosswordContext = createContext<CrosswordContextType | null>(null);
 
-export function CrosswordProvider({ children, data, initialSubmitted = false }: { children: ReactNode, data: CrosswordData, initialSubmitted?: boolean }) {
-  const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
+export function CrosswordProvider({ children, data, initialSubmitted = false, isPreview = false }: { children: ReactNode, data: CrosswordData, initialSubmitted?: boolean, isPreview?: boolean }) {
+  const [userAnswers, setUserAnswers] = useState<Record<string, string>>(() => {
+    const answers: Record<string, string> = {};
+    if (isPreview) {
+      data.words.forEach(w => {
+        const charArray = w.word.split('');
+        charArray.forEach((char, i) => {
+          const r = w.direction === 'down' ? w.row + i : w.row;
+          const c = w.direction === 'across' ? w.col + i : w.col;
+          answers[`${r}-${c}`] = char;
+        });
+      });
+    }
+    return answers;
+  });
   const [selectedCell, setSelectedCell] = useState<Position | null>(null);
   const [currentDirection, setCurrentDirection] = useState<CrosswordDirection>('across');
   const [hintsRemaining, setHintsRemaining] = useState(data.metadata.max_hints);

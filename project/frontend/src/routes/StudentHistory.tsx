@@ -38,7 +38,7 @@ interface PaginatedResponse {
 }
 
 export default function StudentHistory() {
-  const { t } = useTranslation('dashboard')
+  const { t } = useTranslation(['dashboard', 'courses'])
   const { user } = useAuth()
   const [data, setData] = useState<PaginatedResponse | null>(null)
   const [loading, setLoading] = useState(true)
@@ -166,7 +166,7 @@ export default function StudentHistory() {
                         sub.status === 'READY_FOR_CROSSWORD' ? 'default' :
                         'danger'
                       } className="whitespace-nowrap">
-                        {sub.status.replace(/_/g, ' ')}
+                        {t(`courses:status_${sub.status}`)}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right font-medium whitespace-nowrap">

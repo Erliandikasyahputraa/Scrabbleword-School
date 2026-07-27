@@ -1,0 +1,1368 @@
+[
+  {
+    "theme": "School",
+    "level": 1,
+    "data": {
+      "metadata": {
+        "title": "School (Level 1)",
+        "difficulty": "Easy",
+        "estimated_time": 120,
+        "max_hints": 1
+      },
+      "grid": {
+        "rows": 4,
+        "cols": 4
+      },
+      "words": [
+        {
+          "id": "1",
+          "word": "GURU",
+          "row": 0,
+          "col": 1,
+          "direction": "down",
+          "length": 4
+        },
+        {
+          "id": "2",
+          "word": "BUKU",
+          "row": 1,
+          "col": 0,
+          "direction": "across",
+          "length": 4
+        }
+      ],
+      "clues": [
+        {
+          "id": "1",
+          "number": 1,
+          "direction": "down",
+          "clue": "Orang yang mengajar"
+        },
+        {
+          "id": "2",
+          "number": 2,
+          "direction": "across",
+          "clue": "Tempat membaca"
+        }
+      ]
+    }
+  },
+  {
+    "theme": "Animals",
+    "level": 2,
+    "data": {
+      "metadata": {
+        "title": "Animals (Level 2)",
+        "difficulty": "Easy",
+        "estimated_time": 180,
+        "max_hints": 1
+      },
+      "grid": {
+        "rows": 7,
+        "cols": 6
+      },
+      "words": [
+        {
+          "id": "1",
+          "word": "BURUNG",
+          "row": 0,
+          "col": 4,
+          "direction": "down",
+          "length": 6
+        },
+        {
+          "id": "2",
+          "word": "IKAN",
+          "row": 3,
+          "col": 0,
+          "direction": "down",
+          "length": 4
+        },
+        {
+          "id": "3",
+          "word": "KUCING",
+          "row": 4,
+          "col": 0,
+          "direction": "across",
+          "length": 6
+        }
+      ],
+      "clues": [
+        {
+          "id": "1",
+          "number": 1,
+          "direction": "down",
+          "clue": "Hewan yang terbang"
+        },
+        {
+          "id": "2",
+          "number": 2,
+          "direction": "down",
+          "clue": "Hewan yang berenang"
+        },
+        {
+          "id": "3",
+          "number": 3,
+          "direction": "across",
+          "clue": "Hewan mengeong"
+        }
+      ]
+    }
+  },
+  {
+    "theme": "Fruits",
+    "level": 3,
+    "data": {
+      "metadata": {
+        "title": "Fruits (Level 3)",
+        "difficulty": "Easy",
+        "estimated_time": 240,
+        "max_hints": 2
+      },
+      "grid": {
+        "rows": 6,
+        "cols": 8
+      },
+      "words": [
+        {
+          "id": "1",
+          "word": "MANGGA",
+          "row": 0,
+          "col": 4,
+          "direction": "down",
+          "length": 6
+        },
+        {
+          "id": "2",
+          "word": "APEL",
+          "row": 1,
+          "col": 0,
+          "direction": "down",
+          "length": 4
+        },
+        {
+          "id": "3",
+          "word": "PISANG",
+          "row": 2,
+          "col": 0,
+          "direction": "across",
+          "length": 6
+        },
+        {
+          "id": "4",
+          "word": "ANGGUR",
+          "row": 4,
+          "col": 2,
+          "direction": "across",
+          "length": 6
+        }
+      ],
+      "clues": [
+        {
+          "id": "1",
+          "number": 1,
+          "direction": "down",
+          "clue": "Buah manis berdaging kuning atau oranye"
+        },
+        {
+          "id": "2",
+          "number": 2,
+          "direction": "down",
+          "clue": "Buah merah bundar"
+        },
+        {
+          "id": "3",
+          "number": 3,
+          "direction": "across",
+          "clue": "Buah kuning melengkung"
+        },
+        {
+          "id": "4",
+          "number": 4,
+          "direction": "across",
+          "clue": "Buah kecil bergerombol"
+        }
+      ]
+    }
+  },
+  {
+    "theme": "Transportation",
+    "level": 4,
+    "data": {
+      "metadata": {
+        "title": "Transportation (Level 4)",
+        "difficulty": "Easy",
+        "estimated_time": 300,
+        "max_hints": 2
+      },
+      "grid": {
+        "rows": 7,
+        "cols": 13
+      },
+      "words": [
+        {
+          "id": "1",
+          "word": "MOTOR",
+          "row": 0,
+          "col": 8,
+          "direction": "down",
+          "length": 5
+        },
+        {
+          "id": "1",
+          "word": "MOBIL",
+          "row": 0,
+          "col": 8,
+          "direction": "across",
+          "length": 5
+        },
+        {
+          "id": "2",
+          "word": "KERETA",
+          "row": 1,
+          "col": 3,
+          "direction": "down",
+          "length": 6
+        },
+        {
+          "id": "3",
+          "word": "PESAWAT",
+          "row": 2,
+          "col": 2,
+          "direction": "across",
+          "length": 7
+        },
+        {
+          "id": "4",
+          "word": "KAPAL",
+          "row": 6,
+          "col": 0,
+          "direction": "across",
+          "length": 5
+        }
+      ],
+      "clues": [
+        {
+          "id": "1",
+          "number": 1,
+          "direction": "down",
+          "clue": "Kendaraan roda dua"
+        },
+        {
+          "id": "1",
+          "number": 1,
+          "direction": "across",
+          "clue": "Kendaraan roda empat"
+        },
+        {
+          "id": "2",
+          "number": 2,
+          "direction": "down",
+          "clue": "Kendaraan panjang di atas rel"
+        },
+        {
+          "id": "3",
+          "number": 3,
+          "direction": "across",
+          "clue": "Kendaraan di udara"
+        },
+        {
+          "id": "4",
+          "number": 4,
+          "direction": "across",
+          "clue": "Kendaraan di air"
+        }
+      ]
+    }
+  },
+  {
+    "theme": "Profession",
+    "level": 5,
+    "data": {
+      "metadata": {
+        "title": "Profession (Level 5)",
+        "difficulty": "Medium",
+        "estimated_time": 360,
+        "max_hints": 3
+      },
+      "grid": {
+        "rows": 13,
+        "cols": 10
+      },
+      "words": [
+        {
+          "id": "1",
+          "word": "GURU",
+          "row": 0,
+          "col": 9,
+          "direction": "down",
+          "length": 4
+        },
+        {
+          "id": "2",
+          "word": "POLISI",
+          "row": 1,
+          "col": 5,
+          "direction": "down",
+          "length": 6
+        },
+        {
+          "id": "3",
+          "word": "PILOT",
+          "row": 2,
+          "col": 2,
+          "direction": "down",
+          "length": 5
+        },
+        {
+          "id": "4",
+          "word": "DOKTER",
+          "row": 2,
+          "col": 4,
+          "direction": "across",
+          "length": 6
+        },
+        {
+          "id": "5",
+          "word": "PETANI",
+          "row": 6,
+          "col": 0,
+          "direction": "across",
+          "length": 6
+        },
+        {
+          "id": "6",
+          "word": "NELAYAN",
+          "row": 6,
+          "col": 4,
+          "direction": "down",
+          "length": 7
+        }
+      ],
+      "clues": [
+        {
+          "id": "1",
+          "number": 1,
+          "direction": "down",
+          "clue": "Mendidik siswa di sekolah"
+        },
+        {
+          "id": "2",
+          "number": 2,
+          "direction": "down",
+          "clue": "Menjaga keamanan"
+        },
+        {
+          "id": "3",
+          "number": 3,
+          "direction": "down",
+          "clue": "Mengemudikan pesawat"
+        },
+        {
+          "id": "4",
+          "number": 4,
+          "direction": "across",
+          "clue": "Mengobati orang sakit"
+        },
+        {
+          "id": "5",
+          "number": 5,
+          "direction": "across",
+          "clue": "Menanam padi"
+        },
+        {
+          "id": "6",
+          "number": 6,
+          "direction": "down",
+          "clue": "Mencari ikan di laut"
+        }
+      ]
+    }
+  },
+  {
+    "theme": "Body Parts",
+    "level": 6,
+    "data": {
+      "metadata": {
+        "title": "Body Parts (Level 6)",
+        "difficulty": "Medium",
+        "estimated_time": 420,
+        "max_hints": 3
+      },
+      "grid": {
+        "rows": 7,
+        "cols": 8
+      },
+      "words": [
+        {
+          "id": "1",
+          "word": "MULUT",
+          "row": 0,
+          "col": 0,
+          "direction": "across",
+          "length": 5
+        },
+        {
+          "id": "2",
+          "word": "TELINGA",
+          "row": 0,
+          "col": 4,
+          "direction": "down",
+          "length": 7
+        },
+        {
+          "id": "3",
+          "word": "HIDUNG",
+          "row": 0,
+          "col": 7,
+          "direction": "down",
+          "length": 6
+        },
+        {
+          "id": "4",
+          "word": "KEPALA",
+          "row": 2,
+          "col": 0,
+          "direction": "across",
+          "length": 6
+        },
+        {
+          "id": "4",
+          "word": "KAKI",
+          "row": 2,
+          "col": 0,
+          "direction": "down",
+          "length": 4
+        },
+        {
+          "id": "5",
+          "word": "TANGAN",
+          "row": 4,
+          "col": 2,
+          "direction": "across",
+          "length": 6
+        },
+        {
+          "id": "6",
+          "word": "MATA",
+          "row": 6,
+          "col": 3,
+          "direction": "across",
+          "length": 4
+        }
+      ],
+      "clues": [
+        {
+          "id": "1",
+          "number": 1,
+          "direction": "across",
+          "clue": "Digunakan untuk berbicara"
+        },
+        {
+          "id": "2",
+          "number": 2,
+          "direction": "down",
+          "clue": "Digunakan untuk mendengar"
+        },
+        {
+          "id": "3",
+          "number": 3,
+          "direction": "down",
+          "clue": "Digunakan untuk mencium bau"
+        },
+        {
+          "id": "4",
+          "number": 4,
+          "direction": "across",
+          "clue": "Bagian atas tubuh manusia"
+        },
+        {
+          "id": "4",
+          "number": 4,
+          "direction": "down",
+          "clue": "Digunakan untuk berjalan"
+        },
+        {
+          "id": "5",
+          "number": 5,
+          "direction": "across",
+          "clue": "Digunakan untuk memegang"
+        },
+        {
+          "id": "6",
+          "number": 6,
+          "direction": "across",
+          "clue": "Digunakan untuk melihat"
+        }
+      ]
+    }
+  },
+  {
+    "theme": "Religion",
+    "level": 7,
+    "data": {
+      "metadata": {
+        "title": "Religion (Level 7)",
+        "difficulty": "Medium",
+        "estimated_time": 480,
+        "max_hints": 4
+      },
+      "grid": {
+        "rows": 14,
+        "cols": 9
+      },
+      "words": [
+        {
+          "id": "1",
+          "word": "MASJID",
+          "row": 0,
+          "col": 6,
+          "direction": "down",
+          "length": 6
+        },
+        {
+          "id": "2",
+          "word": "VIHARA",
+          "row": 2,
+          "col": 8,
+          "direction": "down",
+          "length": 6
+        },
+        {
+          "id": "3",
+          "word": "DOA",
+          "row": 5,
+          "col": 6,
+          "direction": "across",
+          "length": 3
+        },
+        {
+          "id": "4",
+          "word": "KLENTENG",
+          "row": 6,
+          "col": 1,
+          "direction": "down",
+          "length": 8
+        },
+        {
+          "id": "5",
+          "word": "PURA",
+          "row": 7,
+          "col": 5,
+          "direction": "across",
+          "length": 4
+        },
+        {
+          "id": "5",
+          "word": "PUASA",
+          "row": 7,
+          "col": 5,
+          "direction": "down",
+          "length": 5
+        },
+        {
+          "id": "6",
+          "word": "ZAKAT",
+          "row": 9,
+          "col": 4,
+          "direction": "across",
+          "length": 5
+        },
+        {
+          "id": "7",
+          "word": "GEREJA",
+          "row": 11,
+          "col": 0,
+          "direction": "across",
+          "length": 6
+        }
+      ],
+      "clues": [
+        {
+          "id": "1",
+          "number": 1,
+          "direction": "down",
+          "clue": "Tempat ibadah umat Islam"
+        },
+        {
+          "id": "2",
+          "number": 2,
+          "direction": "down",
+          "clue": "Tempat ibadah umat Buddha"
+        },
+        {
+          "id": "3",
+          "number": 3,
+          "direction": "across",
+          "clue": "Permohonan kepada Tuhan"
+        },
+        {
+          "id": "4",
+          "number": 4,
+          "direction": "down",
+          "clue": "Tempat ibadah umat Konghucu"
+        },
+        {
+          "id": "5",
+          "number": 5,
+          "direction": "across",
+          "clue": "Tempat ibadah umat Hindu"
+        },
+        {
+          "id": "5",
+          "number": 5,
+          "direction": "down",
+          "clue": "Menahan makan dan minum"
+        },
+        {
+          "id": "6",
+          "number": 6,
+          "direction": "across",
+          "clue": "Kewajiban berbagi harta"
+        },
+        {
+          "id": "7",
+          "number": 7,
+          "direction": "across",
+          "clue": "Tempat ibadah umat Kristen"
+        }
+      ]
+    }
+  },
+  {
+    "theme": "Technology",
+    "level": 8,
+    "data": {
+      "metadata": {
+        "title": "Technology (Level 8)",
+        "difficulty": "Medium",
+        "estimated_time": 540,
+        "max_hints": 4
+      },
+      "grid": {
+        "rows": 18,
+        "cols": 10
+      },
+      "words": [
+        {
+          "id": "1",
+          "word": "INTERNET",
+          "row": 0,
+          "col": 7,
+          "direction": "down",
+          "length": 8
+        },
+        {
+          "id": "2",
+          "word": "SOFTWARE",
+          "row": 1,
+          "col": 5,
+          "direction": "down",
+          "length": 8
+        },
+        {
+          "id": "3",
+          "word": "KOMPUTER",
+          "row": 4,
+          "col": 0,
+          "direction": "across",
+          "length": 8
+        },
+        {
+          "id": "4",
+          "word": "HARDWARE",
+          "row": 6,
+          "col": 0,
+          "direction": "across",
+          "length": 8
+        },
+        {
+          "id": "5",
+          "word": "DATABASE",
+          "row": 6,
+          "col": 3,
+          "direction": "down",
+          "length": 8
+        },
+        {
+          "id": "6",
+          "word": "CODE",
+          "row": 9,
+          "col": 1,
+          "direction": "down",
+          "length": 4
+        },
+        {
+          "id": "7",
+          "word": "NETWORK",
+          "row": 11,
+          "col": 6,
+          "direction": "down",
+          "length": 7
+        },
+        {
+          "id": "8",
+          "word": "WEBSITE",
+          "row": 12,
+          "col": 0,
+          "direction": "across",
+          "length": 7
+        },
+        {
+          "id": "9",
+          "word": "SERVER",
+          "row": 16,
+          "col": 4,
+          "direction": "across",
+          "length": 6
+        }
+      ],
+      "clues": [
+        {
+          "id": "1",
+          "number": 1,
+          "direction": "down",
+          "clue": "Jaringan komputer global"
+        },
+        {
+          "id": "2",
+          "number": 2,
+          "direction": "down",
+          "clue": "Perangkat lunak"
+        },
+        {
+          "id": "3",
+          "number": 3,
+          "direction": "across",
+          "clue": "Mesin penghitung elektronik"
+        },
+        {
+          "id": "4",
+          "number": 4,
+          "direction": "across",
+          "clue": "Perangkat keras"
+        },
+        {
+          "id": "5",
+          "number": 5,
+          "direction": "down",
+          "clue": "Basis data"
+        },
+        {
+          "id": "6",
+          "number": 6,
+          "direction": "down",
+          "clue": "Instruksi pemrograman"
+        },
+        {
+          "id": "7",
+          "number": 7,
+          "direction": "down",
+          "clue": "Jaringan komunikasi"
+        },
+        {
+          "id": "8",
+          "number": 8,
+          "direction": "across",
+          "clue": "Halaman di internet"
+        },
+        {
+          "id": "9",
+          "number": 9,
+          "direction": "across",
+          "clue": "Peladen pusat"
+        }
+      ]
+    }
+  },
+  {
+    "theme": "Computer Science",
+    "level": 9,
+    "data": {
+      "metadata": {
+        "title": "Computer Science (Level 9)",
+        "difficulty": "Medium",
+        "estimated_time": 600,
+        "max_hints": 5
+      },
+      "grid": {
+        "rows": 15,
+        "cols": 14
+      },
+      "words": [
+        {
+          "id": "1",
+          "word": "FUNGSI",
+          "row": 0,
+          "col": 6,
+          "direction": "across",
+          "length": 6
+        },
+        {
+          "id": "2",
+          "word": "STRING",
+          "row": 0,
+          "col": 10,
+          "direction": "down",
+          "length": 6
+        },
+        {
+          "id": "3",
+          "word": "VARIABEL",
+          "row": 2,
+          "col": 6,
+          "direction": "down",
+          "length": 8
+        },
+        {
+          "id": "4",
+          "word": "ARRAY",
+          "row": 2,
+          "col": 9,
+          "direction": "across",
+          "length": 5
+        },
+        {
+          "id": "5",
+          "word": "BOOLEAN",
+          "row": 3,
+          "col": 1,
+          "direction": "across",
+          "length": 7
+        },
+        {
+          "id": "6",
+          "word": "INTEGER",
+          "row": 5,
+          "col": 6,
+          "direction": "across",
+          "length": 7
+        },
+        {
+          "id": "7",
+          "word": "DEBUG",
+          "row": 7,
+          "col": 4,
+          "direction": "across",
+          "length": 5
+        },
+        {
+          "id": "8",
+          "word": "LOOPING",
+          "row": 8,
+          "col": 2,
+          "direction": "down",
+          "length": 7
+        },
+        {
+          "id": "9",
+          "word": "COMPILE",
+          "row": 9,
+          "col": 1,
+          "direction": "across",
+          "length": 7
+        },
+        {
+          "id": "10",
+          "word": "ALGORITMA",
+          "row": 14,
+          "col": 0,
+          "direction": "across",
+          "length": 9
+        }
+      ],
+      "clues": [
+        {
+          "id": "1",
+          "number": 1,
+          "direction": "across",
+          "clue": "Blok kode yang dapat dipanggil ulang"
+        },
+        {
+          "id": "2",
+          "number": 2,
+          "direction": "down",
+          "clue": "Tipe data teks"
+        },
+        {
+          "id": "3",
+          "number": 3,
+          "direction": "down",
+          "clue": "Penyimpan nilai"
+        },
+        {
+          "id": "4",
+          "number": 4,
+          "direction": "across",
+          "clue": "Kumpulan data sejenis"
+        },
+        {
+          "id": "5",
+          "number": 5,
+          "direction": "across",
+          "clue": "Tipe data benar atau salah"
+        },
+        {
+          "id": "6",
+          "number": 6,
+          "direction": "across",
+          "clue": "Tipe data bilangan bulat"
+        },
+        {
+          "id": "7",
+          "number": 7,
+          "direction": "across",
+          "clue": "Mencari kesalahan kode"
+        },
+        {
+          "id": "8",
+          "number": 8,
+          "direction": "down",
+          "clue": "Perulangan instruksi"
+        },
+        {
+          "id": "9",
+          "number": 9,
+          "direction": "across",
+          "clue": "Menerjemahkan kode"
+        },
+        {
+          "id": "10",
+          "number": 10,
+          "direction": "across",
+          "clue": "Urutan langkah logis"
+        }
+      ]
+    }
+  },
+  {
+    "theme": "English Vocabulary",
+    "level": 10,
+    "data": {
+      "metadata": {
+        "title": "English Vocabulary (Level 10)",
+        "difficulty": "Medium",
+        "estimated_time": 600,
+        "max_hints": 5
+      },
+      "grid": {
+        "rows": 23,
+        "cols": 19
+      },
+      "words": [
+        {
+          "id": "1",
+          "word": "HANDSOME",
+          "row": 0,
+          "col": 9,
+          "direction": "down",
+          "length": 8
+        },
+        {
+          "id": "2",
+          "word": "EXCELLENT",
+          "row": 6,
+          "col": 7,
+          "direction": "down",
+          "length": 9
+        },
+        {
+          "id": "3",
+          "word": "EXPENSIVE",
+          "row": 7,
+          "col": 6,
+          "direction": "across",
+          "length": 9
+        },
+        {
+          "id": "4",
+          "word": "BEAUTIFUL",
+          "row": 9,
+          "col": 0,
+          "direction": "down",
+          "length": 9
+        },
+        {
+          "id": "5",
+          "word": "WONDERFUL",
+          "row": 10,
+          "col": 3,
+          "direction": "down",
+          "length": 9
+        },
+        {
+          "id": "6",
+          "word": "DANGEROUS",
+          "row": 11,
+          "col": 10,
+          "direction": "down",
+          "length": 9
+        },
+        {
+          "id": "6",
+          "word": "DELICIOUS",
+          "row": 11,
+          "col": 10,
+          "direction": "across",
+          "length": 9
+        },
+        {
+          "id": "7",
+          "word": "INTERESTING",
+          "row": 14,
+          "col": 0,
+          "direction": "across",
+          "length": 11
+        },
+        {
+          "id": "8",
+          "word": "IMPORTANT",
+          "row": 14,
+          "col": 8,
+          "direction": "down",
+          "length": 9
+        },
+        {
+          "id": "9",
+          "word": "DIFFICULT",
+          "row": 22,
+          "col": 0,
+          "direction": "across",
+          "length": 9
+        }
+      ],
+      "clues": [
+        {
+          "id": "1",
+          "number": 1,
+          "direction": "down",
+          "clue": "Tampan (English)"
+        },
+        {
+          "id": "2",
+          "number": 2,
+          "direction": "down",
+          "clue": "Sangat baik (English)"
+        },
+        {
+          "id": "3",
+          "number": 3,
+          "direction": "across",
+          "clue": "Mahal (English)"
+        },
+        {
+          "id": "4",
+          "number": 4,
+          "direction": "down",
+          "clue": "Cantik (English)"
+        },
+        {
+          "id": "5",
+          "number": 5,
+          "direction": "down",
+          "clue": "Menakjubkan (English)"
+        },
+        {
+          "id": "6",
+          "number": 6,
+          "direction": "down",
+          "clue": "Berbahaya (English)"
+        },
+        {
+          "id": "6",
+          "number": 6,
+          "direction": "across",
+          "clue": "Lezat (English)"
+        },
+        {
+          "id": "7",
+          "number": 7,
+          "direction": "across",
+          "clue": "Menarik (English)"
+        },
+        {
+          "id": "8",
+          "number": 8,
+          "direction": "down",
+          "clue": "Penting (English)"
+        },
+        {
+          "id": "9",
+          "number": 9,
+          "direction": "across",
+          "clue": "Sulit (English)"
+        }
+      ]
+    }
+  },
+  {
+    "theme": "TOEFL Vocabulary",
+    "level": 10,
+    "data": {
+      "metadata": {
+        "title": "TOEFL Vocabulary (Level 10)",
+        "difficulty": "Medium",
+        "estimated_time": 600,
+        "max_hints": 5
+      },
+      "grid": {
+        "rows": 17,
+        "cols": 19
+      },
+      "words": [
+        {
+          "id": "1",
+          "word": "METICULOUS",
+          "row": 0,
+          "col": 11,
+          "direction": "down",
+          "length": 10
+        },
+        {
+          "id": "2",
+          "word": "PRAGMATIC",
+          "row": 0,
+          "col": 14,
+          "direction": "down",
+          "length": 9
+        },
+        {
+          "id": "3",
+          "word": "EPHEMERAL",
+          "row": 1,
+          "col": 8,
+          "direction": "across",
+          "length": 9
+        },
+        {
+          "id": "4",
+          "word": "MITIGATE",
+          "row": 3,
+          "col": 10,
+          "direction": "across",
+          "length": 8
+        },
+        {
+          "id": "5",
+          "word": "ELOQUENT",
+          "row": 5,
+          "col": 6,
+          "direction": "down",
+          "length": 8
+        },
+        {
+          "id": "6",
+          "word": "CANDID",
+          "row": 5,
+          "col": 13,
+          "direction": "across",
+          "length": 6
+        },
+        {
+          "id": "7",
+          "word": "ARDUOUS",
+          "row": 8,
+          "col": 0,
+          "direction": "down",
+          "length": 7
+        },
+        {
+          "id": "8",
+          "word": "UBIQUITOUS",
+          "row": 8,
+          "col": 3,
+          "direction": "across",
+          "length": 10
+        },
+        {
+          "id": "9",
+          "word": "OBSOLETE",
+          "row": 12,
+          "col": 0,
+          "direction": "across",
+          "length": 8
+        },
+        {
+          "id": "10",
+          "word": "LUCID",
+          "row": 12,
+          "col": 4,
+          "direction": "down",
+          "length": 5
+        }
+      ],
+      "clues": [
+        {
+          "id": "1",
+          "number": 1,
+          "direction": "down",
+          "clue": "Showing great attention to detail."
+        },
+        {
+          "id": "2",
+          "number": 2,
+          "direction": "down",
+          "clue": "Dealing with things sensibly and realistically."
+        },
+        {
+          "id": "3",
+          "number": 3,
+          "direction": "across",
+          "clue": "Lasting for a very short time."
+        },
+        {
+          "id": "4",
+          "number": 4,
+          "direction": "across",
+          "clue": "Make less severe, serious, or painful."
+        },
+        {
+          "id": "5",
+          "number": 5,
+          "direction": "down",
+          "clue": "Fluent or persuasive in speaking or writing."
+        },
+        {
+          "id": "6",
+          "number": 6,
+          "direction": "across",
+          "clue": "Truthful and straightforward; frank."
+        },
+        {
+          "id": "7",
+          "number": 7,
+          "direction": "down",
+          "clue": "Involving or requiring strenuous effort."
+        },
+        {
+          "id": "8",
+          "number": 8,
+          "direction": "across",
+          "clue": "Present, appearing, or found everywhere."
+        },
+        {
+          "id": "9",
+          "number": 9,
+          "direction": "across",
+          "clue": "No longer produced or used; out of date."
+        },
+        {
+          "id": "10",
+          "number": 10,
+          "direction": "down",
+          "clue": "Expressed clearly; easy to understand."
+        }
+      ]
+    }
+  },
+  {
+    "theme": "Colors",
+    "level": 1,
+    "data": {
+      "metadata": {
+        "title": "Colors (Level 1)",
+        "difficulty": "Easy",
+        "estimated_time": 120,
+        "max_hints": 1
+      },
+      "grid": {
+        "rows": 5,
+        "cols": 5
+      },
+      "words": [
+        {
+          "id": "1",
+          "word": "PUTIH",
+          "row": 0,
+          "col": 4,
+          "direction": "down",
+          "length": 5
+        },
+        {
+          "id": "2",
+          "word": "MERAH",
+          "row": 4,
+          "col": 0,
+          "direction": "across",
+          "length": 5
+        }
+      ],
+      "clues": [
+        {
+          "id": "1",
+          "number": 1,
+          "direction": "down",
+          "clue": "Warna susu"
+        },
+        {
+          "id": "2",
+          "number": 2,
+          "direction": "across",
+          "clue": "Warna darah"
+        }
+      ]
+    }
+  },
+  {
+    "theme": "Shapes",
+    "level": 2,
+    "data": {
+      "metadata": {
+        "title": "Shapes (Level 2)",
+        "difficulty": "Easy",
+        "estimated_time": 180,
+        "max_hints": 1
+      },
+      "grid": {
+        "rows": 6,
+        "cols": 8
+      },
+      "words": [
+        {
+          "id": "1",
+          "word": "BULAT",
+          "row": 0,
+          "col": 4,
+          "direction": "down",
+          "length": 5
+        },
+        {
+          "id": "2",
+          "word": "KOTAK",
+          "row": 1,
+          "col": 7,
+          "direction": "down",
+          "length": 5
+        },
+        {
+          "id": "3",
+          "word": "SEGITIGA",
+          "row": 4,
+          "col": 0,
+          "direction": "across",
+          "length": 8
+        }
+      ],
+      "clues": [
+        {
+          "id": "1",
+          "number": 1,
+          "direction": "down",
+          "clue": "Bentuk seperti bola"
+        },
+        {
+          "id": "2",
+          "number": 2,
+          "direction": "down",
+          "clue": "Empat sisi sama panjang"
+        },
+        {
+          "id": "3",
+          "number": 3,
+          "direction": "across",
+          "clue": "Memiliki tiga sudut"
+        }
+      ]
+    }
+  }
+]

@@ -1,14 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useCrossword } from '../../hooks/useCrossword';
 import type { CrosswordClue } from '../../types/crossword';
-import { Button } from '../ui/Button';
-import { X, List } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export function CrosswordClues() {
   const { t } = useTranslation('courses');
   const { data, activeWord, handleCellClick, currentDirection } = useCrossword();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const listRef = useRef<HTMLDivElement>(null);
 
   const acrossClues = data.clues.filter(c => c.direction === 'across');
   const downClues = data.clues.filter(c => c.direction === 'down');
@@ -17,9 +15,18 @@ export function CrosswordClues() {
     const word = data.words.find(w => w.id === clue.id);
     if (word) {
       handleCellClick(word.row, word.col);
-      setIsModalOpen(false); // Close modal on selection
     }
   };
+
+  useEffect(() => {
+    if (activeWord) {
+      // Find the active element in the list and scroll it into view smoothly
+      const activeEl = listRef.current?.querySelector('[data-active="true"]');
+      if (activeEl) {
+        activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+  }, [activeWord, currentDirection]);
 
   const ClueList = ({ title, clues }: { title: string, clues: CrosswordClue[] }) => (
     <div className="flex-1">
@@ -32,6 +39,7 @@ export function CrosswordClues() {
           return (
             <li 
               key={clue.id}
+              data-active={isActive}
               onClick={() => handleClueClick(clue)}
               className={`text-sm px-3 py-2 rounded-lg cursor-pointer transition-all flex gap-3 leading-snug
                 ${isActive 
@@ -53,9 +61,9 @@ export function CrosswordClues() {
   const activeClueObj = data.clues.find(c => c.id === activeWord?.id && c.direction === currentDirection);
 
   return (
-    <div className="flex flex-col gap-4 w-full">
-      {/* Current Clue Card */}
-      <div className="bg-card border border-border p-4 sm:p-6 rounded-2xl shadow-sm xl:sticky xl:top-0 z-10">
+    <div className="flex flex-col gap-4 w-full h-full">
+      {/* Current Clue Card (Sticky) */}
+      <div className="bg-card border border-border p-4 sm:p-6 rounded-2xl shadow-sm shrink-0 z-10 sticky top-0">
         <div className="flex justify-between items-center mb-2">
           <div className="flex items-center gap-2">
             <span 
@@ -70,9 +78,6 @@ export function CrosswordClues() {
               </span>
             )}
           </div>
-          <Button variant="ghost" size="sm" onClick={() => setIsModalOpen(true)} className="gap-2 text-muted-foreground hover:text-foreground">
-            <List size={16} /> <span className="hidden sm:inline">{t('allQuestions')}</span>
-          </Button>
         </div>
         
         {activeClueObj ? (
@@ -84,26 +89,15 @@ export function CrosswordClues() {
         )}
       </div>
 
-      {/* Clues Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-0 sm:p-4 animate-in fade-in duration-200">
-          <div className="bg-card rounded-none sm:rounded-3xl p-6 sm:p-8 w-full h-full sm:max-w-[calc(100vw-2rem)] lg:max-w-4xl shadow-2xl relative sm:max-h-[90vh] overflow-y-auto flex flex-col">
-            <button 
-              onClick={() => setIsModalOpen(false)}
-              className="absolute top-4 right-4 sm:top-6 sm:right-6 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <X size={24} />
-            </button>
-            <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-6 pr-8">
-              {t('allQuestions')}
-            </h2>
-            <div className="flex flex-col sm:flex-row gap-6 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-800 p-4 sm:p-5">
-              <ClueList title={t('across')} clues={acrossClues} />
-              <ClueList title={t('down')} clues={downClues} />
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Clue List Panel (Scrollable) */}
+      <div 
+        ref={listRef}
+        className="flex flex-col gap-6 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-800 p-4 sm:p-5 overflow-y-auto custom-scrollbar"
+      >
+        <ClueList title={t('across')} clues={acrossClues} />
+        <div className="w-full h-px bg-slate-200 dark:bg-slate-700/50 my-2"></div>
+        <ClueList title={t('down')} clues={downClues} />
+      </div>
     </div>
   );
 }
