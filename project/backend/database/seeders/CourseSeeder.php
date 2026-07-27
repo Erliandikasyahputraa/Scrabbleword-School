@@ -20,12 +20,10 @@ class CourseSeeder extends Seeder
         }
 
         $course = Course::firstOrCreate(
-            ['title' => 'Bahasa Indonesia Kelas X TKJ'],
+            ['name' => 'Bahasa Indonesia Kelas X TKJ'],
             [
                 'teacher_id' => $teacher->id,
                 'description' => 'Mata pelajaran Bahasa Indonesia untuk kelas X TKJ SMK.',
-                'image_url' => 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=1000&auto=format&fit=crop',
-                'status' => 'published',
             ]
         );
 
