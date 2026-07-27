@@ -21,7 +21,6 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'role' => 'admin',
                 'status' => 'approved',
-                'approved_at' => now(),
             ]
         );
 
@@ -33,7 +32,6 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('ninjass123'),
                 'role' => 'teacher',
                 'status' => 'approved',
-                'approved_at' => now(),
             ]
         );
 
@@ -70,7 +68,6 @@ class UserSeeder extends Seeder
                     'password' => Hash::make('password'),
                     'role' => 'student',
                     'status' => 'approved',
-                    'approved_at' => now(),
                 ]
             );
         }
