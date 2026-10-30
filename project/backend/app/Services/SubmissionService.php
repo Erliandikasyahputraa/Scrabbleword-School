@@ -70,7 +70,6 @@ class SubmissionService
             ->where('material_id', $materialId)
             ->first();
 
-        // If they bypass, create a basic record but they shouldn't realistically
         if (!$submission) {
             $submission = Submission::create([
                 'student_id' => $studentId,
@@ -94,12 +93,25 @@ class SubmissionService
         
         if ($crosswordData && isset($crosswordData['words'])) {
             $totalWords = count($crosswordData['words']);
-            foreach ($crosswordData['words'] as $wordObj) {
+            foreach ($crosswordData['words'] as $index => $wordObj) {
                 $id = $wordObj['id'];
+                $direction = $wordObj['direction'] ?? '';
                 $correctWord = strtoupper($wordObj['word']);
-                $studentWord = strtoupper($studentAnswers[$id] ?? '');
                 
-                if ($studentWord === $correctWord) {
+                // Cek jawaban siswa dengan prioritas:
+                // 1. Unique composite key "${id}_${direction}" (misal "3_across")
+                // 2. Index key "idx_${index}"
+                // 3. Fallback id biasa "${id}"
+                $studentWord = '';
+                if (isset($studentAnswers["{$id}_{$direction}"])) {
+                    $studentWord = strtoupper($studentAnswers["{$id}_{$direction}"]);
+                } elseif (isset($studentAnswers["idx_{$index}"])) {
+                    $studentWord = strtoupper($studentAnswers["idx_{$index}"]);
+                } elseif (isset($studentAnswers[$id])) {
+                    $studentWord = strtoupper($studentAnswers[$id]);
+                }
+                
+                if (!empty($studentWord) && $studentWord === $correctWord) {
                     $correctWordsCount++;
                 }
             }

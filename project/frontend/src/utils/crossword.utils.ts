@@ -16,7 +16,7 @@ export function buildSubmissionPayload(
 ): Record<string, string> {
   const answers: Record<string, string> = {};
 
-  data.words.forEach(wordObj => {
+  data.words.forEach((wordObj, index) => {
     let wordAnswer = '';
     for (let i = 0; i < wordObj.length; i++) {
       const r = wordObj.row + (wordObj.direction === 'down' ? i : 0);
@@ -24,8 +24,11 @@ export function buildSubmissionPayload(
       const cellKey = `${r}-${c}`;
       wordAnswer += userAnswers[cellKey] || ' ';
     }
-    // Trim right if needed, or just send exactly the string built
-    answers[wordObj.id] = wordAnswer.trim();
+    const cleanAnswer = wordAnswer.trim();
+    // Simpan ke unique composite key (id_direction), index, dan standard id
+    answers[`${wordObj.id}_${wordObj.direction}`] = cleanAnswer;
+    answers[`idx_${index}`] = cleanAnswer;
+    answers[wordObj.id] = cleanAnswer;
   });
 
   return answers;
