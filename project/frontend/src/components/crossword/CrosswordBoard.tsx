@@ -8,7 +8,7 @@ export function CrosswordBoard() {
   const boardRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="w-full h-full flex justify-center items-center @container/board relative select-none">
+    <div className="w-full h-full flex justify-center items-center @container/board relative">
       <div
         ref={boardRef}
         className={`relative box-content flex justify-center items-center focus:outline-none focus:ring-4 focus:ring-[var(--workspace-ring)] rounded-2xl overflow-hidden shadow-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 transition-all ${isSubmitted ? 'opacity-80 pointer-events-none' : ''}`}

@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react';
 import { useCrossword } from '../../hooks/useCrossword';
 import type { CrosswordClue } from '../../types/crossword';
 import { useTranslation } from 'react-i18next';
@@ -6,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 export function CrosswordClues() {
   const { t } = useTranslation('courses');
   const { data, activeWord, handleCellClick, currentDirection } = useCrossword();
-  const listRef = useRef<HTMLDivElement>(null);
 
   const acrossClues = data.clues.filter(c => c.direction === 'across');
   const downClues = data.clues.filter(c => c.direction === 'down');
@@ -17,16 +15,6 @@ export function CrosswordClues() {
       handleCellClick(word.row, word.col);
     }
   };
-
-  useEffect(() => {
-    if (activeWord) {
-      // Find the active element in the list and scroll it into view smoothly
-      const activeEl = listRef.current?.querySelector('[data-active="true"]');
-      if (activeEl) {
-        activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
-    }
-  }, [activeWord, currentDirection]);
 
   const ClueList = ({ title, clues }: { title: string, clues: CrosswordClue[] }) => (
     <div className="flex-1">
@@ -91,7 +79,6 @@ export function CrosswordClues() {
 
       {/* Clue List Panel (Scrollable) */}
       <div 
-        ref={listRef}
         className="flex flex-col gap-6 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-800 p-4 sm:p-5 overflow-y-auto custom-scrollbar"
       >
         <ClueList title={t('across')} clues={acrossClues} />

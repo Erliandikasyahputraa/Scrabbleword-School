@@ -17,7 +17,10 @@ export function CrosswordCell({ row, col }: CrosswordCellProps) {
     isSubmitted,
     setUserAnswers,
     advanceCursorInWord,
-    handleKeyDown
+    handleKeyDown,
+    activeWord,
+    currentDirection,
+    data
   } = useCrossword() as any;
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -33,7 +36,6 @@ export function CrosswordCell({ row, col }: CrosswordCellProps) {
   useEffect(() => {
     if (isSelected && !isSubmitted && inputRef.current) {
       inputRef.current.focus();
-      // Select text so typing immediately replaces it
       inputRef.current.select();
     }
   }, [isSelected, isSubmitted]);
@@ -70,6 +72,42 @@ export function CrosswordCell({ row, col }: CrosswordCellProps) {
     }
   };
 
+  // Support paste word directly into consecutive cells
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    if (isSubmitted) return;
+
+    const pastedText = e.clipboardData.getData('text').trim().toUpperCase().replace(/[^A-Z]/g, '');
+    if (!pastedText) return;
+
+    setUserAnswers((prev: Record<string, string>) => {
+      const next = { ...prev };
+      const isAcross = currentDirection === 'across';
+
+      for (let i = 0; i < pastedText.length; i++) {
+        const targetRow = isAcross ? row : row + i;
+        const targetCol = isAcross ? col + i : col;
+
+        // Ensure target is within grid and playable
+        if (targetRow < data.grid.rows && targetCol < data.grid.cols && isCellPlayable(targetRow, targetCol)) {
+          next[`${targetRow}-${targetCol}`] = pastedText[i];
+        } else {
+          break;
+        }
+      }
+      return next;
+    });
+
+    // Advance cursor to end of pasted word
+    const isAcross = currentDirection === 'across';
+    const finalOffset = Math.min(pastedText.length, (activeWord?.length || 1) - 1);
+    const endRow = isAcross ? row : row + finalOffset;
+    const endCol = isAcross ? col + finalOffset : col;
+    if (endRow < data.grid.rows && endCol < data.grid.cols && isCellPlayable(endRow, endCol)) {
+      handleCellClick(endRow, endCol);
+    }
+  };
+
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (isSubmitted) return;
 
@@ -93,7 +131,7 @@ export function CrosswordCell({ row, col }: CrosswordCellProps) {
 
   return (
     <div 
-      className={`relative w-full aspect-square flex items-center justify-center cursor-pointer select-none transition-all duration-150 ${cellStyle}`}
+      className={`relative w-full aspect-square flex items-center justify-center cursor-pointer transition-all duration-150 ${cellStyle}`}
       onClick={() => {
         handleCellClick(row, col);
         if (inputRef.current) {
@@ -104,14 +142,14 @@ export function CrosswordCell({ row, col }: CrosswordCellProps) {
     >
       {number && (
         <span 
-          className="absolute top-[2%] left-[4%] text-slate-600 dark:text-slate-400 leading-none font-semibold select-none pointer-events-none z-10"
+          className="absolute top-[2%] left-[4%] text-slate-600 dark:text-slate-400 leading-none font-semibold pointer-events-none z-10"
           style={{ fontSize: 'clamp(8px, 2cqw, 11px)' }}
         >
           {number}
         </span>
       )}
 
-      {/* Real HTML input element inside cell - Guarantees mobile keyboard popup */}
+      {/* Real HTML input element inside cell */}
       <input
         ref={inputRef}
         type="text"
@@ -120,17 +158,17 @@ export function CrosswordCell({ row, col }: CrosswordCellProps) {
         autoComplete="off"
         autoCorrect="off"
         spellCheck={false}
-        maxLength={1}
         value={answer}
         disabled={isSubmitted}
         onChange={handleChange}
+        onPaste={handlePaste}
         onKeyDown={handleInputKeyDown}
         onFocus={() => {
           if (!isSelected) {
             handleCellClick(row, col);
           }
         }}
-        className="w-full h-full text-center uppercase font-bold bg-transparent outline-none cursor-pointer focus:cursor-text caret-transparent selection:bg-transparent"
+        className="w-full h-full text-center uppercase font-bold bg-transparent outline-none cursor-pointer focus:cursor-text text-foreground"
         style={{ fontSize: 'clamp(12px, 4cqw, 24px)' }}
         aria-label={`Input for row ${row + 1}, column ${col + 1}`}
       />
