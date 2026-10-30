@@ -24,6 +24,8 @@ type CrosswordContextType = {
   isCellInActiveWord: (row: number, col: number) => boolean;
   getCellNumber: (row: number, col: number) => number | null;
   activeWord: CrosswordWord | null;
+  setUserAnswers: React.Dispatch<React.SetStateAction<Record<string, string>>>;
+  advanceCursorInWord: (forward: boolean) => void;
 };
 
 export const CrosswordContext = createContext<CrosswordContextType | null>(null);
@@ -256,6 +258,8 @@ export function CrosswordProvider({ children, data, initialSubmitted = false, is
         isCellInActiveWord,
         getCellNumber,
         activeWord,
+        setUserAnswers,
+        advanceCursorInWord,
       }}
     >
       {children}

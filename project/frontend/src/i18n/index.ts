@@ -18,6 +18,7 @@ i18n
     }
   })
   .init({
+    lng: 'id',
     fallbackLng: 'id',
     supportedLngs: ['id', 'en'],
     ns: ['common', 'auth', 'dashboard', 'courses', 'materials', 'crossword', 'teacher', 'student', 'validation', 'dialog', 'toast', 'errors'],
